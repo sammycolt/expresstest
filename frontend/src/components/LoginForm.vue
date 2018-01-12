@@ -52,7 +52,6 @@ export default {
         'username': this.username,
         'password': this.password
       }).then(resp => {
-        console.log(resp)
         this.username = ''
         this.password = ''
       }).catch(err => {

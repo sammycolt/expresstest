@@ -7,7 +7,9 @@ import {
   REMOVE_NOTE,
   SET_NOTES,
   ADD_USER,
-  SET_USERS
+  SET_USERS,
+  LOGIN_USER,
+  LOGOUT_USER
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -15,12 +17,15 @@ Vue.use(Vuex)
 const state = {
   notes: [],
   users: [],
-  isAutintificated: false
+  isLogged: !!localStorage.getItem('token'),
+  userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {}
 }
 
 const getters = {
   notes: state => state.notes,
-  users: state => state.users
+  users: state => state.users,
+  isLogged: state => state.isLogged,
+  userInfo: state => state.userInfo
 }
 
 const mutations = {
@@ -40,7 +45,17 @@ const mutations = {
   },
   [SET_USERS] (state, { users }) {
     state.users = users
+  },
+  [LOGIN_USER] (state, userInfo) {
+    state.isLogged = true
+    state.userInfo = userInfo
+  },
+
+  [LOGOUT_USER] (state) {
+    state.isLogged = false
+    state.userInfo = {}
   }
+
 }
 
 const actions = {
@@ -72,11 +87,20 @@ const actions = {
     })
   },
   loginUser ({ commit }, userData) {
-    return User.login(userData).then(response => {
-      return response
+    return User.login(userData).then(resp => {
+      localStorage.setItem('token', resp['data']['token'])
+      localStorage.setItem('userInfo', JSON.stringify(resp['data']['user']))
+      commit(LOGIN_USER, resp['data']['user'])
+
+      return resp
     }).catch(err => {
       return Promise.reject(err)
     })
+  },
+  logoutUser ({ commit }) {
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+    commit(LOGOUT_USER)
   }
 }
 

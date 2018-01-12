@@ -5,8 +5,8 @@
     <!--</section>-->
     <section class="container grid-960">
       <!--<reg-form></reg-form>-->
-      <login-form></login-form>
-      <!--<users-list></users-list>-->
+      <login-form v-if="!check()"></login-form>
+      <account v-else-if="check()"></account>
       <!--<div class="columns">-->
         <!--<div class="column col-2"></div>-->
         <!--<div class="column col-8 col-md-12">-->
@@ -37,6 +37,7 @@ import Navbar from './components/Navbar'
 import UsersList from './components/UsersList'
 import RegistrationForm from './components/RegistrationForm.vue'
 import LoginForm from './components/LoginForm.vue'
+import Account from './components/Account.vue'
 
 export default {
   name: 'app',
@@ -46,11 +47,17 @@ export default {
     'note-list': NoteList,
     'users-list': UsersList,
     'reg-form': RegistrationForm,
-    'login-form': LoginForm
+    'login-form': LoginForm,
+    'account': Account
   },
   data: function () {
     return {
       variant_: false
+    }
+  },
+  methods: {
+    check () {
+      return this.$store.getters.isLogged
     }
   }
 }

@@ -39,7 +39,6 @@ export default {
       this.createNote()
       this.title = ''
       this.body = ''
-
       event.preventDefault()
     },
     createNote () {

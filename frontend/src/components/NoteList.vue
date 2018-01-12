@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="card" v-for="note in notes">
+    <div class="card" v-for="note in this.notes">
       <div class="card-header">
         <button class="btn btn-clear float-right" v-on:click="deleteNote(note)"></button>
         <div class="card-title">{{ note.title }}</div>

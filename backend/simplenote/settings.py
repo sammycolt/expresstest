@@ -20,6 +20,11 @@ import os
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
     'JWT_ALLOW_REFRESH': True,
+    'JWT_PAYLOAD_HANDLER': 'notes.serializers.jwt_token_payload_handler',
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'notes.serializers.UserSerializer'
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
