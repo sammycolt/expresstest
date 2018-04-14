@@ -15,5 +15,10 @@ export const User = {
     return HTTP.post('/rest-auth/login/', config).then(response => {
       return response
     })
+  },
+  details (id) {
+    return HTTP.get('/user/' + id + '/').then(response => {
+      return response.data
+    })
   }
 }

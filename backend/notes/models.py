@@ -14,6 +14,22 @@ class Note(models.Model):
 
 class UniversityUser(models.Model):
     user = models.OneToOneField(User)
-
-    #CustomFields
     type = models.CharField(max_length=1, choices=USER_CHOICES)
+
+
+class QuizTest(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey(User)
+
+class QuizAnswer(models.Model):
+    text = models.TextField()
+    is_correct = models.NullBooleanField()
+
+class AnswerByUser(models.Model):
+    user = models.ForeignKey(UniversityUser)
+    answer = models.ForeignKey(QuizAnswer)
+
+class QuizQuestion(models.Model):
+    quiz = models.ForeignKey(QuizTest)
+    text = models.TextField()
+    answers = models.ManyToManyField(QuizAnswer)

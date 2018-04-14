@@ -8,7 +8,10 @@
     </section>
   </nav>
   <note-list v-if="checkType('student')"></note-list>
-  <create-note v-else-if="checkType('teacher')"></create-note>
+  <div v-else-if="checkType('teacher')">
+    <create-test></create-test>
+    <test-list></test-list>
+  </div>
 </div>
 </template>
 
@@ -16,6 +19,8 @@
 import UsersList from './UsersList.vue'
 import NoteList from './NoteList.vue'
 import CreateNote from './CreateNote.vue'
+import CreateTest from './CreateTest.vue'
+import TestList from './TestList.vue'
 import { UserType } from '../enums/userType'
 
 import { mapGetters } from 'vuex'
@@ -25,7 +30,9 @@ export default {
   components: {
     'users-list': UsersList,
     'note-list': NoteList,
-    'create-note': CreateNote
+    'create-note': CreateNote,
+    'create-test': CreateTest,
+    'test-list': TestList
   },
   computed: mapGetters(['userInfo']),
   methods: {
