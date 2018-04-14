@@ -30,6 +30,6 @@ class AnswerByUser(models.Model):
     answer = models.ForeignKey(QuizAnswer)
 
 class QuizQuestion(models.Model):
-    quiz = models.ForeignKey(QuizTest)
+    quiz = models.ForeignKey(QuizTest, related_name='questions')
     text = models.TextField()
-    answers = models.ManyToManyField(QuizAnswer)
+    answers = models.ManyToManyField(QuizAnswer, blank=True)

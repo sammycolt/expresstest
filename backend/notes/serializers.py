@@ -35,12 +35,17 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'password', 'type')
 
-
-class QuizTestSerializer(serializers.ModelSerializer):
+class QuizQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
+        model = QuizQuestion
+        fields = ('id', 'quiz', 'text', 'answers')
+
+class QuizTestSerializer(serializers.ModelSerializer):
+    questions = QuizQuestionSerializer(many=True)
+    class Meta:
         model = QuizTest
-        fields = ('id', 'title', 'author')
+        fields = ('id', 'title', 'author', 'questions')
 
 
 class QuizAnswerSerializer(serializers.ModelSerializer):
@@ -49,11 +54,7 @@ class QuizAnswerSerializer(serializers.ModelSerializer):
         model = QuizAnswer
         fields = ('id', 'text', 'is_correct')
 
-class QuizQuestionSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers')
 
 def jwt_token_payload_handler(user, request=None):
     return {

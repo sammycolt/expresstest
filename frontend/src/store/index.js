@@ -170,6 +170,7 @@ const actions = {
     })
   },
   getTestDetails ({ commit }, id) {
+    console.log('GTD')
     Test.details(id).then(response => {
       var payload = {
         key: id,
@@ -178,9 +179,10 @@ const actions = {
       commit(ADD_TEST_DETAILS, payload)
     })
   },
-  createQuestion ({ commit }, questionData) {
+  createQuestion ({ commit, dispatch }, questionData) {
     Question.create(questionData).then(question => {
       commit(ADD_QUESTION, question)
+      dispatch('getTestDetails', question.quiz)
     })
   },
   getQuestions ({ commit }) {
