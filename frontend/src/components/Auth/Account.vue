@@ -17,11 +17,11 @@
 
 <script>
 import UsersList from './UsersList.vue'
-import NoteList from './NoteList.vue'
-import CreateNote from './CreateNote.vue'
-import CreateTest from './CreateTest.vue'
-import TestList from './TestList.vue'
-import { UserType } from '../enums/userType'
+import NoteList from '../Notes/NoteList.vue'
+import CreateNote from '../Notes/CreateNote.vue'
+import CreateTest from '../Tests/CreateTest.vue'
+import TestList from '../Tests/TestList.vue'
+import { UserType } from '../../enums/userType'
 
 import { mapGetters } from 'vuex'
 

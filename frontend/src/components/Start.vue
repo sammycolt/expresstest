@@ -31,13 +31,13 @@
 
 <script>
 
-import CreateNote from './CreateNote'
-import NoteList from './NoteList'
+import CreateNote from './Notes/CreateNote'
+import NoteList from './Notes/NoteList'
 import Navbar from './Navbar'
-import UsersList from './UsersList'
-import RegistrationForm from './RegistrationForm.vue'
-import LoginForm from './LoginForm.vue'
-import Account from './Account.vue'
+import UsersList from './Auth/UsersList'
+import RegistrationForm from './Auth/RegistrationForm.vue'
+import LoginForm from './Auth/LoginForm.vue'
+import Account from './Auth/Account.vue'
 
 export default {
   name: 'start',

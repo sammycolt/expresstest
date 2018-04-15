@@ -22,7 +22,7 @@ class QuizTest(models.Model):
     author = models.ForeignKey(User)
 
 class QuizAnswer(models.Model):
-    text = models.TextField()
+    answer_text = models.TextField()
     is_correct = models.NullBooleanField()
 
 class AnswerByUser(models.Model):
@@ -32,4 +32,11 @@ class AnswerByUser(models.Model):
 class QuizQuestion(models.Model):
     quiz = models.ForeignKey(QuizTest, related_name='questions')
     text = models.TextField()
-    answers = models.ManyToManyField(QuizAnswer, blank=True)
+    answers = models.ManyToManyField(QuizAnswer, through='AnswerToQuestion')
+
+class AnswerToQuestion(models.Model):
+    answer = models.ForeignKey(QuizAnswer)
+    question = models.ForeignKey(QuizQuestion)
+
+
+

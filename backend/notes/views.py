@@ -1,7 +1,8 @@
 from rest_framework import viewsets, generics
 
-from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion
-from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer, QuizQuestionSerializer, QuizAnswerSerializer
+from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion
+from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
+    QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -32,3 +33,11 @@ class QuizAnswerViewSet(viewsets.ModelViewSet):
 class QuizQuestionViewSet(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
+
+class QuizQuestionDetails(generics.RetrieveAPIView):
+    queryset = QuizQuestion.objects.all()
+    serializer_class = QuizQuestionSerializer
+
+class AnswerToQauestionVS(viewsets.ModelViewSet):
+    queryset = AnswerToQuestion.objects.all()
+    serializer_class = AnswerToQuestionSerializer

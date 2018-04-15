@@ -14,7 +14,7 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import { UserType } from '../enums/userType'
+import { UserType } from '../../enums/userType'
 
 export default {
   name: 'users-list',

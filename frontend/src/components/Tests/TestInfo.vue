@@ -14,8 +14,8 @@
 <script>
 
 import { mapState } from 'vuex'
-import CreateQuestion from './CreateQuestion.vue'
-import QuestionList from './QuestionList.vue'
+import CreateQuestion from '../Questions/CreateQuestion.vue'
+import QuestionList from '../Questions/QuestionList.vue'
 
 export default {
   name: 'test-info',

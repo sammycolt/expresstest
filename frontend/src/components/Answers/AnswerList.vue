@@ -24,8 +24,8 @@ export default {
     }
   }),
   methods: {
-    onClick (q) {
-      alert(q)
+    onClick (question) {
+      this.$router.push({name: 'QuestionInfo', params: { 'id': question.id }})
     }
   }
 }

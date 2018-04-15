@@ -21,7 +21,8 @@ import {
   SET_QUESTIONS,
   SET_USER_DETAILS,
   ADD_USER_DETAILS,
-  ADD_TEST_DETAILS
+  ADD_TEST_DETAILS,
+  ADD_QUESTION_DETAILS
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -35,7 +36,8 @@ const state = {
   isLogged: !!localStorage.getItem('token'),
   userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {},
   userDetails: {},
-  testDetails: {}
+  testDetails: {},
+  questionDetails: {}
 }
 
 const getters = {
@@ -47,7 +49,8 @@ const getters = {
   isLogged: state => state.isLogged,
   userInfo: state => state.userInfo,
   userDetails: state => state.userDetails,
-  testDetails: state => state.testDetails
+  testDetails: state => state.testDetails,
+  questionDetails: state => state.questionDetails
 }
 
 const mutations = {
@@ -103,6 +106,9 @@ const mutations = {
   },
   [ADD_TEST_DETAILS] (state, payload) {
     Vue.set(state.testDetails, payload.key, payload.value)
+  },
+  [ADD_QUESTION_DETAILS] (state, payload) {
+    Vue.set(state.questionDetails, payload.key, payload.value)
   }
 }
 
@@ -170,7 +176,6 @@ const actions = {
     })
   },
   getTestDetails ({ commit }, id) {
-    console.log('GTD')
     Test.details(id).then(response => {
       var payload = {
         key: id,
@@ -190,14 +195,38 @@ const actions = {
       commit(SET_QUESTIONS, { questions })
     })
   },
-  createAnswer ({ commit }, answerData) {
+  getQuestionDetails ({ commit }, id) {
+    Question.details(id).then(response => {
+      var payload = {
+        key: id,
+        value: response
+      }
+      commit(ADD_QUESTION_DETAILS, payload)
+    })
+  },
+  createAnswer ({ commit, dispatch }, payload) {
+    var questionId = payload.questionId
+    var answerData = payload.answerData
+    console.log(questionId)
+    console.log(answerData)
     Answer.create(answerData).then(answer => {
+      dispatch('addAnswerToQuestion', {
+        'questionId': questionId,
+        'answerId': answer.id
+      })
       commit(ADD_ANSWER, answer)
     })
   },
   getAnswers ({ commit }) {
     Answer.list().then(answers => {
       commit(SET_ANSWERS, { answers })
+    })
+  },
+  addAnswerToQuestion ({ dispatch }, payload) {
+    var questionId = payload.questionId
+    var answerId = payload.answerId
+    Question.addAnswerToQuestion(questionId, answerId).then(response => {
+      dispatch('getQuestionDetails', questionId)
     })
   }
 }
