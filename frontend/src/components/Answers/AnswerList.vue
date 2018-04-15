@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <div class="card" v-for="question in this.questions">
-      <div class="card-header" @click="onClick(question)">
-        <div class="card-title">Text: {{ question.text }}</div>
-        <div class="card-subtitle">Answers: {{ question.answers.length }}</div>
+    <div class="card" v-for="answer in this.answers">
+      <div class="card-header">
+        <div class="card-title">Text: {{ answer.answer_text }}</div>
+        <div class="card-subtitle">Correct: {{ answer.is_correct }}</div>
       </div>
     </div>
   </div>
@@ -15,19 +15,14 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'question-list',
-  props: ['testId'],
+  props: ['questionId'],
   computed: mapState({
-    questions (state) {
-      if (state.testDetails[this.testId]) {
-        return state.testDetails[this.testId].questions
+    answers (state) {
+      if (state.questionDetails[this.questionId]) {
+        return state.questionDetails[this.questionId].answers
       }
     }
-  }),
-  methods: {
-    onClick (question) {
-      this.$router.push({name: 'QuestionInfo', params: { 'id': question.id }})
-    }
-  }
+  })
 }
 </script>
 

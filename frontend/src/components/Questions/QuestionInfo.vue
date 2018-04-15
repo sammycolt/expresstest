@@ -7,6 +7,7 @@
     </div>
   </div>
   <create-answer :questionId="this.id"></create-answer>
+  <answer-list :questionId="this.id"></answer-list>
 </section>
 </template>
 
@@ -14,11 +15,13 @@
 
 import { mapState } from 'vuex'
 import CreateAnswer from '../Answers/CreateAnswer.vue'
+import AnswerList from '../Answers/AnswerList.vue'
 
 export default {
   name: 'question-info',
   components: {
-    'create-answer': CreateAnswer
+    'create-answer': CreateAnswer,
+    'answer-list': AnswerList
   },
   computed: mapState({
     text (state) {
