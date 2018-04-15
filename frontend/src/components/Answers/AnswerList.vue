@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <div class="card" v-for="answer in this.answers">
-      <div class="card-header">
+    <div class="card"  v-for="answer in this.answers">
+      <div class="card-header is-error">
         <div class="card-title">Text: {{ answer.answer_text }}</div>
-        <div class="card-subtitle">Correct: {{ answer.is_correct }}</div>
+        <div class="card-subtitle">
+          <span class="label label-primary" v-bind:class="correctClass(answer.is_correct)">{{ correctLabel(answer.is_correct) }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -22,7 +24,23 @@ export default {
         return state.questionDetails[this.questionId].answers
       }
     }
-  })
+  }),
+  methods: {
+    correctClass (isCorrect) {
+      if (isCorrect) {
+        return 'label-success'
+      } else {
+        return 'label-error'
+      }
+    },
+    correctLabel (isCorrect) {
+      if (isCorrect) {
+        return 'Correct'
+      } else {
+        return 'Incorrect'
+      }
+    }
+  }
 }
 </script>
 
