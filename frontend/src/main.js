@@ -7,6 +7,7 @@ import router from './router'
 import Router from 'vue-router'
 // import { sync } from 'vuex-router-sync'
 
+// var jwtDecode = require('jwt-decode')
 Vue.use(Router)
 Vue.config.productionTip = false
 // sync(store, router)

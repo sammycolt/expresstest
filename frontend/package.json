@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "jwt-decode": "^2.2.0",
     "pretty-date": "^0.2.0",
     "vue": "^2.3.3",
     "vue-axios": "^2.0.2",

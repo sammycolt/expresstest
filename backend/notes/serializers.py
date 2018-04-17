@@ -3,7 +3,8 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import JWTSerializer
 
 
-from .models import Note, UniversityUser, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion
+from .models import Note, UniversityUser, User, QuizTest, \
+    QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -42,13 +43,13 @@ class QuizAnswerSerializer(serializers.ModelSerializer):
         fields = ('id', 'answer_text', 'is_correct')
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
-    answers = QuizAnswerSerializer(many=True)
+    answers = QuizAnswerSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
         fields = ('id', 'quiz', 'text', 'answers')
 
 class QuizTestSerializer(serializers.ModelSerializer):
-    questions = QuizQuestionSerializer(many=True)
+    questions = QuizQuestionSerializer(many=True, read_only=True)
     class Meta:
         model = QuizTest
         fields = ('id', 'title', 'author', 'questions')
@@ -60,9 +61,17 @@ class AnswerToQuestionSerializer(serializers.ModelSerializer):
         fields = ('answer', 'question')
 
 
+class UserToQuizSerializer(serializers.ModelSerializer):
 
-def jwt_token_payload_handler(user, request=None):
+    class Meta:
+        model = UserToQuiz
+        fields = ('quiz', 'user')
+
+
+
+def jwt_token_payload_handler(token, user, request=None):
     return {
+        'token': token,
         'user': UserSerializer(user, context={'request': request}).data
     }
 

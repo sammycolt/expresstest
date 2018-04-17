@@ -17,9 +17,15 @@ class UniversityUser(models.Model):
     type = models.CharField(max_length=1, choices=USER_CHOICES)
 
 
+
 class QuizTest(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User)
+    readers = models.ManyToManyField(UniversityUser, through='UserToQuiz')
+
+class UserToQuiz(models.Model):
+    quiz = models.ForeignKey(QuizTest)
+    user = models.ForeignKey(UniversityUser)
 
 class QuizAnswer(models.Model):
     answer_text = models.TextField()

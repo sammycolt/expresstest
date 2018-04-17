@@ -1,4 +1,4 @@
-import { HTTP } from './common'
+import { HTTP, getHeaders } from './common'
 
 export const User = {
   create (config) {
@@ -7,17 +7,17 @@ export const User = {
     })
   },
   list () {
-    return HTTP.get('/users/').then(response => {
+    return HTTP.get('/users/', getHeaders()).then(response => {
       return response.data
     })
   },
   login (config) {
-    return HTTP.post('/rest-auth/login/', config).then(response => {
+    return HTTP.post('/rest-auth-jwt/login/', config).then(response => {
       return response
     })
   },
   details (id) {
-    return HTTP.get('/user/' + id + '/').then(response => {
+    return HTTP.get('/user/' + id + '/', getHeaders()).then(response => {
       return response.data
     })
   }

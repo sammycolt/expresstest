@@ -20,7 +20,9 @@ import os
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
     'JWT_ALLOW_REFRESH': True,
-    'JWT_PAYLOAD_HANDLER': 'notes.serializers.jwt_token_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'notes.serializers.jwt_token_payload_handler',
+    # 'JWT_PAYLOAD_HANDLER': 'notes.serializers.jwt_token_payload_handler',
+    'JWT_AUTH_COOKIE': 'jwt_cookie',
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -39,7 +41,6 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
 }
-
 # Enables django-rest-auth to use JWT tokens instead of regular tokens.
 REST_USE_JWT = True
 SITE_ID = 1
@@ -94,6 +95,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'notes.middleware.JWTAuthenticationMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

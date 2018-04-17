@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="card" v-for="test in this.tests">
-      <test-list-elem :title="test.title" :author="test.author" :id="test.id"></test-list-elem>
+      <test-list-elem :title="test.title" :author="test.author" :id="test.id" :questionsCount="test.questions.length"></test-list-elem>
     </div>
   </div>
 </template>
@@ -12,12 +12,12 @@ import { mapGetters } from 'vuex'
 import TestListElem from './TestListElem.vue'
 
 export default {
-  name: 'note-list',
+  name: 'test-list',
   computed: mapGetters(['tests']),
   components: {
     'test-list-elem': TestListElem
   },
-  beforeMount () {
+  created: function () {
     this.$store.dispatch('getTests')
   }
 }

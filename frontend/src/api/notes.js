@@ -1,16 +1,16 @@
-import { HTTP } from './common'
+import { HTTP, getHeaders } from './common'
 
 export const Note = {
   create (config) {
-    return HTTP.post('/notes/', config).then(response => {
+    return HTTP.post('/notes/', config, getHeaders()).then(response => {
       return response.data
     })
   },
   delete (note) {
-    return HTTP.delete(`/notes/${note.id}/`)
+    return HTTP.delete(`/notes/${note.id}/`, getHeaders())
   },
   list () {
-    return HTTP.get('/notes/').then(response => {
+    return HTTP.get('/notes/', getHeaders()).then(response => {
       return response.data
     })
   }

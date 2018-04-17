@@ -143,6 +143,7 @@ const actions = {
   loginUser ({ commit }, userData) {
     return User.login(userData).then(resp => {
       localStorage.setItem('token', resp['data']['token'])
+      console.log(JSON.stringify(resp['data']['user']))
       localStorage.setItem('userInfo', JSON.stringify(resp['data']['user']))
       commit(LOGIN_USER, resp['data']['user'])
 
