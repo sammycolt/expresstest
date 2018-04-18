@@ -7,7 +7,9 @@
       <a class="btn btn-default" v-on:click="logout()">Logout</a>
     </section>
   </nav>
-  <note-list v-if="checkType('student')"></note-list>
+  <div v-if="checkType('student')">
+    <test-list></test-list>
+  </div>
   <div v-else-if="checkType('teacher')">
     <create-test></create-test>
     <test-list></test-list>
@@ -22,6 +24,7 @@ import CreateNote from '../Notes/CreateNote.vue'
 import CreateTest from '../Tests/CreateTest.vue'
 import TestList from '../Tests/TestList.vue'
 import { UserType } from '../../enums/userType'
+import AddStudent from '../Students/AddStudent.vue'
 
 import { mapGetters } from 'vuex'
 
@@ -32,7 +35,8 @@ export default {
     'note-list': NoteList,
     'create-note': CreateNote,
     'create-test': CreateTest,
-    'test-list': TestList
+    'test-list': TestList,
+    'add-student': AddStudent
   },
   computed: mapGetters(['userInfo']),
   methods: {

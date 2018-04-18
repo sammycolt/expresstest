@@ -21,11 +21,11 @@ class UniversityUser(models.Model):
 class QuizTest(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User)
-    readers = models.ManyToManyField(UniversityUser, through='UserToQuiz')
+    readers = models.ManyToManyField(User, through='UserToQuiz', related_name='quiz')
 
 class UserToQuiz(models.Model):
     quiz = models.ForeignKey(QuizTest)
-    user = models.ForeignKey(UniversityUser)
+    user = models.ForeignKey(User)
 
 class QuizAnswer(models.Model):
     answer_text = models.TextField()

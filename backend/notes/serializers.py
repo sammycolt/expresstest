@@ -50,9 +50,10 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 
 class QuizTestSerializer(serializers.ModelSerializer):
     questions = QuizQuestionSerializer(many=True, read_only=True)
+    readers = UserSerializer(many=True, read_only=True)
     class Meta:
         model = QuizTest
-        fields = ('id', 'title', 'author', 'questions')
+        fields = ('id', 'title', 'author', 'questions', 'readers')
 
 class AnswerToQuestionSerializer(serializers.ModelSerializer):
 

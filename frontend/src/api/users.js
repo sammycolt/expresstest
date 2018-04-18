@@ -20,5 +20,10 @@ export const User = {
     return HTTP.get('/user/' + id + '/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  studentList () {
+    return HTTP.get('/students/', getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

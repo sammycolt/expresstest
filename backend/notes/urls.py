@@ -3,7 +3,7 @@ from django.conf.urls import url
 
 from .views import NoteViewSet, UserViewSet, QuizTestViewSet, QuizAnswerViewSet, \
     QuizQuestionViewSet, QuizTestDetails, UserDetails, QuizQuestionDetails, AnswerToQauestionVS, \
-    UserToQuizVS
+    UserToQuizVS, StudentsViewSet
 
 
 router = routers.DefaultRouter()
@@ -14,6 +14,7 @@ router.register(r'answers', QuizAnswerViewSet)
 router.register(r'questions', QuizQuestionViewSet)
 router.register(r'answer_to_question', AnswerToQauestionVS)
 router.register(r'user_to_quiz', UserToQuizVS)
+router.register(r'students', StudentsViewSet)
 
 urlpatterns = [
     url(r'^user/(?P<pk>[0-9]+)/$', UserDetails.as_view()),

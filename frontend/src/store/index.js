@@ -22,7 +22,8 @@ import {
   SET_USER_DETAILS,
   ADD_USER_DETAILS,
   ADD_TEST_DETAILS,
-  ADD_QUESTION_DETAILS
+  ADD_QUESTION_DETAILS,
+  SET_STUDENTS
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -37,7 +38,8 @@ const state = {
   userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {},
   userDetails: {},
   testDetails: {},
-  questionDetails: {}
+  questionDetails: {},
+  students: []
 }
 
 const getters = {
@@ -50,7 +52,8 @@ const getters = {
   userInfo: state => state.userInfo,
   userDetails: state => state.userDetails,
   testDetails: state => state.testDetails,
-  questionDetails: state => state.questionDetails
+  questionDetails: state => state.questionDetails,
+  students: state => state.students
 }
 
 const mutations = {
@@ -109,6 +112,9 @@ const mutations = {
   },
   [ADD_QUESTION_DETAILS] (state, payload) {
     Vue.set(state.questionDetails, payload.key, payload.value)
+  },
+  [SET_STUDENTS] (state, { students }) {
+    state.students = students
   }
 }
 
@@ -228,6 +234,14 @@ const actions = {
     var answerId = payload.answerId
     Question.addAnswerToQuestion(questionId, answerId).then(response => {
       dispatch('getQuestionDetails', questionId)
+    })
+  },
+  addUserToTest ({ commit }, payload) {
+    Test.addUserToTest(payload).then(response => {})
+  },
+  getStudents ({ commit }) {
+    User.studentList().then(students => {
+      commit(SET_STUDENTS, { students })
     })
   }
 }

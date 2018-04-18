@@ -27,8 +27,18 @@ class QuizTestViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.universityuser.type == UniUser.TEACHER.value:
-            print(self.request.user.universityuser.type)
             return queryset.filter(author_id=self.request.user.id)
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return queryset.filter(readers__id=self.request.user.id)
+
+class StudentsViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().select_related('universityuser').filter(universityuser__type=UniUser.STUDENT.value)
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return queryset
 
 class QuizTestDetails(generics.RetrieveAPIView):
     queryset = QuizTest.objects.all()

@@ -16,5 +16,10 @@ export const Test = {
     return HTTP.get('/test/' + id + '/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  addUserToTest (payload) {
+    return HTTP.post('/user_to_quiz/', payload, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }
