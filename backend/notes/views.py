@@ -4,7 +4,7 @@ from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQues
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer, \
-    UserToQuizSerializer
+    UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -42,7 +42,19 @@ class StudentsViewSet(viewsets.ModelViewSet):
 
 class QuizTestDetails(generics.RetrieveAPIView):
     queryset = QuizTest.objects.all()
-    serializer_class = QuizTestSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return QuizTestSerializer
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return QuizTestStudentSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return queryset.filter(author_id=self.request.user.id)
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return queryset.filter(readers__id=self.request.user.id)
 
 class QuizAnswerViewSet(viewsets.ModelViewSet):
     queryset = QuizAnswer.objects.all()
@@ -50,11 +62,21 @@ class QuizAnswerViewSet(viewsets.ModelViewSet):
 
 class QuizQuestionViewSet(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
-    serializer_class = QuizQuestionSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return QuizQuestionSerializer
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return QuizQuestionStudentSerializer
 
 class QuizQuestionDetails(generics.RetrieveAPIView):
     queryset = QuizQuestion.objects.all()
-    serializer_class = QuizQuestionSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return QuizQuestionSerializer
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return QuizQuestionStudentSerializer
 
 class AnswerToQauestionVS(viewsets.ModelViewSet):
     queryset = AnswerToQuestion.objects.all()

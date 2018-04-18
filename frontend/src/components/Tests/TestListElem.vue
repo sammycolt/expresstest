@@ -8,6 +8,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { UserType } from '../../enums/userType'
 
 export default {
   name: 'test-list-elem',
@@ -21,8 +22,11 @@ export default {
   }),
   methods: {
     onClick () {
-//      console.log(this)
-      this.$router.push({name: 'TestInfo', params: { 'id': this.id }})
+      if (this.$store.state.userInfo.type === UserType.TEACHER.toString()) {
+        this.$router.push({name: 'TestInfo', params: {'id': this.id}})
+      } else if (this.$store.state.userInfo.type === UserType.STUDENT.toString()) {
+        this.$router.push({name: 'TestPassing', params: {'id': this.id}})
+      }
     }
   },
   created: function () {

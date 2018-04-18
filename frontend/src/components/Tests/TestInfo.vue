@@ -40,7 +40,7 @@ export default {
   },
   created: function () {
     this.$store.dispatch('getTestDetails', this.id)
-    console.log(this.$store.state.testDetails[this.id])
+//    console.log(this.$store.state.testDetails[this.id])
   }
 }
 </script>

@@ -55,6 +55,26 @@ class QuizTestSerializer(serializers.ModelSerializer):
         model = QuizTest
         fields = ('id', 'title', 'author', 'questions', 'readers')
 
+class QuizAnswerStudentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuizAnswer
+        fields = ('id', 'answer_text')
+
+
+class QuizQuestionStudentSerializer(serializers.ModelSerializer):
+    answers = QuizAnswerStudentSerializer(many=True, read_only=True)
+    class Meta:
+        model = QuizQuestion
+        fields = ('id', 'quiz', 'text', 'answers')
+
+class QuizTestStudentSerializer(serializers.ModelSerializer):
+    questions = QuizQuestionStudentSerializer(many=True, read_only=True)
+    readers = UserSerializer(many=True, read_only=True)
+    class Meta:
+        model = QuizTest
+        fields = ('id', 'title', 'author', 'questions', 'readers')
+
 class AnswerToQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -67,6 +87,7 @@ class UserToQuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserToQuiz
         fields = ('quiz', 'user')
+
 
 
 
