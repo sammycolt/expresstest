@@ -11,5 +11,10 @@ export const Answer = {
     return HTTP.get('/answers/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  addAnswerByUser (config) {
+    return HTTP.post('/answer_by_user/', config, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

@@ -23,7 +23,10 @@ import {
   ADD_USER_DETAILS,
   ADD_TEST_DETAILS,
   ADD_QUESTION_DETAILS,
-  SET_STUDENTS
+  SET_STUDENTS,
+  ADD_ANSWER_BY_USER,
+  SET_ANSWERS_BY_USER,
+  SET_GIVEN_ANSWERS
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -39,7 +42,9 @@ const state = {
   userDetails: {},
   testDetails: {},
   questionDetails: {},
-  students: []
+  students: [],
+  answersByUser: [],
+  givenAnswers: {}
 }
 
 const getters = {
@@ -53,7 +58,8 @@ const getters = {
   userDetails: state => state.userDetails,
   testDetails: state => state.testDetails,
   questionDetails: state => state.questionDetails,
-  students: state => state.students
+  students: state => state.students,
+  givenAnswers: state => state.givenAnswers
 }
 
 const mutations = {
@@ -115,6 +121,25 @@ const mutations = {
   },
   [SET_STUDENTS] (state, { students }) {
     state.students = students
+  },
+  [ADD_ANSWER_BY_USER] (state, answerByUser) {
+    state.answersByUser = [answerByUser, ...state.answersByUser]
+  },
+  [SET_ANSWERS_BY_USER] (state, { answers }) {
+    state.answersByUser = answers
+  },
+  [SET_GIVEN_ANSWERS] (state, testId) {
+    if (!state.givenAnswers.length) {
+      var ans = {}
+      var questions = state.testDetails[testId].questions
+      for (var i = 0; i < questions.length; ++i) {
+        Vue.set(ans, questions[i].id, {})
+        for (var j = 0; j < questions[i].answers.length; ++j) {
+          Vue.set(ans[questions[i].id], questions[i].answers[j].id, {'given': false})
+        }
+      }
+      Vue.set(state, 'givenAnswers', ans)
+    }
   }
 }
 
@@ -189,6 +214,7 @@ const actions = {
         value: response
       }
       commit(ADD_TEST_DETAILS, payload)
+      commit(SET_GIVEN_ANSWERS, id)
     })
   },
   createQuestion ({ commit, dispatch }, questionData) {
@@ -242,6 +268,11 @@ const actions = {
   getStudents ({ commit }) {
     User.studentList().then(students => {
       commit(SET_STUDENTS, { students })
+    })
+  },
+  addAnswerByUser ({ commit }, payload) {
+    Answer.addAnswerByUser(payload).then(response => {
+      commit(ADD_ANSWER_BY_USER, payload)
     })
   }
 }

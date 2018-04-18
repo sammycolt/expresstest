@@ -1,20 +1,23 @@
 <template>
 <section class="container grid-960">
-  <div class="panel">
+  <div class="panel" v-if="givenAnswers">
     <div class="panel-header text-center">
-      <div class="panel-title h5 mt-10">Pass the test</div>
+      <div class="panel-title h5 mt-10">{{this.title}}</div>
     </div>
     <div class="panel-body">
       <ul class="step">
-        <li class="step-item" v-for="(question, index) in this.questions" :class="[index === questionIndex ? 'active' : '']"><a>{{index + 1}}</a></li>
+        <li class="step-item" v-for="(question, index) in this.questions" :class="[index === questionIndex ? 'active' : '']" @click="setIndex(index)">
+          <a>{{index + 1}}</a>
+        </li>
       </ul>
       <div v-for="(question, index) in this.questions" class="step-item">
         <div v-show="index === questionIndex">
-          <h4>{{ question.text }}</h4>
+          <h5>{{ question.text }}</h5>
           <ol>
-            <li v-for="answer in question.answers">
+            <li v-for="(answer, index2) in question.answers">
+              <!--{{givenAnswers}}-->
                 <label class="form-checkbox">
-                  <input type="checkbox">
+                  <input type="checkbox" v-model="givenAnswers[question.id][answer.id].given">
                   <i class="form-icon"></i> {{answer.answer_text}}
                 </label>
             </li>
@@ -25,7 +28,7 @@
     <div class="panel-footer">
       <div class="form-group">
         <div>
-          <button class="btn btn-primary btn-block" @click="next">Next</button>
+          <button class="btn btn-primary btn-block" @click="submit">Submit</button>
         </div>
       </div>
     </div>
@@ -43,6 +46,14 @@ export default{
       if (state.testDetails[this.testId]) {
         return state.testDetails[this.testId].questions
       }
+    },
+    title (state) {
+      if (state.testDetails[this.testId]) {
+        return state.testDetails[this.testId].title
+      }
+    },
+    givenAnswers (state) {
+      return state.givenAnswers
     }
   }),
   data () {
@@ -52,8 +63,24 @@ export default{
     }
   },
   methods: {
-    next () {
+    submit () {
       this.questionIndex++
+//      console.log(this.questions.length)
+      for (var i = 0; i < this.questions.length; ++i) {
+        for (var j = 0; j < this.questions[i].answers.length; ++j) {
+//          console.log(this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id])
+          if (this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id].given) {
+            this.$store.dispatch('addAnswerByUser', {
+              'user': this.$store.state.userInfo.id,
+              'answer': this.questions[i].answers[j].id
+            })
+//            console.log(i, j)
+          }
+        }
+      }
+    },
+    setIndex (value) {
+      this.questionIndex = value
     }
   },
   created: function () {

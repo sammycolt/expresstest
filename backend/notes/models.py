@@ -16,8 +16,6 @@ class UniversityUser(models.Model):
     user = models.OneToOneField(User)
     type = models.CharField(max_length=1, choices=USER_CHOICES)
 
-
-
 class QuizTest(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User)
@@ -32,7 +30,7 @@ class QuizAnswer(models.Model):
     is_correct = models.NullBooleanField()
 
 class AnswerByUser(models.Model):
-    user = models.ForeignKey(UniversityUser)
+    user = models.ForeignKey(User)
     answer = models.ForeignKey(QuizAnswer)
 
 class QuizQuestion(models.Model):
@@ -43,6 +41,3 @@ class QuizQuestion(models.Model):
 class AnswerToQuestion(models.Model):
     answer = models.ForeignKey(QuizAnswer)
     question = models.ForeignKey(QuizQuestion)
-
-
-

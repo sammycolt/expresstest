@@ -4,7 +4,8 @@ from rest_auth.serializers import JWTSerializer
 
 
 from .models import Note, UniversityUser, User, QuizTest, \
-    QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz
+    QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, \
+    AnswerByUser
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -89,7 +90,11 @@ class UserToQuizSerializer(serializers.ModelSerializer):
         fields = ('quiz', 'user')
 
 
+class AnswerByUserSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = AnswerByUser
+        fields = ('answer', 'user')
 
 def jwt_token_payload_handler(token, user, request=None):
     return {

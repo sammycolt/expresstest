@@ -1,10 +1,11 @@
 from rest_framework import viewsets, generics
 
-from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz
+from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer, \
-    UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer
+    UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer, \
+    AnswerByUserSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -23,6 +24,12 @@ class UserDetails(generics.RetrieveAPIView):
 class QuizTestViewSet(viewsets.ModelViewSet):
     queryset = QuizTest.objects.all()
     serializer_class = QuizTestSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return QuizTestSerializer
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return QuizTestStudentSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -85,3 +92,14 @@ class AnswerToQauestionVS(viewsets.ModelViewSet):
 class UserToQuizVS(viewsets.ModelViewSet):
     queryset = UserToQuiz.objects.all()
     serializer_class = UserToQuizSerializer
+
+class AnswerByUserViewSet(viewsets.ModelViewSet):
+    queryset = AnswerByUser.objects.all()
+    serializer_class = AnswerByUserSerializer
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
+    #         return queryset.filter(answer__question__quiz__author_id=self.request.user.id)
+    #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+    #         return queryset.filter(user_id=self.request.user.id)
