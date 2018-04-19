@@ -1,11 +1,12 @@
+from django.db.models import QuerySet
 from rest_framework import viewsets, generics
 
-from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser
+from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, QuizResults
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer, \
     UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer, \
-    AnswerByUserSerializer
+    AnswerByUserSerializer, QuizResultsSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -69,12 +70,13 @@ class QuizAnswerViewSet(viewsets.ModelViewSet):
 
 class QuizQuestionViewSet(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
+    serializer_class = QuizQuestionSerializer
 
-    def get_serializer_class(self):
-        if self.request.user.universityuser.type == UniUser.TEACHER.value:
-            return QuizQuestionSerializer
-        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
-            return QuizQuestionStudentSerializer
+    # def get_serializer_class(self):
+    #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
+    #         return QuizQuestionSerializer
+    #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+    #         return QuizQuestionStudentSerializer
 
 class QuizQuestionDetails(generics.RetrieveAPIView):
     queryset = QuizQuestion.objects.all()
@@ -103,3 +105,7 @@ class AnswerByUserViewSet(viewsets.ModelViewSet):
     #         return queryset.filter(answer__question__quiz__author_id=self.request.user.id)
     #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
     #         return queryset.filter(user_id=self.request.user.id)
+
+class UserQuizResultsViewSet(viewsets.ModelViewSet):
+    queryset = QuizResults.objects.all()
+    serializer_class = QuizResultsSerializer

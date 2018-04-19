@@ -7,9 +7,16 @@
     <div>
       <form class="form-horizontal">
         <div class="form-group">
-
           <div class="col-9">
            <textarea class="form-input" v-model="body" rows="8" placeholder="Type your question..."></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-3">
+            <label class="form-label">Score</label>
+          </div>
+          <div class="col-6">
+            <input class="form-input" v-model="score" placeholder="Type score here...">
           </div>
         </div>
       </form>
@@ -31,7 +38,8 @@ export default{
   props: ['testId'],
   data () {
     return {
-      'body': ''
+      'body': '',
+      'score': 0
     }
   },
   methods: {

@@ -37,7 +37,18 @@ class QuizQuestion(models.Model):
     quiz = models.ForeignKey(QuizTest, related_name='questions')
     text = models.TextField()
     answers = models.ManyToManyField(QuizAnswer, through='AnswerToQuestion')
+    score = models.IntegerField(default=1)
 
 class AnswerToQuestion(models.Model):
-    answer = models.ForeignKey(QuizAnswer)
+    answer = models.ForeignKey(QuizAnswer, related_name='questions')
     question = models.ForeignKey(QuizQuestion)
+
+class QuizResults(models.Model):
+    user = models.ForeignKey(User)
+    quiz = models.ForeignKey(QuizTest)
+    correct_answers = models.ManyToManyField(QuizAnswer, through='AnswerToResult')
+    total_score = models.FloatField()
+
+class AnswerToResult(models.Model):
+    answer = models.ForeignKey(QuizAnswer)
+    result = models.ForeignKey(QuizResults)
