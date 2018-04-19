@@ -21,5 +21,10 @@ export const Test = {
     return HTTP.post('/user_to_quiz/', payload, getHeaders()).then(response => {
       return response.data
     })
+  },
+  results () {
+    return HTTP.get('/results/', getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

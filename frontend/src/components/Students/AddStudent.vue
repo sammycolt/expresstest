@@ -1,5 +1,5 @@
 <template>
-<div class="panel" v-if="studentsDictionary">
+<div class="panel" v-if="studentsDictionaryByUsername">
   <div class="panel-header text-center">
     <div class="panel-title h5 mt-10">Share test to student</div>
   </div>
@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 export default{
   name: 'add-student',
   props: ['testId'],
-  computed: mapGetters(['students', 'studentsDictionary']),
+  computed: mapGetters(['students', 'studentsDictionaryByUsername']),
   data () {
     return {
       'stdnt': {}
@@ -39,7 +39,7 @@ export default{
   },
   methods: {
     share (event) {
-      var student1 = this.studentsDictionary[this.stdnt]
+      var student1 = this.studentsDictionaryByUsername[this.stdnt]
       var payload = {
         'user': student1.id,
         'quiz': this.testId
@@ -50,9 +50,9 @@ export default{
   },
   created: function () {
     this.$store.dispatch('getStudents').then(response => {
-      for (var i in this.students) {
-        this.studentsDictionary[this.students[i].username] = this.students[i]
-      }
+//      for (var i in this.students) {
+//        this.studentsDictionaryByUsername[this.students[i].username] = this.students[i]
+//      }
     })
   }
 

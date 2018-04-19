@@ -87,15 +87,27 @@ class UserToQuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserToQuiz
-        fields = ('quiz', 'user')
+        fields = ('quiz', 'user', 'id')
+
+    def save(self, **kwargs):
+        user = self.validated_data['user']
+        quiz = self.validated_data['quiz']
+
+        users_to_quiz = UserToQuiz.objects.filter(user_id=user.id, quiz_id=quiz.id)
+        if users_to_quiz.count():
+            user_to_quiz = users_to_quiz[0]
+        else:
+            user_to_quiz = super().save(**kwargs)
+
+        return user_to_quiz
 
 
 class AnswerByUserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = AnswerByUser
         fields = ('answer', 'user', 'id')
-        read_only_fields = ('id',)
+
 
     def save(self, **kwargs):
         answer = self.validated_data['answer']
@@ -118,15 +130,15 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
         correct_answers_on_this_question_by_user = answers_on_this_question_by_user.filter(answer__is_correct=True)
         correct_answers_on_this_question = QuizQuestion.objects.filter(id=question.id). \
             filter(answers__is_correct=True)
-        for elem in correct_answers_on_this_question_by_user.all():
-            print(elem)
-        print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
+        # for elem in correct_answers_on_this_question_by_user.all():
+        #     print(elem)
+        # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
 
         if (quiz_results.count()):
             quiz_result = quiz_results[0]
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
-                    print("!!1")
+                    # print("!!1")
                     if question not in quiz_result.correct_questions.all():
                         ans_to_res = QuestionToResult(question=question, result=quiz_result)
                         ans_to_res.save()

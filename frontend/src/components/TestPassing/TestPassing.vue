@@ -1,6 +1,6 @@
 <template>
 <section class="container grid-960">
-  <div class="panel" v-if="givenAnswers">
+  <div class="panel" v-if="givenAnswers && !this.showResults && questions">
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">{{this.title}}</div>
     </div>
@@ -25,19 +25,28 @@
         </div>
       </div>
     </div>
-    <div class="panel-footer">
+    <div class="panel-footer form-horizontal">
       <div class="form-group">
-        <div>
-          <button class="btn btn-primary btn-block" @click="submit">Submit</button>
+        <div class="col-2">
+          <button v-if="questionIndex > 0" class="btn btn-primary btn-block" @click="prev">Prev</button>
         </div>
+        <div class="col-8"></div>
+        <div class="col-2">
+          <button v-if="questionIndex < questions.length - 1" class="btn btn-primary btn-block" @click="next">Next</button>
+        </div>
+      </div>
+      <div v-if="questionIndex === questions.length - 1">
+        <button class="btn btn-primary btn-block" @click="finish">Finish test</button>
       </div>
     </div>
   </div>
+  <student-test-results v-if="this.showResults" :testId="this.testId"></student-test-results>
 </section>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import TestResults from './StudentTestResults.vue'
 
 export default{
   name: 'test-passing',
@@ -59,12 +68,27 @@ export default{
   data () {
     return {
       'testId': this.$route.params.id,
+      'showResults': false,
       questionIndex: 0
     }
   },
+  components: {
+    'student-test-results': TestResults
+  },
   methods: {
+    next () {
+      this.setIndex(this.questionIndex + 1)
+      this.submit()
+    },
+    prev () {
+      this.setIndex(this.questionIndex - 1)
+      this.submit()
+    },
+    finish () {
+      this.submit()
+      this.showResults = true
+    },
     submit () {
-      this.questionIndex++
 //      console.log(this.questions.length)
       for (var i = 0; i < this.questions.length; ++i) {
         for (var j = 0; j < this.questions[i].answers.length; ++j) {
@@ -78,7 +102,11 @@ export default{
       }
     },
     setIndex (value) {
-      this.questionIndex = value
+      console.log(this.questionIndex, value)
+      if ((value >= 0) && (value < this.questions.length)) {
+        this.questionIndex = value
+      }
+      console.log(this.questionIndex)
     },
     change (given, answerId, questionId) {
       if (given) {

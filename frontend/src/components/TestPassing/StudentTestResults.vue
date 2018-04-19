@@ -1,0 +1,26 @@
+<template>
+  <section class="container grid-960">
+    <div class="panel" v-if="testResults[this.testId]">
+      <div class="panel-header text-center">
+        <div class="panel-title h5 mt-10">Result: {{testResults[this.testId][0].total_score}}</div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default{
+  name: 'student-test-results',
+  props: ['testId'],
+  computed: mapState({
+    testResults (state) {
+      return state.testResults
+    }
+  }),
+  created: function () {
+    this.$store.dispatch('getTestResults')
+  }
+}
+</script>

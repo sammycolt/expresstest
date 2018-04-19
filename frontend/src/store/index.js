@@ -29,7 +29,8 @@ import {
   SET_GIVEN_ANSWERS,
   SET_STUDENTS_DICTIONARY,
   ADD_ID_TO_GIVEN_ANSWERS,
-  REMOVE_ANSWER_BY_USER
+  REMOVE_ANSWER_BY_USER,
+  SET_TEST_RESULTS
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -48,7 +49,9 @@ const state = {
   students: [],
   answersByUser: [],
   givenAnswers: {},
-  studentsDictionary: {}
+  studentsDictionaryByUsername: {},
+  studentsDictionaryById: {},
+  testResults: {}
 }
 
 const getters = {
@@ -64,7 +67,8 @@ const getters = {
   questionDetails: state => state.questionDetails,
   students: state => state.students,
   givenAnswers: state => state.givenAnswers,
-  studentsDictionary: state => state.studentsDictionary
+  testResults: state => state.testResults,
+  studentsDictionaryByUsername: state => state.studentsDictionaryByUsername
 }
 
 const mutations = {
@@ -161,13 +165,31 @@ const mutations = {
     }
   },
   [SET_STUDENTS_DICTIONARY] (state) {
-    if (!state.studentsDictionary.length) {
+    if (!state.studentsDictionaryByUsername.length) {
       var students = {}
       for (var i = 0; i < state.students.length; ++i) {
         students[state.students[i].username] = state.students[i]
       }
-      Vue.set(state, 'studentsDictionary', students)
+      Vue.set(state, 'studentsDictionaryByUsername', students)
     }
+    if (!state.studentsDictionaryById.length) {
+      var students1 = {}
+      for (var j = 0; j < state.students.length; ++j) {
+        students1[state.students[j].id] = state.students[j]
+      }
+      Vue.set(state, 'studentsDictionaryById', students1)
+    }
+  },
+  [SET_TEST_RESULTS] (state, results) {
+    var res = {}
+    for (var i = 0; i < results.length; ++i) {
+      if (!res[results[i].quiz]) {
+        res[results[i].quiz] = [results[i]]
+      } else {
+        res[results[i].quiz] = [results[i], ...res[results[i].quiz]]
+      }
+    }
+    state.testResults = res
   }
 }
 
@@ -302,13 +324,18 @@ const actions = {
   addAnswerByUser ({ commit }, payload) {
     Answer.addAnswerByUser(payload).then(response => {
       commit(ADD_ANSWER_BY_USER, payload)
-      console.log(response)
+      // console.log(response)
       commit(ADD_ID_TO_GIVEN_ANSWERS, response)
     })
   },
   deleteAnswerByUser ({ commit }, id) {
     Answer.deleteAnswerByUser(id).then(response => {
       commit(REMOVE_ANSWER_BY_USER, id)
+    })
+  },
+  getTestResults ({ commit }) {
+    Test.results().then(results => {
+      commit(SET_TEST_RESULTS, results)
     })
   }
 }
