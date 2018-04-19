@@ -5,7 +5,7 @@ from rest_auth.serializers import JWTSerializer
 
 from .models import Note, UniversityUser, User, QuizTest, \
     QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, \
-    AnswerByUser, QuizResults, AnswerToResult
+    AnswerByUser, QuizResults, QuestionToResult
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -67,7 +67,7 @@ class QuizQuestionStudentSerializer(serializers.ModelSerializer):
     answers = QuizAnswerStudentSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers')
+        fields = ('id', 'quiz', 'text', 'answers', 'score')
 
 class QuizTestStudentSerializer(serializers.ModelSerializer):
     questions = QuizQuestionStudentSerializer(many=True, read_only=True)
@@ -91,42 +91,77 @@ class UserToQuizSerializer(serializers.ModelSerializer):
 
 
 class AnswerByUserSerializer(serializers.ModelSerializer):
-
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = AnswerByUser
-        fields = ('answer', 'user')
+        fields = ('answer', 'user', 'id')
+        read_only_fields = ('id',)
 
     def save(self, **kwargs):
-        abu = super().save(**kwargs)
+        answer = self.validated_data['answer']
+        user = self.validated_data['user']
+
+        answers_by_user = AnswerByUser.objects.filter(answer_id=answer.id).filter(user_id=user.id)
+        if answers_by_user.count():
+            abu = answers_by_user[0]
+        else:
+            abu = super().save(**kwargs)
+
+
         question = abu.answer.questions.all()[0].question
         quiz = question.quiz
-        # print(abu.answer.questions.all()[0].question.quiz.id)
-        # print(dir(abu.answer.quizquestion_set))
         quiz_results = QuizResults.objects.filter(quiz_id=quiz.id).filter(user_id=abu.user.id)
+
+        answers_on_this_question_by_user = AnswerByUser.objects.filter(user_id=user.id). \
+            filter(answer__questions__question_id=question.id)
+
+        correct_answers_on_this_question_by_user = answers_on_this_question_by_user.filter(answer__is_correct=True)
+        correct_answers_on_this_question = QuizQuestion.objects.filter(id=question.id). \
+            filter(answers__is_correct=True)
+        for elem in correct_answers_on_this_question_by_user.all():
+            print(elem)
+        print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
+
         if (quiz_results.count()):
             quiz_result = quiz_results[0]
-            if abu.answer not in quiz_result.correct_answers.all():
-                ans_to_res = AnswerToResult(answer=abu.answer, result=quiz_result)
-                ans_to_res.save()
-                quiz_result.total_score += question.score
-                quiz_result.save()
+            if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
+                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
+                    print("!!1")
+                    if question not in quiz_result.correct_questions.all():
+                        ans_to_res = QuestionToResult(question=question, result=quiz_result)
+                        ans_to_res.save()
+                        quiz_result.total_score += question.score
+                        quiz_result.save()
+                else:
+                    if question in quiz_result.correct_questions.all() :
+                        QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
+                        quiz_result.total_score -= question.score
+                        quiz_result.save()
+            else:
+                if question in quiz_result.correct_questions.all():
+                    QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
+                    quiz_result.total_score -= question.score
+                    quiz_result.save()
         else:
             score = 0
-            if abu.answer.is_correct:
-                score = question.score
-            new_result = QuizResults(user=abu.user, quiz=quiz, total_score=score)
-            new_result.save()
-            if abu.answer.is_correct:
-                ans_to_res = AnswerToResult(answer=abu.answer, result=new_result)
-                ans_to_res.save()
+            if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
+                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
+                    score = question.score
+                new_result = QuizResults(user=abu.user, quiz=quiz, total_score=score)
+                new_result.save()
+                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
+                    ans_to_res = QuestionToResult(question=question, result=new_result)
+                    ans_to_res.save()
+
         return abu
 
+
 class QuizResultsSerializer(serializers.ModelSerializer):
-    correct_answers = QuizAnswerStudentSerializer(many=True, read_only=True)
+    correct_questions = QuizQuestionStudentSerializer(many=True, read_only=True)
 
     class Meta:
         model = QuizResults
-        fields = ('user', 'quiz', 'correct_answers', 'total_score')
+        fields = ('id', 'user', 'quiz', 'correct_questions', 'total_score')
 
 
 

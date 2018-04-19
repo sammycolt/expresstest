@@ -46,9 +46,9 @@ class AnswerToQuestion(models.Model):
 class QuizResults(models.Model):
     user = models.ForeignKey(User)
     quiz = models.ForeignKey(QuizTest)
-    correct_answers = models.ManyToManyField(QuizAnswer, through='AnswerToResult')
+    correct_questions = models.ManyToManyField(QuizQuestion, through='QuestionToResult')
     total_score = models.FloatField()
 
-class AnswerToResult(models.Model):
-    answer = models.ForeignKey(QuizAnswer)
+class QuestionToResult(models.Model):
+    question = models.ForeignKey(QuizQuestion)
     result = models.ForeignKey(QuizResults)

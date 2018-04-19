@@ -46,7 +46,8 @@ export default{
     create (event) {
       this.$store.dispatch('createQuestion', {
         'quiz': this.testId,
-        'text': this.body
+        'text': this.body,
+        'score': this.score
       })
       this.body = ''
       event.preventDefault()

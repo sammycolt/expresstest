@@ -17,7 +17,7 @@
             <li v-for="(answer, index2) in question.answers">
               <!--{{givenAnswers}}-->
                 <label class="form-checkbox">
-                  <input type="checkbox" v-model="givenAnswers[question.id][answer.id].given">
+                  <input type="checkbox" v-model="givenAnswers[question.id][answer.id].given" @change="change(givenAnswers[question.id][answer.id].given, answer.id, question.id)">
                   <i class="form-icon"></i> {{answer.answer_text}}
                 </label>
             </li>
@@ -68,19 +68,30 @@ export default{
 //      console.log(this.questions.length)
       for (var i = 0; i < this.questions.length; ++i) {
         for (var j = 0; j < this.questions[i].answers.length; ++j) {
-//          console.log(this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id])
           if (this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id].given) {
             this.$store.dispatch('addAnswerByUser', {
               'user': this.$store.state.userInfo.id,
               'answer': this.questions[i].answers[j].id
             })
-//            console.log(i, j)
           }
         }
       }
     },
     setIndex (value) {
       this.questionIndex = value
+    },
+    change (given, answerId, questionId) {
+      if (given) {
+        this.$store.dispatch('addAnswerByUser', {
+          'user': this.$store.state.userInfo.id,
+          'answer': answerId
+        })
+      } else {
+//        console.log('unChange')
+        var abuId = this.givenAnswers[questionId][answerId].answerByUserId
+//        console.log(abuId)
+        this.$store.dispatch('deleteAnswerByUser', abuId)
+      }
     }
   },
   created: function () {

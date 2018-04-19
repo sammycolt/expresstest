@@ -1,7 +1,8 @@
 from django.db.models import QuerySet
 from rest_framework import viewsets, generics
 
-from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, QuizResults
+from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, \
+    QuizResults, QuestionToResult
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer, \
@@ -99,12 +100,45 @@ class AnswerByUserViewSet(viewsets.ModelViewSet):
     queryset = AnswerByUser.objects.all()
     serializer_class = AnswerByUserSerializer
 
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        answer = resp.data['answer']
+        user = resp.data['user']
+        # print(resp.data)
+        abu = AnswerByUser.objects.filter(answer_id=answer, user_id=user)[0]
+        resp.data['id'] = abu.id
+        # print(abu.answer.questions.filter(answer_id=answer)[0].question.id)
+        resp.data['question'] = abu.answer.questions.filter(answer_id=answer)[0].question.id
+        # print(abu.answer.questions.all()[0].id)
+        return resp
+
+    def destroy(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        abu = AnswerByUser.objects.get(id=id)
+        # print(abu.answer, abu.user)
+        question = abu.answer.questions.filter(answer_id=abu.answer)[0].question
+        quiz = question.quiz
+        user = abu.user
+        results = QuizResults.objects.filter(user_id=user.id, quiz_id=quiz.id)
+
+        if abu.answer.is_correct:
+            if results.count():
+                result = results[0]
+                if question in result.correct_questions.all():
+                    QuestionToResult.objects.filter(question_id=question.id, result_id=result.id).delete()
+                    result.total_score -= question.score
+                    result.save()
+        else:
+            print('Kek')
+        return super().destroy(request, *args, **kwargs)
+
     # def get_queryset(self):
     #     queryset = super().get_queryset()
     #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
     #         return queryset.filter(answer__question__quiz__author_id=self.request.user.id)
     #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
     #         return queryset.filter(user_id=self.request.user.id)
+
 
 class UserQuizResultsViewSet(viewsets.ModelViewSet):
     queryset = QuizResults.objects.all()

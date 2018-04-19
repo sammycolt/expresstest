@@ -26,7 +26,10 @@ import {
   SET_STUDENTS,
   ADD_ANSWER_BY_USER,
   SET_ANSWERS_BY_USER,
-  SET_GIVEN_ANSWERS
+  SET_GIVEN_ANSWERS,
+  SET_STUDENTS_DICTIONARY,
+  ADD_ID_TO_GIVEN_ANSWERS,
+  REMOVE_ANSWER_BY_USER
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -44,7 +47,8 @@ const state = {
   questionDetails: {},
   students: [],
   answersByUser: [],
-  givenAnswers: {}
+  givenAnswers: {},
+  studentsDictionary: {}
 }
 
 const getters = {
@@ -59,7 +63,8 @@ const getters = {
   testDetails: state => state.testDetails,
   questionDetails: state => state.questionDetails,
   students: state => state.students,
-  givenAnswers: state => state.givenAnswers
+  givenAnswers: state => state.givenAnswers,
+  studentsDictionary: state => state.studentsDictionary
 }
 
 const mutations = {
@@ -128,17 +133,40 @@ const mutations = {
   [SET_ANSWERS_BY_USER] (state, { answers }) {
     state.answersByUser = answers
   },
+  [REMOVE_ANSWER_BY_USER] (state, { id }) {
+    state.answersByUser = state.answersByUser.filter(abu => {
+      return abu.id !== id
+    })
+  },
   [SET_GIVEN_ANSWERS] (state, testId) {
     if (!state.givenAnswers.length) {
       var ans = {}
       var questions = state.testDetails[testId].questions
       for (var i = 0; i < questions.length; ++i) {
-        Vue.set(ans, questions[i].id, {})
+        Vue.set(ans, questions[i].id, {'given': false})
         for (var j = 0; j < questions[i].answers.length; ++j) {
           Vue.set(ans[questions[i].id], questions[i].answers[j].id, {'given': false})
         }
       }
       Vue.set(state, 'givenAnswers', ans)
+    }
+  },
+  [ADD_ID_TO_GIVEN_ANSWERS] (state, payload) {
+    // console.log(payload)
+    if (state.givenAnswers) {
+      var question = payload.question
+      var answer = payload.answer
+      var abuId = payload.id
+      Vue.set(state.givenAnswers[question][answer], 'answerByUserId', abuId)
+    }
+  },
+  [SET_STUDENTS_DICTIONARY] (state) {
+    if (!state.studentsDictionary.length) {
+      var students = {}
+      for (var i = 0; i < state.students.length; ++i) {
+        students[state.students[i].username] = state.students[i]
+      }
+      Vue.set(state, 'studentsDictionary', students)
     }
   }
 }
@@ -268,11 +296,19 @@ const actions = {
   getStudents ({ commit }) {
     User.studentList().then(students => {
       commit(SET_STUDENTS, { students })
+      commit(SET_STUDENTS_DICTIONARY)
     })
   },
   addAnswerByUser ({ commit }, payload) {
     Answer.addAnswerByUser(payload).then(response => {
       commit(ADD_ANSWER_BY_USER, payload)
+      console.log(response)
+      commit(ADD_ID_TO_GIVEN_ANSWERS, response)
+    })
+  },
+  deleteAnswerByUser ({ commit }, id) {
+    Answer.deleteAnswerByUser(id).then(response => {
+      commit(REMOVE_ANSWER_BY_USER, id)
     })
   }
 }

@@ -16,5 +16,10 @@ export const Answer = {
     return HTTP.post('/answer_by_user/', config, getHeaders()).then(response => {
       return response.data
     })
+  },
+  deleteAnswerByUser (answerByUser) {
+    return HTTP.delete(`/answer_by_user/${answerByUser}/`, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }
