@@ -30,7 +30,8 @@ import {
   SET_STUDENTS_DICTIONARY,
   ADD_ID_TO_GIVEN_ANSWERS,
   REMOVE_ANSWER_BY_USER,
-  SET_TEST_RESULTS
+  SET_TEST_RESULTS,
+  REMOVE_TEST_RESULT
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -190,6 +191,9 @@ const mutations = {
       }
     }
     state.testResults = res
+  },
+  [REMOVE_TEST_RESULT] (state, { testId }) {
+    Vue.set(state.testResults, testId, {})
   }
 }
 
@@ -336,6 +340,13 @@ const actions = {
   getTestResults ({ commit }) {
     Test.results().then(results => {
       commit(SET_TEST_RESULTS, results)
+    })
+  },
+  removeTestResults ({ commit }, payload) {
+    var testId = payload.testId
+    var resultId = payload.resultId
+    Test.deleteResults(resultId).then(response => {
+      commit(REMOVE_TEST_RESULT, testId)
     })
   }
 }

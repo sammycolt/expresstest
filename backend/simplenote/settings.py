@@ -120,6 +120,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'simplenote.wsgi.application'
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

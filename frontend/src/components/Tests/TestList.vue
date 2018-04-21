@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h4>Available tests:</h4>
     <div class="card" v-for="test in this.tests">
       <test-list-elem :title="test.title" :author="test.author" :id="test.id" :questionsCount="test.questions.length"></test-list-elem>
     </div>
@@ -19,6 +20,7 @@ export default {
   },
   created: function () {
     this.$store.dispatch('getTests')
+    this.$store.dispatch('getTestResults')
   }
 }
 </script>

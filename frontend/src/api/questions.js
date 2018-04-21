@@ -24,5 +24,10 @@ export const Question = {
     return HTTP.post('/answer_to_question/', payload, getHeaders()).then(response => {
       return response.data
     })
+  },
+  delete (id) {
+    return HTTP.delete(`/questions/${id}/`, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

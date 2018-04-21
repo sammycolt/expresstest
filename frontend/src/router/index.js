@@ -34,7 +34,16 @@ export default new Router({
     {
       path: '/passing/:id',
       name: 'TestPassing',
-      component: TestPassing
+      component: TestPassing,
+      beforeEnter (to, from, next) {
+        const answer = window.confirm('Are you sure you want to take the test? If you have already passed it, ' +
+          'the previous result will be deleted!')
+        if (answer) {
+          next()
+        } else {
+          next(false)
+        }
+      }
     }
   ]
 })

@@ -21,5 +21,10 @@ export const Answer = {
     return HTTP.delete(`/answer_by_user/${answerByUser}/`, getHeaders()).then(response => {
       return response.data
     })
+  },
+  delete (id) {
+    return HTTP.delete(`/answers/${id}/`, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

@@ -4,8 +4,7 @@
       <!--<navbar class="text-center" ></navbar>-->
     <!--</section>-->
     <section class="container grid-960">
-      <reg-form></reg-form>
-      <login-form v-if="!check()"></login-form>
+      <auth v-if="!check()"></auth>
       <account v-else-if="check()"></account>
       <!--<div class="columns">-->
         <!--<div class="column col-2"></div>-->
@@ -31,24 +30,14 @@
 
 <script>
 
-import CreateNote from './Notes/CreateNote'
-import NoteList from './Notes/NoteList'
-import Navbar from './Navbar'
-import UsersList from './Auth/UsersList'
-import RegistrationForm from './Auth/RegistrationForm.vue'
-import LoginForm from './Auth/LoginForm.vue'
 import Account from './Auth/Account.vue'
+import Auth from './Auth/Auth.vue'
 
 export default {
   name: 'start',
   components: {
-    'navbar': Navbar,
-    'create-note': CreateNote,
-    'note-list': NoteList,
-    'users-list': UsersList,
-    'reg-form': RegistrationForm,
-    'login-form': LoginForm,
-    'account': Account
+    'account': Account,
+    'auth': Auth
   },
   data: function () {
     return {

@@ -26,5 +26,15 @@ export const Test = {
     return HTTP.get('/results/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  deleteResults (resultId) {
+    return HTTP.delete(`/results/${resultId}/`, getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  delete (id) {
+    return HTTP.delete(`/tests/${id}`, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

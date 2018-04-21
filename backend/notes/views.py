@@ -150,3 +150,12 @@ class UserQuizResultsViewSet(viewsets.ModelViewSet):
                 return queryset.filter(user_id=self.request.user.id)
         except Exception as e:
             return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        res = QuizResults.objects.get(id=id)
+        user = res.user
+        quiz = res.quiz
+        for question in quiz.questions.all():
+            AnswerByUser.objects.filter(user_id=user.id, answer__questions__question_id=question.id).delete()
+        return super().destroy(request, *args, **kwargs)

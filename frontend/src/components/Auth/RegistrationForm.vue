@@ -1,58 +1,58 @@
 <template>
 <form class="form-horizontal" @submit="submitForm">
-<div class="form-group">
-  <div class="col-3">
-    <label class="form-label">Username</label>
+  <div class="form-group">
+    <div class="col-3">
+      <label class="form-label">Username</label>
+    </div>
+    <div class="col-9">
+      <input class="form-input " :class="usernameError" type="text" v-model="username" placeholder="Type your username..."/>
+      <p class="form-input-hint">{{ usernameHint }}</p>
+    </div>
   </div>
-  <div class="col-9">
-    <input class="form-input " :class="usernameError" type="text" v-model="username" placeholder="Type your username..."/>
-    <p class="form-input-hint">{{ usernameHint }}</p>
+  <div class="form-group">
+    <div class="col-3">
+      <label class="form-label">Email</label>
+    </div>
+    <div class="col-9">
+      <input class="form-input " :class="emailError" type="email" v-model="email" placeholder="Type your email..."/>
+      <p class="form-input-hint">{{ emailHint }}</p>
+    </div>
   </div>
-</div>
-<div class="form-group">
-  <div class="col-3">
-    <label class="form-label">Email</label>
+  <div class="form-group">
+    <div class="col-3">
+      <label class="form-label">Password</label>
+    </div>
+    <div class="col-9">
+      <input class="form-input " :class="password1Error" type="password" v-model="password1" placeholder="Type your password..."/>
+      <p class="form-input-hint">{{ password1Hint }}</p>
+    </div>
   </div>
-  <div class="col-9">
-    <input class="form-input " :class="emailError" type="email" v-model="email" placeholder="Type your email..."/>
-    <p class="form-input-hint">{{ emailHint }}</p>
+  <div class="form-group">
+    <div class="col-3">
+      <label class="form-label">Repeat Password</label>
+    </div>
+    <div class="col-9">
+      <input class="form-input " :class="password2Error" type="password" v-model="password2" placeholder="Repeat your password..."/>
+      <p class="form-input-hint">{{ password2Hint }}</p>
+    </div>
   </div>
-</div>
-<div class="form-group">
-  <div class="col-3">
-    <label class="form-label">Password</label>
+  <div class="form-group">
+    <div class="col-3">
+      <label class="form-label">Type of user</label>
+    </div>
+    <div class="col-9">
+      <select class="form-select" v-model="usertype">
+        <option value="1">Student</option>
+        <option value="0">Teacher</option>
+      </select>
+    </div>
   </div>
-  <div class="col-9">
-    <input class="form-input " :class="password1Error" type="password" v-model="password1" placeholder="Type your password..."/>
-    <p class="form-input-hint">{{ password1Hint }}</p>
+  <div class="form-group">
+    <div class="col-3"></div>
+    <div class="col-9">
+      <button class="btn btn-primary" type="submit">Register</button>
+    </div>
   </div>
-</div>
-<div class="form-group">
-  <div class="col-3">
-    <label class="form-label">Repeat Password</label>
-  </div>
-  <div class="col-9">
-    <input class="form-input " :class="password2Error" type="password" v-model="password2" placeholder="Repeat your password..."/>
-    <p class="form-input-hint">{{ password2Hint }}</p>
-  </div>
-</div>
-<div class="form-group">
-  <div class="col-3">
-    <label class="form-label">Type of user</label>
-  </div>
-  <div class="col-9">
-    <select class="form-select" v-model="usertype">
-      <option value="1">Student</option>
-      <option value="0">Teacher</option>
-    </select>
-  </div>
-</div>
-<div class="form-group">
-  <div class="col-3"></div>
-  <div class="col-9">
-    <button class="btn btn-primary" type="submit">Register</button>
-  </div>
-</div>
 </form>
 </template>
 
@@ -61,10 +61,10 @@ export default {
   name: 'register-user',
   data () {
     return {
-      'username': 'sjnsdjks',
-      'email': 'mfsdsd@mail.ru',
-      'password1': 'kekbsjndnsd',
-      'password2': 'sdfuhsdjsjd',
+      'username': '',
+      'email': '',
+      'password1': '',
+      'password2': '',
       'usertype': '1',
       usernameError: '',
       usernameHint: '',

@@ -1,8 +1,25 @@
 <template>
 <div>
+  <navbar v-if="isLogged"></navbar>
   <router-view></router-view>
 </div>
 </template>
+<script>
+
+import Navbar from './components/Navbar.vue'
+import { mapState } from 'vuex'
+
+export default {
+  components: {
+    'navbar': Navbar
+  },
+  computed: mapState({
+    isLogged (state) {
+      return state.isLogged
+    }
+  })
+}
+</script>
 
 <style>
   @import url(https://fonts.googleapis.com/css?family=Eczar);

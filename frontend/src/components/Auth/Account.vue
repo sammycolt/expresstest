@@ -1,12 +1,6 @@
 <template>
 <div>
-  <nav class="navbar">
-    <section class="navbar-section"></section>
-    <section class="navbar-center"></section>
-    <section class="navbar-section">
-      <a class="btn btn-default" v-on:click="logout()">Logout</a>
-    </section>
-  </nav>
+
   <div v-if="checkType('student')">
     <test-list></test-list>
   </div>
@@ -40,9 +34,6 @@ export default {
   },
   computed: mapGetters(['userInfo']),
   methods: {
-    logout () {
-      this.$store.dispatch('logoutUser')
-    },
     checkType (currType) {
       var type = this.userInfo['type']
       var typeToCheck = null

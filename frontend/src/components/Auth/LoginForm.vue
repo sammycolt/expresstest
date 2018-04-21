@@ -1,38 +1,28 @@
 <template>
-<div class="panel">
-  <div class="panel-header text-center">
-    <div class="panel-title h5 mt-10">Express Test</div>
-    <div class="panel-subtitle">Login</div>
-  </div>
-  <div class="panel-body">
-    <div>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <div class="col-3">
-            <label class="form-label">Username</label>
-          </div>
-          <div class="col-9">
-            <input class="form-input " :class="isError" type="text" v-model="username" placeholder="Type your username...">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-3">
-            <label class="form-label">Password</label>
-          </div>
-          <div class="col-9">
-            <input class="form-input " type="password" :class="isError" v-model="password" placeholder="Type your password...">
-          </div>
-        </div>
-      </form>
+<div>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <div class="col-3">
+        <label class="form-label">Username</label>
+      </div>
+      <div class="col-9">
+        <input class="form-input " :class="isError" type="text" v-model="username" placeholder="Type your username...">
+      </div>
     </div>
-  </div>
-  <div class="panel-footer">
+    <div class="form-group">
+      <div class="col-3">
+        <label class="form-label">Password</label>
+      </div>
+      <div class="col-9">
+        <input class="form-input " type="password" :class="isError" v-model="password" placeholder="Type your password...">
+      </div>
+    </div>
     <div class="form-group">
       <div>
         <button class="btn btn-primary btn-block" v-on:click="login">Login</button>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 </template>
 

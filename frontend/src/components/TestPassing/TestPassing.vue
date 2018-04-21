@@ -63,6 +63,9 @@ export default{
     },
     givenAnswers (state) {
       return state.givenAnswers
+    },
+    results (state) {
+      return state.testResults
     }
   }),
   data () {
@@ -78,15 +81,13 @@ export default{
   methods: {
     next () {
       this.setIndex(this.questionIndex + 1)
-      this.submit()
     },
     prev () {
       this.setIndex(this.questionIndex - 1)
-      this.submit()
     },
     finish () {
-      this.submit()
       this.showResults = true
+      this.submit()
     },
     submit () {
 //      console.log(this.questions.length)
@@ -103,6 +104,7 @@ export default{
     },
     setIndex (value) {
       console.log(this.questionIndex, value)
+      this.submit()
       if ((value >= 0) && (value < this.questions.length)) {
         this.questionIndex = value
       }
@@ -124,6 +126,12 @@ export default{
   },
   created: function () {
     this.$store.dispatch('getTestDetails', this.testId)
+    if (this.results[this.testId]) {
+      this.$store.dispatch('removeTestResults', {
+        'testId': this.testId,
+        'resultId': this.results[this.testId][0].id
+      })
+    }
   }
 }
 </script>
