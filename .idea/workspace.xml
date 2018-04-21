@@ -2,27 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6297057b-4347-4e04-83d2-500c065acd43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/backend/db.sqlite3" afterPath="$PROJECT_DIR$/backend/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/677d4230-25f8-4da6-8d6d-67c02cd0506c.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/677d4230-25f8-4da6-8d6d-67c02cd0506c.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/backend/notes/views.py" afterPath="$PROJECT_DIR$/backend/notes/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/backend/simplenote/settings.py" afterPath="$PROJECT_DIR$/backend/simplenote/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/index.html" afterPath="$PROJECT_DIR$/frontend/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/App.vue" afterPath="$PROJECT_DIR$/frontend/src/App.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/api/answers.js" afterPath="$PROJECT_DIR$/frontend/src/api/answers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/api/questions.js" afterPath="$PROJECT_DIR$/frontend/src/api/questions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/api/tests.js" afterPath="$PROJECT_DIR$/frontend/src/api/tests.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Auth/Account.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Auth/Account.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Auth/LoginForm.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Auth/LoginForm.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Auth/RegistrationForm.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Auth/RegistrationForm.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Start.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Start.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/TestPassing/StudentTestResults.vue" afterPath="$PROJECT_DIR$/frontend/src/components/TestPassing/StudentTestResults.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/TestPassing/TestPassing.vue" afterPath="$PROJECT_DIR$/frontend/src/components/TestPassing/TestPassing.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/Tests/TestList.vue" afterPath="$PROJECT_DIR$/frontend/src/components/Tests/TestList.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/router/index.js" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/store/index.js" afterPath="$PROJECT_DIR$/frontend/src/store/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/store/mutation-types.js" afterPath="$PROJECT_DIR$/frontend/src/store/mutation-types.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/api/common.js" afterPath="$PROJECT_DIR$/frontend/src/api/common.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/api/notes.js" afterPath="$PROJECT_DIR$/frontend/src/api/notes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue" afterPath="$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue" />
     </list>
     <ignored path="djangovue.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,42 +37,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/backend/notes/views.py">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/backend/notes/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-32">
-              <caret line="126" column="33" selection-start-line="126" selection-start-column="33" selection-end-line="126" selection-end-column="33" />
+            <state relative-caret-position="195">
+              <caret line="18" column="36" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/router/index.js">
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/backend/simplenote/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="31" column="70" selection-start-line="31" selection-start-column="70" selection-end-line="31" selection-end-column="70" />
+            <state relative-caret-position="135">
+              <caret line="20" column="54" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="serializers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/backend/notes/serializers.py">
+      <file leaf-file-name="common.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/api/common.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1680">
-              <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NoteList.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/components/Notes/NoteList.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="89" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="89" />
-              <folding />
+            <state relative-caret-position="300">
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -97,18 +72,8 @@
       <file leaf-file-name="answers.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/api/answers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mutation-types.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/store/mutation-types.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+            <state relative-caret-position="0">
+              <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -117,8 +82,8 @@
       <file leaf-file-name="notes.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/api/notes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="42" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="42" />
+            <state relative-caret-position="270">
+              <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -127,8 +92,18 @@
       <file leaf-file-name="questions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/api/questions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
+            <state relative-caret-position="0">
+              <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TeacherTestResults.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="94">
+              <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -137,8 +112,8 @@
       <file leaf-file-name="tests.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/api/tests.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+            <state relative-caret-position="0">
+              <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -147,8 +122,18 @@
       <file leaf-file-name="users.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/api/users.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
+            <state relative-caret-position="435">
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Navbar.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/components/Navbar.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="23" column="40" selection-start-line="22" selection-start-column="6" selection-end-line="23" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -186,18 +171,14 @@
         <option value="$PROJECT_DIR$/frontend/src/components/Questions/QuestionInfo.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/Answers/AnswerList.vue" />
         <option value="$PROJECT_DIR$/frontend/src/main.js" />
-        <option value="$PROJECT_DIR$/frontend/src/api/notes.js" />
-        <option value="$PROJECT_DIR$/frontend/src/api/common.js" />
         <option value="$PROJECT_DIR$/backend/notes/middleware.py" />
         <option value="$PROJECT_DIR$/backend/notes/enums.py" />
-        <option value="$PROJECT_DIR$/frontend/src/api/users.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/Tests/TestListElem.vue" />
         <option value="$PROJECT_DIR$/backend/notes/urls.py" />
         <option value="$PROJECT_DIR$/backend/notes/models.py" />
         <option value="$PROJECT_DIR$/frontend/src/components/Questions/CreateQuestion.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/TestPassing/TestResults.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/Tests/TestInfo.vue" />
-        <option value="$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/Students/AddStudent.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/Auth/Account.vue" />
         <option value="$PROJECT_DIR$/frontend/src/App.vue" />
@@ -209,7 +190,6 @@
         <option value="$PROJECT_DIR$/frontend/src/components/Auth/RegistrationForm.vue" />
         <option value="$PROJECT_DIR$/myvenv/lib/python3.5/site-packages/rest_auth/registration/urls.py" />
         <option value="$PROJECT_DIR$/backend/simplenote/urls.py" />
-        <option value="$PROJECT_DIR$/backend/simplenote/settings.py" />
         <option value="$PROJECT_DIR$/backend/notes/serializers.py" />
         <option value="$PROJECT_DIR$/frontend/src/store/mutation-types.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/Tests/TestList.vue" />
@@ -221,6 +201,11 @@
         <option value="$PROJECT_DIR$/frontend/src/api/answers.js" />
         <option value="$PROJECT_DIR$/frontend/src/api/questions.js" />
         <option value="$PROJECT_DIR$/frontend/src/api/tests.js" />
+        <option value="$PROJECT_DIR$/frontend/src/api/users.js" />
+        <option value="$PROJECT_DIR$/frontend/src/api/notes.js" />
+        <option value="$PROJECT_DIR$/frontend/src/api/common.js" />
+        <option value="$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue" />
+        <option value="$PROJECT_DIR$/backend/simplenote/settings.py" />
       </list>
     </option>
   </component>
@@ -1007,7 +992,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -1015,7 +1000,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20849934" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35723773" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1221,13 +1206,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/common.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/myvenv/lib/python3.5/site-packages/rest_framework/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1286,6 +1264,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="124" column="18" selection-start-line="124" selection-start-column="18" selection-end-line="124" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1317,7 +1296,7 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <element signature="e#520#551#0" expanded="true" />
+            <element signature="e#520#551#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1373,7 +1352,7 @@
         <state relative-caret-position="255">
           <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
           <folding>
-            <element signature="e#529#568#0" expanded="true" />
+            <element signature="e#529#568#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1382,14 +1361,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/notes/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="18" column="36" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -1428,30 +1399,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/simplenote/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="113" column="62" selection-start-line="113" selection-start-column="62" selection-end-line="113" selection-end-column="62" />
-          <folding>
-            <element signature="e#314#329#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/Navbar.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/Start.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-276">
           <caret line="5" column="40" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
           <folding>
-            <element signature="e#974#1014#0" expanded="true" />
+            <element signature="e#974#1014#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1461,7 +1414,7 @@
         <state relative-caret-position="210">
           <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
           <folding>
-            <element signature="e#287#320#0" expanded="true" />
+            <element signature="e#287#320#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1492,34 +1445,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/StudentTestResults.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/TestPassing.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="52" column="22" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="31" column="70" selection-start-line="31" selection-start-column="70" selection-end-line="31" selection-end-column="70" />
           <folding />
         </state>
       </provider>
@@ -1540,46 +1469,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/answers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="11" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/notes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="42" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/questions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="26" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/tests.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/api/users.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/notes/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1680">
@@ -1588,10 +1477,108 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/TestPassing.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="52" column="22" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/router/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/backend/notes/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-32">
           <caret line="126" column="33" selection-start-line="126" selection-start-column="33" selection-end-line="126" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/notes/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="18" column="36" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/Navbar.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="23" column="40" selection-start-line="22" selection-start-column="6" selection-end-line="23" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/answers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/questions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/tests.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="25" selection-start-line="0" selection-start-column="25" selection-end-line="0" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/notes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/TestPassing/TeacherTestResults.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="94">
+          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/api/common.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/simplenote/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="20" column="54" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="54" />
           <folding />
         </state>
       </provider>

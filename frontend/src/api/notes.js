@@ -7,7 +7,9 @@ export const Note = {
     })
   },
   delete (note) {
-    return HTTP.delete(`/notes/${note.id}/`, getHeaders())
+    return HTTP.delete(`/notes/${note.id}/`, getHeaders()).then(response => {
+      return response.data
+    })
   },
   list () {
     return HTTP.get('/notes/', getHeaders()).then(response => {

@@ -5,7 +5,7 @@
       <div class="panel-header text-center">
         <h3>Results: </h3>
         <div class="card"  v-for="(result, index) in testResults[this.testId]">
-          <div class="card-header is-error">
+          <div class="card-header is-error" v-if="studentsInfo[result.user]">
             <div class="card-title">Student: {{ studentsInfo[result.user].username }}</div>
             <div class="card-body">
               Score: {{ result.total_score }}
