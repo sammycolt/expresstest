@@ -1,10 +1,13 @@
 <template>
-<div class="card-header">
-  <button v-if="checkType()" class="btn btn-clear float-right" @click="deleteTest()"></button>
-  <div class="card-title" @click="onClick">Test: {{ title }}</div>
-  <div class="card-subtitle" @click="onClick">Author: {{ username }}</div>
-  <div class="card-subtitle" @click="onClick">Questions: {{ questionsCount }}</div>
-</div>
+    <div class="card-header">
+      <button v-if="checkType()" class="btn btn-clear float-right" @click="deleteTest()"></button>
+      <div class="card-title" @click="onClick">Test: {{ title }}</div>
+      <div class="card-subtitle" @click="onClick">Author: {{ username }}</div>
+      <div class="card-subtitle" @click="onClick">Questions: {{ questionsCount }}</div>
+      <br v-if="!checkType()">
+      <button v-if="!checkType()" class="btn btn-sm" @click="onClick">Pass</button>
+      <button v-if="!checkType()" class="btn btn-sm" @click="results()">Results</button>
+    </div>
 </template>
 
 <script>
@@ -37,6 +40,9 @@ export default {
     },
     checkType () {
       return this.userType === UserType.TEACHER.toString()
+    },
+    results () {
+      this.$router.push({name: 'TestResults', params: {'id': this.id}})
     }
   },
   created: function () {

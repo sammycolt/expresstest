@@ -1,6 +1,7 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar container grid-960">
     <section class="navbar-section">
+      <a v-if="notStartPage" class="btn btn-default" @click="goStart()">Main page</a>
       <a v-if="notStartPage" class="btn btn-default" @click="goBack()">Back</a>
     </section>
     <section class="navbar-center"></section>
@@ -27,6 +28,9 @@ export default {
       window.history.length > 1
         ? this.$router.go(-1)
         : this.$router.push('/')
+    },
+    goStart () {
+      this.$router.push({name: 'Start'})
     }
   }
 }

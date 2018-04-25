@@ -5,6 +5,7 @@
         <button class="btn btn-clear float-right" @click="deleteQuestion(question.id)"></button>
         <div class="card-title" @click="onClick(question)">Text: {{ question.text }}</div>
         <div class="card-subtitle" @click="onClick(question)">Answers: {{ question.answers.length }}</div>
+        <div class="card-subtitle" @click="onClick(question)">Score: {{ question.score }}</div>
       </div>
     </div>
   </div>

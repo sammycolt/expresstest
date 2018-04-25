@@ -5,6 +5,7 @@ import QuestionInfo from '../components/Questions/QuestionInfo'
 import TestPassing from '../components/TestPassing/TestPassing'
 import store from '../store'
 import { UserType } from '../enums/userType'
+import StudentTestResultsInDetail from '../components/TestPassing/StudentTestResultsInDetail'
 
 function studentsOutZone (to, from, next) {
   if (store.state.userInfo.type === UserType.TEACHER.toString()) {
@@ -46,6 +47,11 @@ export default new Router({
           next(false)
         }
       }
+    },
+    {
+      path: '/results/:id',
+      name: 'TestResults',
+      component: StudentTestResultsInDetail
     }
   ]
 })

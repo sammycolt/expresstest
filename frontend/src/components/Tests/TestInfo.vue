@@ -10,9 +10,9 @@
         <question-list :testId="this.id"></question-list>
       </tab>
       <tab name="Share">
+        <add-course :testId="this.id"></add-course>
         <add-group :testId="this.id"></add-group>
         <add-student :testId="this.id"></add-student>
-        <add-course :testId="this.id"></add-course>
       </tab>
       <tab name="Results">
         <teacher-test-results :testId="this.id"></teacher-test-results>
