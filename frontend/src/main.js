@@ -5,10 +5,12 @@ import App from './App'
 import store from './store'
 import router from './router'
 import Router from 'vue-router'
+import {Tabs} from 'vue-tabs-component'
 // import { sync } from 'vuex-router-sync'
 
 // var jwtDecode = require('jwt-decode')
 Vue.use(Router)
+Vue.use(Tabs)
 Vue.config.productionTip = false
 // sync(store, router)
 

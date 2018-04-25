@@ -19,12 +19,15 @@ import CreateTest from '../Tests/CreateTest.vue'
 import TestList from '../Tests/TestList.vue'
 import { UserType } from '../../enums/userType'
 import AddStudent from '../Students/AddStudent.vue'
+import {Tabs, Tab} from 'vue-tabs-component'
 
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'account',
   components: {
+    'tabs': Tabs,
+    'tab': Tab,
     'users-list': UsersList,
     'note-list': NoteList,
     'create-note': CreateNote,

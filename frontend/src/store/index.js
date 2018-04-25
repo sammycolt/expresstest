@@ -5,6 +5,8 @@ import { User } from '../api/users'
 import { Test } from '../api/tests'
 import { Answer } from '../api/answers'
 import { Question } from '../api/questions'
+import { Group } from '../api/groups'
+import { Course } from '../api/courses'
 import {
   ADD_NOTE,
   REMOVE_NOTE,
@@ -31,7 +33,14 @@ import {
   ADD_ID_TO_GIVEN_ANSWERS,
   REMOVE_ANSWER_BY_USER,
   SET_TEST_RESULTS,
-  REMOVE_TEST_RESULT
+  REMOVE_TEST_RESULT,
+  SET_GROUPS,
+  SET_GROUPS_DICTIONARY,
+  SET_COURSES,
+  SET_COURSES_DICTIONARY,
+  REMOVE_TEST,
+  REMOVE_QUESTION,
+  REMOVE_ANSWER
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -52,7 +61,13 @@ const state = {
   givenAnswers: {},
   studentsDictionaryByUsername: {},
   studentsDictionaryById: {},
-  testResults: {}
+  testResults: {},
+  groups: [],
+  groupsDictionaryByName: {},
+  groupsDictionaryById: {},
+  courses: [],
+  coursesDictionaryByName: {},
+  coursesDictionaryById: {}
 }
 
 const getters = {
@@ -69,7 +84,11 @@ const getters = {
   students: state => state.students,
   givenAnswers: state => state.givenAnswers,
   testResults: state => state.testResults,
-  studentsDictionaryByUsername: state => state.studentsDictionaryByUsername
+  studentsDictionaryByUsername: state => state.studentsDictionaryByUsername,
+  groups: state => state.groups,
+  groupsDictionaryByName: state => state.groupsDictionaryByName,
+  courses: state => state.courses,
+  coursesDictionaryByName: state => state.coursesDictionaryByName
 }
 
 const mutations = {
@@ -194,6 +213,69 @@ const mutations = {
   },
   [REMOVE_TEST_RESULT] (state, { testId }) {
     Vue.set(state.testResults, testId, {})
+  },
+  [SET_GROUPS] (state, { groups }) {
+    state.groups = groups
+  },
+  [SET_GROUPS_DICTIONARY] (state) {
+    if (!state.groupsDictionaryByName.length) {
+      var groups = {}
+      for (var i = 0; i < state.groups.length; ++i) {
+        groups[state.groups[i].name] = state.groups[i]
+      }
+      Vue.set(state, 'groupsDictionaryByName', groups)
+    }
+    if (!state.groupsDictionaryById.length) {
+      var groups1 = {}
+      for (var j = 0; j < state.groups.length; ++j) {
+        groups1[state.groups[j].id] = state.groups[j]
+      }
+      Vue.set(state, 'groupsDictionaryById', groups1)
+    }
+  },
+  [SET_COURSES] (state, { courses }) {
+    state.courses = courses
+  },
+  [SET_COURSES_DICTIONARY] (state) {
+    if (!state.coursesDictionaryByName.length) {
+      var courses = {}
+      for (var i = 0; i < state.courses.length; ++i) {
+        courses[state.courses[i].name] = state.courses[i]
+      }
+      Vue.set(state, 'coursesDictionaryByName', courses)
+    }
+    if (!state.coursesDictionaryById.length) {
+      var courses1 = {}
+      for (var j = 0; j < state.courses.length; ++j) {
+        courses1[state.courses[j].id] = state.courses[j]
+      }
+      Vue.set(state, 'coursesDictionaryById', courses1)
+    }
+  },
+  [REMOVE_TEST] (state, id) {
+    Vue.set(state, 'tests', state.tests.filter(test => {
+      return test.id !== id
+    }))
+  },
+  [REMOVE_QUESTION] (state, payload) {
+    var questionId = payload.questionId
+    var testId = payload.testId
+    Vue.set(state, 'questions', state.questions.filter(question => {
+      return question.id !== questionId
+    }))
+    Vue.set(state.testDetails[testId], 'questions', state.testDetails[testId].questions.filter(question => {
+      return question.id !== questionId
+    }))
+  },
+  [REMOVE_ANSWER] (state, payload) {
+    var questionId = payload.questionId
+    var answerId = payload.answerId
+    Vue.set(state, 'answers', state.answers.filter(answer => {
+      return answer.id !== answerId
+    }))
+    Vue.set(state.questionDetails[questionId], 'answers', state.questionDetails[questionId].answers.filter(answer => {
+      return answer.id !== answerId
+    }))
   }
 }
 
@@ -347,6 +429,39 @@ const actions = {
     var resultId = payload.resultId
     Test.deleteResults(resultId).then(response => {
       commit(REMOVE_TEST_RESULT, testId)
+    })
+  },
+  getGroups ({ commit }) {
+    Group.list().then(groups => {
+      commit(SET_GROUPS, { groups })
+      commit(SET_GROUPS_DICTIONARY)
+    })
+  },
+  addGroupToTest ({ commit }, payload) {
+    Test.addGroupToTest(payload).then(response => {})
+  },
+  getCourses ({ commit }) {
+    Course.list().then(courses => {
+      commit(SET_COURSES, { courses })
+      commit(SET_COURSES_DICTIONARY)
+    })
+  },
+  addCourseToTest ({ commit }, payload) {
+    Test.addCourseToTest(payload).then(response => {})
+  },
+  deleteTest ({ commit }, testId) {
+    Test.delete(testId).then(response => {
+      commit(REMOVE_TEST, testId)
+    })
+  },
+  deleteQuestion ({ commit }, payload) {
+    Question.delete(payload.questionId).then(response => {
+      commit(REMOVE_QUESTION, payload)
+    })
+  },
+  deleteAnswer ({ commit }, payload) {
+    Answer.delete(payload.answerId).then(response => {
+      commit(REMOVE_ANSWER, payload)
     })
   }
 }

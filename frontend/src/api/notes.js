@@ -2,7 +2,7 @@ import { HTTP, getHeaders } from './common'
 
 export const Note = {
   create (config) {
-    return HTTP.post('/notes/', config, getHeaders()).then(response => {
+    return HTTP.post('/quiz/', config, getHeaders()).then(response => {
       return response.data
     })
   },
@@ -12,7 +12,7 @@ export const Note = {
     })
   },
   list () {
-    return HTTP.get('/notes/', getHeaders()).then(response => {
+    return HTTP.get('/quiz/', getHeaders()).then(response => {
       return response.data
     })
   }

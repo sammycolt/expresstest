@@ -17,7 +17,7 @@
           <!--</div>-->
           <!--<div v-else>-->
             <!--<header class="text-center">-->
-              <!--<h2>List of notes</h2>-->
+              <!--<h2>List of quiz</h2>-->
             <!--</header>-->
             <!--<note-list></note-list>-->
           <!--</div>-->

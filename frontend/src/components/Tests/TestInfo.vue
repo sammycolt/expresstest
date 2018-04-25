@@ -3,12 +3,21 @@
   <div class="panel">
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">Test: {{ title }}</div>
-      <div class="panel-default h5 mt-10">Questions:</div>
     </div>
-    <add-student :testId="this.id"></add-student>
-    <create-question :testId="this.id"></create-question>
-    <question-list :testId="this.id"></question-list>
-    <teacher-test-results :testId="this.id"></teacher-test-results>
+    <tabs>
+      <tab name="Questions">
+        <create-question :testId="this.id"></create-question>
+        <question-list :testId="this.id"></question-list>
+      </tab>
+      <tab name="Share">
+        <add-group :testId="this.id"></add-group>
+        <add-student :testId="this.id"></add-student>
+        <add-course :testId="this.id"></add-course>
+      </tab>
+      <tab name="Results">
+        <teacher-test-results :testId="this.id"></teacher-test-results>
+      </tab>
+    </tabs>
   </div>
 </section>
 </template>
@@ -20,6 +29,9 @@ import CreateQuestion from '../Questions/CreateQuestion.vue'
 import QuestionList from '../Questions/QuestionList.vue'
 import AddStudent from '../Students/AddStudent.vue'
 import TeacherTestResults from '../TestPassing/TeacherTestResults.vue'
+import AddGroup from '../Groups/AddGroup.vue'
+import AddCourse from '../Courses/AddCourse.vue'
+import {Tabs, Tab} from 'vue-tabs-component'
 
 export default {
   name: 'test-info',
@@ -27,7 +39,11 @@ export default {
     'create-question': CreateQuestion,
     'question-list': QuestionList,
     'add-student': AddStudent,
-    'teacher-test-results': TeacherTestResults
+    'teacher-test-results': TeacherTestResults,
+    'add-group': AddGroup,
+    'add-course': AddCourse,
+    'tabs': Tabs,
+    'tab': Tab
   },
   computed: mapState({
     title (state) {

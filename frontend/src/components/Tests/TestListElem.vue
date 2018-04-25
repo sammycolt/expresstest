@@ -1,8 +1,9 @@
 <template>
-<div class="card-header" @click="onClick">
-  <div class="card-title">Test: {{ title }}</div>
-  <div class="card-subtitle">Author: {{ username }}</div>
-  <div class="card-subtitle">Questions: {{ questionsCount }}</div>
+<div class="card-header">
+  <button v-if="checkType()" class="btn btn-clear float-right" @click="deleteTest()"></button>
+  <div class="card-title" @click="onClick">Test: {{ title }}</div>
+  <div class="card-subtitle" @click="onClick">Author: {{ username }}</div>
+  <div class="card-subtitle" @click="onClick">Questions: {{ questionsCount }}</div>
 </div>
 </template>
 
@@ -18,15 +19,24 @@ export default {
       if (state.userDetails[this.author]) {
         return state.userDetails[this.author].username
       }
+    },
+    userType (state) {
+      return state.userInfo.type
     }
   }),
   methods: {
     onClick () {
-      if (this.$store.state.userInfo.type === UserType.TEACHER.toString()) {
+      if (this.userType === UserType.TEACHER.toString()) {
         this.$router.push({name: 'TestInfo', params: {'id': this.id}})
       } else if (this.$store.state.userInfo.type === UserType.STUDENT.toString()) {
         this.$router.push({name: 'TestPassing', params: {'id': this.id}})
       }
+    },
+    deleteTest () {
+      this.$store.dispatch('deleteTest', this.id)
+    },
+    checkType () {
+      return this.userType === UserType.TEACHER.toString()
     }
   },
   created: function () {

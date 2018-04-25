@@ -2,6 +2,7 @@
   <div id="app">
     <div class="card"  v-for="answer in this.answers">
       <div class="card-header is-error">
+        <button class="btn btn-clear float-right" @click="deleteAnswer(answer.id)"></button>
         <div class="card-title">Text: {{ answer.answer_text }}</div>
         <div class="card-subtitle">
           <span class="label label-primary" v-bind:class="correctClass(answer.is_correct)">{{ correctLabel(answer.is_correct) }}</span>
@@ -39,6 +40,13 @@ export default {
       } else {
         return 'Incorrect'
       }
+    },
+    deleteAnswer (answerId) {
+      var payload = {
+        'answerId': answerId,
+        'questionId': this.questionId
+      }
+      this.$store.dispatch('deleteAnswer', payload)
     }
   }
 }

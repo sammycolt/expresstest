@@ -36,5 +36,15 @@ export const Test = {
     return HTTP.delete(`/tests/${id}`, getHeaders()).then(response => {
       return response.data
     })
+  },
+  addGroupToTest (payload) {
+    return HTTP.post('/quiz_to_group/', payload, getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  addCourseToTest (payload) {
+    return HTTP.post('/quiz_to_course/', payload, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

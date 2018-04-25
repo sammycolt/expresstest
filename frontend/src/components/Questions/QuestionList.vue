@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div class="card" v-for="question in this.questions">
-      <div class="card-header" @click="onClick(question)">
-        <div class="card-title">Text: {{ question.text }}</div>
-        <div class="card-subtitle">Answers: {{ question.answers.length }}</div>
+      <div class="card-header">
+        <button class="btn btn-clear float-right" @click="deleteQuestion(question.id)"></button>
+        <div class="card-title" @click="onClick(question)">Text: {{ question.text }}</div>
+        <div class="card-subtitle" @click="onClick(question)">Answers: {{ question.answers.length }}</div>
       </div>
     </div>
   </div>
@@ -26,6 +27,13 @@ export default {
   methods: {
     onClick (question) {
       this.$router.push({name: 'QuestionInfo', params: { 'id': question.id }})
+    },
+    deleteQuestion (questionId) {
+      var payload = {
+        'questionId': questionId,
+        'testId': this.testId
+      }
+      this.$store.dispatch('deleteQuestion', payload)
     }
   }
 }

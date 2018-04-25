@@ -23,7 +23,9 @@ export default new Router({
       path: '/testInfo/:id',
       name: 'TestInfo',
       component: TestInfo,
-      beforeEnter: (to, from, next) => studentsOutZone(to, from, next)
+      beforeEnter (to, from, next) {
+        studentsOutZone(to, from, next)
+      }
     },
     {
       path: '/questionInfo/:id',
