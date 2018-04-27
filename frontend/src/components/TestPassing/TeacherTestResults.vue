@@ -36,6 +36,11 @@
             </tbody>
           </table>
         </div>
+        <center>
+          <div v-if="testDetails && testResults" style="max-width: 400px; max-height: 400px">
+            <results-chart :chart-data="this.chartData"></results-chart>
+          </div>
+        </center>
 
         <!--<div class="card"  v-for="(result, index) in testResults[this.testId]">-->
           <!--<div class="card-header is-error" v-if="studentsInfo[result.user]">-->
@@ -53,10 +58,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import ResultsChart from './ResultsChart.vue'
 
 export default{
   name: 'teacher-test-results',
   props: ['testId'],
+  components: {
+    'results-chart': ResultsChart
+  },
   computed: mapState({
     testResults (state) {
       return state.testResults
@@ -72,6 +81,56 @@ export default{
     },
     groups (state) {
       return state.groups
+    },
+
+    calculateLabelsForChart (state) {
+      var labels = []
+      var testId = this.testId
+      console.log('Kek' + this.testId.toString())
+      for (var i = 0; i < state.testDetails[testId].questions.length; ++i) {
+        var question = state.testDetails[testId].questions[i]
+        labels.push(question.text.substring(0, question.text.length >= 5 ? 5 : question.text.length))
+      }
+      return labels
+    },
+    calculateDataSets (state) {
+      var dataset1 = {
+        label: 'Correct answers',
+        backgroundColor: '#f87979',
+        data: []
+      }
+      var dataset2 = {
+        label: 'Incorrect answers',
+        backgroundColor: '#0000ff',
+        data: []
+      }
+      var testId = this.testId
+//      console.log(this.testDetails)
+      for (var j = 0; j < state.testDetails[testId].questions.length; ++j) {
+        dataset1.data.push(0)
+        dataset2.data.push(0)
+      }
+      for (var i = 0; i < state.testResults[testId].length; ++i) {
+        var result = state.testResults[testId][i]
+        for (j = 0; j < state.testDetails[testId].questions.length; ++j) {
+          var question = state.testDetails[testId].questions[j]
+          if (this.checkCorrectness(result, question.id)) {
+            dataset1.data[j] += 1
+          } else {
+            dataset2.data[j] += 1
+          }
+        }
+      }
+      return [
+        dataset1,
+        dataset2
+      ]
+    },
+    chartData (state) {
+      return {
+        'labels': this.calculateLabelsForChart,
+        'datasets': this.calculateDataSets
+      }
     }
   }),
   methods: {
@@ -79,7 +138,6 @@ export default{
       var found = false
       for (var i = 0; i < result.correct_questions.length; ++i) {
         var question = result.correct_questions[i]
-        console.log(question.id, questionId)
         if (question.id === questionId) {
           found = true
         }
@@ -87,7 +145,6 @@ export default{
       return found
     },
     calculateGroups (student) {
-      console.log(student)
       var ans = ''
       var groups = this.studentsInfo[student].group_set
       for (var i = 0; i < groups.length - 1; ++i) {
