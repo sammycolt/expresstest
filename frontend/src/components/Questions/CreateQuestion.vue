@@ -12,6 +12,18 @@
           </div>
         </div>
         <div class="form-group">
+          <div class="col-4">
+            <label class="form-label">Type</label>
+          </div>
+          <div class="col-5">
+            <select class="form-select" v-model="type">
+              <option value="0">Many Correct Answers</option>
+              <option value="1">One Correct Answer</option>
+              <option value="2">Open Answer</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-3">
             <label class="form-label">Score</label>
           </div>
@@ -39,7 +51,8 @@ export default{
   data () {
     return {
       'body': '',
-      'score': 0
+      'score': 0,
+      'type': 0
     }
   },
   methods: {
@@ -47,7 +60,8 @@ export default{
       this.$store.dispatch('createQuestion', {
         'quiz': this.testId,
         'text': this.body,
-        'score': this.score
+        'score': this.score,
+        'type': this.type.toString()
       })
       this.body = ''
       event.preventDefault()

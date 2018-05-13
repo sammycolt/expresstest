@@ -6,7 +6,7 @@
       <div class="panel-default h5 mt-10">Answers:</div>
     </div>
   </div>
-  <create-answer :questionId="this.id"></create-answer>
+  <create-answer :questionId="this.id" :quizId="this.testId"></create-answer>
   <answer-list :questionId="this.id"></answer-list>
 </section>
 </template>
@@ -32,7 +32,8 @@ export default {
   }),
   data () {
     return {
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      testId: this.$route.params.testId
     }
   },
   created: function () {

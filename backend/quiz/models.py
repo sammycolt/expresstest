@@ -7,6 +7,12 @@ USER_CHOICES = (
     ('1', 'Student')
 )
 
+QUESTION_TYPE_CHOICES = (
+    ('0', 'ManyAnswers'),
+    ('1', 'OneAnswer'),
+    ('2', 'OpenAnswer')
+)
+
 class Note(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
@@ -40,6 +46,7 @@ class QuizQuestion(models.Model):
     text = models.TextField()
     answers = models.ManyToManyField(QuizAnswer, through='AnswerToQuestion')
     score = models.IntegerField(default=1)
+    type = models.CharField(max_length=1, choices=QUESTION_TYPE_CHOICES, default='0')
 
 class AnswerToQuestion(models.Model):
     answer = models.ForeignKey(QuizAnswer, related_name='questions')

@@ -45,11 +45,12 @@ class QuizAnswerSerializer(serializers.ModelSerializer):
         model = QuizAnswer
         fields = ('id', 'answer_text', 'is_correct')
 
+
 class QuizQuestionSerializer(serializers.ModelSerializer):
     answers = QuizAnswerSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers', 'score')
+        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type')
 
 class QuizTestSerializer(serializers.ModelSerializer):
     questions = QuizQuestionSerializer(many=True, read_only=True)
@@ -69,7 +70,7 @@ class QuizQuestionStudentSerializer(serializers.ModelSerializer):
     answers = QuizAnswerStudentSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers', 'score')
+        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type')
 
 class QuizTestStudentSerializer(serializers.ModelSerializer):
     questions = QuizQuestionStudentSerializer(many=True, read_only=True)
@@ -130,8 +131,17 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
             filter(answer__questions__question_id=question.id)
 
         correct_answers_on_this_question_by_user = answers_on_this_question_by_user.filter(answer__is_correct=True)
+
+
         correct_answers_on_this_question = QuizQuestion.objects.filter(id=question.id). \
             filter(answers__is_correct=True)
+        print(question.type)
+        if str(question.type) == '0':
+            print("+")
+            count_of_correct_answers_on_this_question = correct_answers_on_this_question.count()
+        else:
+            count_of_correct_answers_on_this_question = 1
+        print("HERE", count_of_correct_answers_on_this_question)
         # for elem in correct_answers_on_this_question_by_user.all():
         #     print(elem)
         # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
@@ -139,8 +149,8 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
         if (quiz_results.count()):
             quiz_result = quiz_results[0]
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
-                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
-                    # print("!!1")
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                    print("!!1")
                     if question not in quiz_result.correct_questions.all():
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
 
@@ -170,11 +180,11 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
             score = 0
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
-                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
                     score = question.score
                 new_result = QuizResults(user=abu.user, quiz=quiz, total_score=score, percentage=score/max_score_for_quiz)
                 new_result.save()
-                if correct_answers_on_this_question_by_user.count() == correct_answers_on_this_question.count():
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
                     ans_to_res = QuestionToResult(question=question, result=new_result)
                     ans_to_res.save()
 

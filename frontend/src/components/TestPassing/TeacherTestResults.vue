@@ -1,7 +1,7 @@
 <template>
   <section class="container grid-960">
 
-    <div class="panel" v-if="testResults && testDetails">
+    <div class="panel" v-if="testResults && testDetails && groupsInfo && studentsInfo">
       <div class="panel-header text-center">
         <h3>Results: </h3>
           <table class="docs-table table table-striped text-center">
@@ -86,7 +86,7 @@ export default{
     calculateLabelsForChart (state) {
       var labels = []
       var testId = this.testId
-      console.log('Kek' + this.testId.toString())
+//      console.log('Kek' + this.testId.toString())
       for (var i = 0; i < state.testDetails[testId].questions.length; ++i) {
         var question = state.testDetails[testId].questions[i]
         labels.push(question.text.substring(0, question.text.length >= 5 ? 5 : question.text.length))
@@ -145,18 +145,22 @@ export default{
       return found
     },
     calculateGroups (student) {
-      var ans = ''
-      var groups = this.studentsInfo[student].group_set
-      for (var i = 0; i < groups.length - 1; ++i) {
-        ans += this.groupsInfo[groups[i]].name + ', '
-      }
-      ans += this.groupsInfo[groups[groups.length - 1]].name
-      return ans
+//      console.log(student)
+//      var ans = ''
+//      console.log(this.studentsInfo[student])
+//      var groups = this.studentsInfo[student].group_set
+//      for (var i = 0; i < groups.length - 1; ++i) {
+//        console.log(groups[i], this.groupsInfo[groups[i]])
+//       ans += this.groupsInfo[groups[i]].name + ', '
+//      }
+//      ans += this.groupsInfo[groups[groups.length - 1]].name
+//      return ans
     }
   },
   created: function () {
     this.$store.dispatch('getTestResults')
     this.$store.dispatch('getStudents')
+    this.$store.dispatch('getGroups')
   }
 }
 </script>

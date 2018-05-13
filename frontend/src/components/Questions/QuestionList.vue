@@ -6,6 +6,7 @@
         <div class="card-title" @click="onClick(question)">Text: {{ question.text }}</div>
         <div class="card-subtitle" @click="onClick(question)">Answers: {{ question.answers.length }}</div>
         <div class="card-subtitle" @click="onClick(question)">Score: {{ question.score }}</div>
+        <div class="card-subtitle" @click="onClick(question)">Type: {{ type(question.type) }}</div>
       </div>
     </div>
   </div>
@@ -14,6 +15,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { QuestionType } from '../../enums/questionType'
 
 export default {
   name: 'question-list',
@@ -27,7 +29,7 @@ export default {
   }),
   methods: {
     onClick (question) {
-      this.$router.push({name: 'QuestionInfo', params: { 'id': question.id }})
+      this.$router.push({name: 'QuestionInfo', params: { 'id': question.id, 'testId': this.testId }})
     },
     deleteQuestion (questionId) {
       var payload = {
@@ -35,6 +37,14 @@ export default {
         'testId': this.testId
       }
       this.$store.dispatch('deleteQuestion', payload)
+    },
+    type (questionType) {
+      console.log(QuestionType)
+      try {
+        return QuestionType.properties[questionType].name
+      } catch (err) {
+        return QuestionType.properties[1].name
+      }
     }
   }
 }

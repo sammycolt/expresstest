@@ -36,7 +36,7 @@
 <script>
 export default {
   name: 'create-answer',
-  props: ['questionId'],
+  props: ['questionId', 'quizId'],
   data () {
     return {
       text: '',
@@ -45,6 +45,29 @@ export default {
   },
   methods: {
     create (event) {
+      var questions = this.$store.state.testDetails[this.quizId].questions
+      var question = null
+      for (var i = 0; i < questions.length; ++i) {
+        if (questions[i].id === this.questionId) {
+          question = questions[i]
+        }
+      }
+      if (question.type === '1') {
+        var numOCorrectAnswers = 0
+        for (i = 0; i < question.answers.length; ++i) {
+          if (question.answers[i].is_correct) {
+            numOCorrectAnswers++
+          }
+        }
+        if (numOCorrectAnswers > 0) {
+          if (this.isCorrect) {
+            alert('This type of question available only one correct answer')
+            return
+          }
+        }
+      }
+
+//      console.log(question)
       this.$store.dispatch('createAnswer', {
         'answerData': {
           'answer_text': this.text,
@@ -56,6 +79,9 @@ export default {
       this.isCorrect = false
       event.preventDefault()
     }
+  },
+  created: function () {
+    this.$store.dispatch('getTestDetails', this.quizId)
   }
 }
 </script>

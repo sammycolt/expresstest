@@ -13,15 +13,30 @@
       <div v-for="(question, index) in this.questions" class="step-item">
         <div v-show="index === questionIndex">
           <h5>{{ question.text }}</h5>
-          <ol>
-            <li v-for="(answer, index2) in question.answers">
-              <!--{{givenAnswers}}-->
-                <label class="form-checkbox">
-                  <input type="checkbox" v-model="givenAnswers[question.id][answer.id].given" @change="change(givenAnswers[question.id][answer.id].given, answer.id, question.id)">
+          <div v-if="question.type === '0'">
+            <ol>
+              <li v-for="(answer, index2) in question.answers">
+                <!--{{givenAnswers}}-->
+                  <label class="form-checkbox">
+                    <input type="checkbox" v-model="givenAnswers[question.id][answer.id].given" @change="change(givenAnswers[question.id][answer.id].given, answer.id, question.id)">
+                    <i class="form-icon"></i> {{answer.answer_text}}
+                  </label>
+              </li>
+            </ol>
+          </div>
+          <div v-else-if="question.type === '1'">
+            <ol>
+              <li v-for="(answer, index2) in question.answers">
+                <label class="form-radio">
+                  <input type="radio" :value="answer.id" v-model="givenAnswers[question.id].given" @click="update(question.id)">
                   <i class="form-icon"></i> {{answer.answer_text}}
                 </label>
-            </li>
-          </ol>
+              </li>
+            </ol>
+          </div>
+          <div v-else-if="question.type === '2'">
+              <input class="form-input" type="text" placeholder="Answer..." v-model="givenAnswers[question.id].textInput">
+          </div>
         </div>
       </div>
     </div>
@@ -72,6 +87,7 @@ export default{
     return {
       'testId': this.$route.params.id,
       'showResults': false,
+      'textInput': '',
       questionIndex: 0
     }
   },
@@ -92,6 +108,13 @@ export default{
     submit () {
 //      console.log(this.questions.length)
       for (var i = 0; i < this.questions.length; ++i) {
+        if (this.questions[i].type === '1') {
+          this.update(this.questions[i].id)
+        } else {
+          if (this.questions[i].type === '2') {
+            this.processInput(this.questions[i])
+          }
+        }
         for (var j = 0; j < this.questions[i].answers.length; ++j) {
           if (this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id].given) {
             this.$store.dispatch('addAnswerByUser', {
@@ -110,12 +133,45 @@ export default{
       }
       console.log(this.questionIndex)
     },
+    processInput (question) {
+      var isCorrect = false
+      var corrAnsId = 0
+      for (var i = 0; i < question.answers.length; ++i) {
+        var answer = question.answers[i]
+        if (answer.answer_text === this.givenAnswers[question.id].textInput) {
+          isCorrect = true
+          corrAnsId = answer.id
+        }
+      }
+      if (isCorrect) {
+        this.givenAnswers[question.id][corrAnsId].given = true
+      }
+//      console.log(isCorrect)
+    },
+    update (questionId) {
+      var a = this.givenAnswers[questionId].given
+      for (var i = 0; i < this.givenAnswers[questionId].length; ++i) {
+        var answer = this.givenAnswer[questionId][i]
+        if (answer.given) {
+          this.change(false, answer.id, questionId)
+          this.givenAnswers[questionId][answer.id].given = false
+        }
+      }
+      if (a) {
+        this.change(true, a, questionId)
+        this.givenAnswers[questionId][a].given = true
+      }
+//      console.log(a)
+    },
     change (given, answerId, questionId) {
       if (given) {
-        this.$store.dispatch('addAnswerByUser', {
-          'user': this.$store.state.userInfo.id,
-          'answer': answerId
-        })
+        if (answerId !== 'false') {
+//          console.log(answerId)
+          this.$store.dispatch('addAnswerByUser', {
+            'user': this.$store.state.userInfo.id,
+            'answer': answerId
+          })
+        }
       } else {
 //        console.log('unChange')
         var abuId = this.givenAnswers[questionId][answerId].answerByUserId
