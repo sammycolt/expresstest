@@ -1,6 +1,14 @@
 <template>
 <section class="container grid-960">
+  <div class="panel" v-if="results">
+    <div class="panel-header text-center">
+      <div class="panel-title h5 mt-10">Result: {{results[this.testId][0].total_score}}</div>
+       <div class="panel-title h3 mt-10">Percents: {{Number((results[this.testId][0].percentage * 100).toFixed(1))}} %</div>
+    </div>
+  </div>
+
   <div class="panel" v-if="results && questions">
+
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">{{this.title}}</div>
     </div>

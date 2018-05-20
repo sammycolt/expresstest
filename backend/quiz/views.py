@@ -52,11 +52,15 @@ class QuizTestViewSet(viewsets.ModelViewSet):
                 for elem in self.request.user.group_set.all():
                     for course in elem.course_set.all():
                         curr_courses.append(course.id)
-                # print(dir(curr_groups))
-                return queryset.filter(Q(courses__in=curr_courses) | Q(groups_of_readers__in=curr_groups) | Q(readers__id=self.request.user.id))
+                # print(dir(curr_groups))a
+                q1 = queryset.filter(courses__in=curr_courses)
+                q2 = queryset.filter(groups_of_readers__in=curr_groups)
+                q3 = queryset.filter(readers__id=self.request.user.id)
+                return q1.union(q2).union(q3)
+                # return queryset.filter(Q(courses__in=curr_courses) | Q(groups_of_readers__in=curr_groups) | Q(readers__id=self.request.user.id))
                 # return queryset.filter(readers__id=self.request.user.id)
         except Exception as e:
-            return  queryset
+            return queryset
 
 class StudentsViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().select_related('universityuser').filter(universityuser__type=UniUser.STUDENT.value)
@@ -76,19 +80,23 @@ class QuizTestDetails(generics.RetrieveAPIView):
         elif self.request.user.universityuser.type == UniUser.STUDENT.value:
             return QuizTestStudentSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.universityuser.type == UniUser.TEACHER.value:
-            return queryset.filter(author_id=self.request.user.id)
-        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
-            curr_groups = [elem.id for elem in self.request.user.group_set.all()]
-            curr_courses = []
-            for elem in self.request.user.group_set.all():
-                for course in elem.course_set.all():
-                    curr_courses.append(course.id)
-            # print(dir(curr_groups))
-            return queryset.filter(Q(courses__in=curr_courses) | Q(groups_of_readers__in=curr_groups) | Q(
-                readers__id=self.request.user.id))
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
+    #         return queryset.filter(author_id=self.request.user.id)
+    #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+    #         curr_groups = [elem.id for elem in self.request.user.group_set.all()]
+    #         curr_courses = []
+    #         for elem in self.request.user.group_set.all():
+    #             for course in elem.course_set.all():
+    #                 curr_courses.append(course.id)
+    #         # print(dir(curr_groups))
+    #         q1 = queryset.filter(courses__in=curr_courses)
+    #         q2 = queryset.filter(groups_of_readers__in=curr_groups)
+    #         q3 = queryset.filter(readers__id=self.request.user.id)
+    #         return q1.union(q2).union(q3)
+    #         # return queryset.filter(Q(courses__in=curr_courses) | Q(groups_of_readers__in=curr_groups) | Q(
+    #         #     readers__id=self.request.user.id))
 
 class QuizAnswerViewSet(viewsets.ModelViewSet):
     queryset = QuizAnswer.objects.all()

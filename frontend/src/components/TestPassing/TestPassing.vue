@@ -55,13 +55,11 @@
       </div>
     </div>
   </div>
-  <student-test-results v-if="this.showResults" :testId="this.testId"></student-test-results>
 </section>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import TestResults from './StudentTestResults.vue'
 
 export default{
   name: 'test-passing',
@@ -91,9 +89,6 @@ export default{
       questionIndex: 0
     }
   },
-  components: {
-    'student-test-results': TestResults
-  },
   methods: {
     next () {
       this.setIndex(this.questionIndex + 1)
@@ -102,8 +97,10 @@ export default{
       this.setIndex(this.questionIndex - 1)
     },
     finish () {
-      this.showResults = true
       this.submit()
+      this.showResults = true
+      console.log('Kek')
+      this.$router.push({name: 'TestResults', params: {'id': this.testId}})
     },
     submit () {
 //      console.log(this.questions.length)

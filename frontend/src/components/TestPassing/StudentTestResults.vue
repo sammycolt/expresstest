@@ -26,7 +26,7 @@ export default{
     }
   }),
   created: function () {
-    this.$store.dispatch('getTestResults')
+    setTimeout(this.$store.dispatch('getTestResults'), 5000)
   }
 }
 </script>
