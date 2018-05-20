@@ -7,6 +7,7 @@ import { Answer } from '../api/answers'
 import { Question } from '../api/questions'
 import { Group } from '../api/groups'
 import { Course } from '../api/courses'
+import { Passing } from '../api/passing'
 import {
   ADD_NOTE,
   REMOVE_NOTE,
@@ -40,7 +41,8 @@ import {
   SET_COURSES_DICTIONARY,
   REMOVE_TEST,
   REMOVE_QUESTION,
-  REMOVE_ANSWER
+  REMOVE_ANSWER,
+  SET_PASSING
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -67,7 +69,8 @@ const state = {
   groupsDictionaryById: {},
   courses: [],
   coursesDictionaryByName: {},
-  coursesDictionaryById: {}
+  coursesDictionaryById: {},
+  passing: {}
 }
 
 const getters = {
@@ -276,6 +279,11 @@ const mutations = {
     Vue.set(state.questionDetails[questionId], 'answers', state.questionDetails[questionId].answers.filter(answer => {
       return answer.id !== answerId
     }))
+  },
+  [SET_PASSING] (state, passing) {
+    // console.log('Kek')
+    // console.log(passing)
+    state.passing = passing
   }
 }
 
@@ -462,6 +470,17 @@ const actions = {
   deleteAnswer ({ commit }, payload) {
     Answer.delete(payload.answerId).then(response => {
       commit(REMOVE_ANSWER, payload)
+    })
+  },
+  getCurrentPassing ({ commit }, passingData) {
+    Passing.create(passingData).then(passing => {
+      // console.log(passing)
+      commit(SET_PASSING, passing)
+    })
+  },
+  getCurrentPassingDetails ({ commit }, id) {
+    Passing.details(id).then(passing => {
+      commit(SET_PASSING, passing)
     })
   }
 }

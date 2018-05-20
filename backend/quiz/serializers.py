@@ -1,12 +1,15 @@
 from rest_framework import serializers
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import JWTSerializer
+from django.utils.timezone import utc
+from django.utils import timezone
+import datetime
 
 
 from .models import Note, UniversityUser, User, QuizTest, \
     QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, \
     AnswerByUser, QuizResults, QuestionToResult, UserToGroup, Group, \
-    QuizToGroup, QuizToCourse, Course, GroupToCourse
+    QuizToGroup, QuizToCourse, Course, GroupToCourse, QuizPassing, AnswerToPassing
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -196,7 +199,7 @@ class QuizResultsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuizResults
-        fields = ('id', 'user', 'quiz', 'correct_questions', 'total_score', 'percentage')
+        fields = ('id',  'correct_questions', 'total_score', 'percentage')
 
 class UserToGroupSerializer(serializers.ModelSerializer):
 
@@ -261,6 +264,128 @@ class QuizToCourseSerializer(serializers.ModelSerializer):
         else:
             abu = super().save(**kwargs)
         return abu
+
+class AnswerToPassingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnswerToPassing
+        fields = ('id', 'answer', 'passing')
+
+    def save(self, **kwargs):
+        answer = self.validated_data['answer']
+        passing = self.validated_data['passing']
+
+        answers_by_user = AnswerToPassing.objects.filter(answer_id=answer.id).filter(passing_id=passing.id)
+        if answers_by_user.count():
+            atp = answers_by_user[0]
+        else:
+            atp = super().save(**kwargs)
+        user = atp.passing.user
+        quiz = atp.passing.quiz
+
+        question = atp.answer.questions.all()[0].question
+        # quiz = question.quiz
+        quiz_results = QuizResults.objects.filter(quiz_id=quiz.id).filter(user_id=user.id)
+
+        answers_on_this_question_by_user = AnswerByUser.objects.filter(user_id=user.id). \
+            filter(answer__questions__question_id=question.id)
+
+        correct_answers_on_this_question_by_user = answers_on_this_question_by_user.filter(answer__is_correct=True)
+
+        correct_answers_on_this_question = QuizQuestion.objects.filter(id=question.id). \
+            filter(answers__is_correct=True)
+        print(question.type)
+        if str(question.type) == '0':
+            print("+")
+            count_of_correct_answers_on_this_question = correct_answers_on_this_question.count()
+        else:
+            count_of_correct_answers_on_this_question = 1
+        print("HERE", count_of_correct_answers_on_this_question)
+        # for elem in correct_answers_on_this_question_by_user.all():
+        #     print(elem)
+        # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
+
+        if (quiz_results.count()):
+            quiz_result = quiz_results[0]
+            if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                    print("!!1")
+                    if question not in quiz_result.correct_questions.all():
+                        max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
+
+                        ans_to_res = QuestionToResult(question=question, result=quiz_result)
+                        ans_to_res.save()
+                        quiz_result.total_score += question.score
+                        quiz_result.save()
+                        quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
+                        quiz_result.save()
+                else:
+                    if question in quiz_result.correct_questions.all():
+                        max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
+                        QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
+                        quiz_result.total_score -= question.score
+                        quiz_result.save()
+                        quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
+                        quiz_result.save()
+            else:
+                if question in quiz_result.correct_questions.all():
+                    max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
+                    QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
+                    quiz_result.total_score -= question.score
+                    quiz_result.save()
+                    quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
+                    quiz_result.save()
+        else:
+            score = 0
+            if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
+                max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                    score = question.score
+                new_result = QuizResults(total_score=score,
+                                         percentage=score / max_score_for_quiz)
+                new_result.save()
+                atp.passing.result = new_result
+                atp.save()
+                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                    ans_to_res = QuestionToResult(question=question, result=new_result)
+                    ans_to_res.save()
+
+        return atp
+
+class QuizPassingSerializer(serializers.ModelSerializer):
+    result = QuizResultsSerializer(read_only=True)
+    answers = AnswerToPassingSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = QuizPassing
+        fields = ('id', 'quiz', 'user', 'result', 'answers', 'start_time', 'duration')
+
+    def save(self, **kwargs):
+        quiz = self.validated_data['quiz']
+        user = self.validated_data['user']
+        query = QuizPassing.objects.filter(quiz_id=quiz.id, user_id=user.id).order_by('start_time')
+
+        last = query.all().last()
+        if last:
+            now = timezone.now()
+            # print(now)
+            # print(timezone.now())
+            # print(last.start_time)
+            timediff = now - last.start_time
+            timediff_in_minutes = timediff.total_seconds() / 60
+            if timediff_in_minutes > last.duration:
+                result = QuizResults()
+                result.save()
+                new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=1, result=result)
+                return new_passing
+            else:
+                return last
+        else:
+            result = QuizResults()
+            result.save()
+            new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=1, result=result)
+            return new_passing
+
+
 
 def jwt_token_payload_handler(token, user, request=None):
     return {

@@ -1,16 +1,19 @@
 from django.db.models import QuerySet
 from django.db.models import Q
 from rest_framework import viewsets, generics
+from django.utils import timezone
 
 from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, \
-    QuizResults, QuestionToResult, UserToGroup, Group, QuizToGroup, Course, GroupToCourse, QuizToCourse
+    QuizResults, QuestionToResult, UserToGroup, Group, QuizToGroup, Course, GroupToCourse, QuizToCourse, QuizPassing, \
+    AnswerToPassing
 
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     QuizQuestionSerializer, QuizAnswerSerializer, AnswerToQuestionSerializer, \
     UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer, \
     AnswerByUserSerializer, QuizResultsSerializer, UserToGroupSerializer, GroupOfUsersSerializer, \
-    GroupToQuizSerializer, CourseSerializer, GroupToCourseSerializer, QuizToCourseSerializer
+    GroupToQuizSerializer, CourseSerializer, GroupToCourseSerializer, QuizToCourseSerializer, QuizPassingSerializer, \
+    AnswerToPassingSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -257,3 +260,80 @@ class QuizToCourseViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return queryset
 
+class QuizPassingViewSet(viewsets.ModelViewSet):
+    queryset = QuizPassing.objects.all()
+    serializer_class = QuizPassingSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        try:
+            if self.request.user.universityuser.type == UniUser.STUDENT.value:
+                return queryset.filter(user_id=self.request.user.id)
+            else:
+                return queryset.filter(quiz_author_id=self.request.user.id)
+        except Exception:
+            return queryset
+
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        user_id = resp.data['user']
+        quiz_id = resp.data['quiz']
+        last = QuizPassing.objects.filter(user_id=user_id, quiz_id=quiz_id).order_by('start_time').last()
+        resp.data['id'] = last.id
+        resp.data['start_time'] = last.start_time
+        resp.data['duration'] = last.duration
+        print(last.start_time)
+        return resp
+
+class QuizPassingDetails(generics.RetrieveAPIView):
+    queryset = QuizPassing.objects.all()
+    serializer_class = QuizPassingSerializer
+
+    def get(self, request, *args, **kwargs):
+        resp = super().get(request, *args, **kwargs)
+        obj = QuizPassing.objects.filter(id=resp.data['id']).last()
+        now = timezone.now()
+        timediff = now - obj.start_time
+        timediff_in_minutes = timediff.total_seconds() / 60
+        if timediff_in_minutes > obj.duration:
+            resp.data['is_going'] = False
+        else:
+            resp.data['is_going'] = True
+            resp.data['seconds_per_end'] = 60 * obj.duration - timediff.total_seconds()
+        return resp
+
+class AnswerToPassingViewSet(viewsets.ModelViewSet):
+    queryset = AnswerToPassing.objects.all()
+    serializer_class = AnswerToPassingSerializer
+
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        answer = resp.data['answer']
+        passing = resp.data['passing']
+        atp = AnswerToPassing.objects.filter(answer_id=answer, passing_id=passing)[0]
+        resp.data['id'] = atp.id
+        resp.data['question'] = atp.answer.questions.filter(answer_id=answer)[0].question.id
+        return resp
+
+    def destroy(self, request, *args, **kwargs):
+        id = kwargs['pk']
+        atp = AnswerToPassing.objects.get(id=id)
+        question = atp.answer.questions.filter(answer_id=atp.answer)[0].question
+        quiz = question.quiz
+        passing = atp.passing
+        user = passing.user
+        results = QuizResults.objects.filter(user_id=user.id, quiz_id=quiz.id)
+
+        if atp.answer.is_correct:
+            if results.count():
+                result = results[0]
+                if question in result.correct_questions.all():
+                    max_score_for_quiz = sum([q.score for q in quiz.questions.all()])
+                    QuestionToResult.objects.filter(question_id=question.id, result_id=result.id).delete()
+                    result.total_score -= question.score
+                    result.save()
+                    result.percentage = result.total_score / max_score_for_quiz
+                    result.save()
+        else:
+            print('SUBMIIIIIIT TIME')
+        return super().destroy(request, *args, **kwargs)

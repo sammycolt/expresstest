@@ -53,10 +53,11 @@ class AnswerToQuestion(models.Model):
     question = models.ForeignKey(QuizQuestion)
 
 class QuizResults(models.Model):
-    user = models.ForeignKey(User)
-    quiz = models.ForeignKey(QuizTest)
+    # user = models.ForeignKey(User)
+    # quiz = models.ForeignKey(QuizTest)
+    # passing = models.ForeignKey(QuizPassing)
     correct_questions = models.ManyToManyField(QuizQuestion, through='QuestionToResult')
-    total_score = models.FloatField()
+    total_score = models.FloatField(default=0)
     percentage = models.FloatField(default=0)
 
 class QuestionToResult(models.Model):
@@ -99,3 +100,15 @@ class QuizToGroup(models.Model):
     quiz = models.ForeignKey(QuizTest)
     group = models.ForeignKey(Group)
 
+class QuizPassing(models.Model):
+    quiz = models.ForeignKey(QuizTest)
+    user = models.ForeignKey(User)
+    answers = models.ManyToManyField(QuizAnswer, through='AnswerToPassing')
+    result = models.ForeignKey(QuizResults, related_name='passing')
+    start_time = models.DateTimeField()
+    duration = models.IntegerField()  # in minutes
+
+
+class AnswerToPassing(models.Model):
+    answer = models.ForeignKey(QuizAnswer)
+    passing = models.ForeignKey(QuizPassing)

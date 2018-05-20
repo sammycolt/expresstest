@@ -1,6 +1,7 @@
 <template>
 <section class="container grid-960">
   <div class="panel" v-if="givenAnswers && !this.showResults && questions">
+    {{ this.passing }}
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">{{this.title}}</div>
     </div>
@@ -79,6 +80,9 @@ export default{
     },
     results (state) {
       return state.testResults
+    },
+    passing (state) {
+      return state.passing
     }
   }),
   data () {
@@ -99,7 +103,6 @@ export default{
     finish () {
       this.submit()
       this.showResults = true
-      console.log('Kek')
       this.$router.push({name: 'TestResults', params: {'id': this.testId}})
     },
     submit () {
@@ -178,6 +181,24 @@ export default{
     }
   },
   created: function () {
+    var passingData = {
+      'quiz': this.testId,
+      'user': this.$store.state.userInfo.id,
+      'start_time': '1970-01-01 01:01:01',
+      'duration': 0
+    }
+    this.$store.dispatch('getCurrentPassing', passingData).then(response => {
+      this.timer = setInterval(() => {
+        this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
+        if (this.passing.is_going === false) {
+//          console.log('!!!!!!!')
+//          console.log(this.passing)
+          this.finish()
+        }
+//      console.log(this.passing)
+      }, 3000)
+    })
+
     this.$store.dispatch('getTestDetails', this.testId)
     if (this.results[this.testId]) {
       this.$store.dispatch('removeTestResults', {
@@ -185,6 +206,10 @@ export default{
         'resultId': this.results[this.testId][0].id
       })
     }
+  },
+  beforeDestroy: function () {
+//    console.log('Kek')
+    clearInterval(this.timer)
   }
 }
 </script>
