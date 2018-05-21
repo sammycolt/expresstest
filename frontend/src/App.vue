@@ -1,5 +1,6 @@
 <template>
 <div>
+  <br>
   <navbar v-if="isLogged"></navbar>
   <br>
   <router-view></router-view>

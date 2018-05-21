@@ -16,5 +16,15 @@ export const Passing = {
     return HTTP.get('/passing_details/' + id + '/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  last () {
+    return HTTP.get('/last_passing/', getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  stop (id) {
+    return HTTP.get('/stop_passing/' + id + '/', getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

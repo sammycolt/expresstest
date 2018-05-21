@@ -1,9 +1,9 @@
 <template>
 <section class="container grid-960">
   <div class="panel" v-if="givenAnswers && !this.showResults && questions">
-    {{ this.passing }}
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">{{this.title}}</div>
+      <div class="panel-title h3 mt-10" v-if="this.calculateTime()">Seconds to end: {{this.calculateTime()}}</div>
     </div>
     <div class="panel-body">
       <ul class="step">
@@ -103,7 +103,14 @@ export default{
     finish () {
       this.submit()
       this.showResults = true
+      this.$store.dispatch('stopPassing', this.passing.id)
       this.$router.push({name: 'TestResults', params: {'id': this.testId}})
+    },
+    calculateTime () {
+//      console.log(this.passing)
+      if (this.passing.seconds_per_end) {
+        return Math.ceil(this.passing.seconds_per_end)
+      }
     },
     submit () {
 //      console.log(this.questions.length)
@@ -118,7 +125,7 @@ export default{
         for (var j = 0; j < this.questions[i].answers.length; ++j) {
           if (this.givenAnswers[this.questions[i].id][this.questions[i].answers[j].id].given) {
             this.$store.dispatch('addAnswerByUser', {
-              'user': this.$store.state.userInfo.id,
+              'passing': this.passing.id,
               'answer': this.questions[i].answers[j].id
             })
           }
@@ -126,12 +133,12 @@ export default{
       }
     },
     setIndex (value) {
-      console.log(this.questionIndex, value)
+//      console.log(this.questionIndex, value)
       this.submit()
       if ((value >= 0) && (value < this.questions.length)) {
         this.questionIndex = value
       }
-      console.log(this.questionIndex)
+//      console.log(this.questionIndex)
     },
     processInput (question) {
       var isCorrect = false
@@ -166,17 +173,25 @@ export default{
     change (given, answerId, questionId) {
       if (given) {
         if (answerId !== 'false') {
-//          console.log(answerId)
           this.$store.dispatch('addAnswerByUser', {
-            'user': this.$store.state.userInfo.id,
+            'passing': this.passing.id,
             'answer': answerId
           })
         }
       } else {
-//        console.log('unChange')
         var abuId = this.givenAnswers[questionId][answerId].answerByUserId
-//        console.log(abuId)
         this.$store.dispatch('deleteAnswerByUser', abuId)
+      }
+    },
+    findQuestion (answerId) {
+      for (var i = 0; i < this.questions.length; ++i) {
+        var question = this.questions[i]
+        for (var j = 0; j < question.answers.length; ++j) {
+          var answer = question.answers[j]
+          if (answer.id === answerId) {
+            return question
+          }
+        }
       }
     }
   },
@@ -191,12 +206,20 @@ export default{
       this.timer = setInterval(() => {
         this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
         if (this.passing.is_going === false) {
-//          console.log('!!!!!!!')
-//          console.log(this.passing)
           this.finish()
+        } else {
+          if (this.passing.is_going === true) {
+            for (var i = 0; i < this.passing.answers.length; ++i) {
+              var answer = this.passing.answers[i]
+//              console.log(answer)
+              var question = this.findQuestion(answer.id)
+//              console.log(question.id)
+              this.givenAnswers[question.id][answer.id].given = true
+            }
+//            console.log(this.passing.answers)
+          }
         }
-//      console.log(this.passing)
-      }, 3000)
+      }, 500)
     })
 
     this.$store.dispatch('getTestDetails', this.testId)
@@ -208,7 +231,6 @@ export default{
     }
   },
   beforeDestroy: function () {
-//    console.log('Kek')
     clearInterval(this.timer)
   }
 }

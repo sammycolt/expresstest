@@ -12,10 +12,11 @@
                 <th v-for="question in testDetails[testId].questions" class="tooltip" :data-tooltip="question.text">{{question.text.substring(0, question.text.length >= 5 ? 5 : question.text.length)}}</th>
                 <th>total</th>
                 <th>%</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="result in testResults[testId]">
+              <tr v-for="result in filterResults[testId]">
                 <td>{{calculateGroups(result.user)}}</td>
                 <td class="text-left">{{studentsInfo[result.user].username}}</td>
                 <td v-for="question in testDetails[testId].questions">
@@ -31,6 +32,9 @@
                 </td>
                 <td>
                   {{ Number((result.percentage * 100).toFixed(1)) }}
+                </td>
+                <td>
+                  {{ calculateTime(result.remaining_time) }}
                 </td>
               </tr>
             </tbody>
@@ -69,6 +73,28 @@ export default{
   computed: mapState({
     testResults (state) {
       return state.testResults
+    },
+    filterResults (state) {
+      var set = new Set()
+      var ans = {}
+      for (var i = 0; i < this.testResults[this.testId].length; ++i) {
+        var result = this.testResults[this.testId][i]
+//        console.log(result)
+//        console.log(result.user)
+//        console.log(set.size)
+//        console.log(!set.has(result.user))
+        if (!set.has(result.user)) {
+//          console.log('add')
+          set.add(result.user)
+          if (!ans[this.testId]) {
+            ans[this.testId] = [result]
+          } else {
+            ans[this.testId].push(result)
+          }
+        }
+      }
+//      console.log(ans)
+      return ans
     },
     studentsInfo (state) {
       return state.studentsDictionaryById
@@ -110,13 +136,17 @@ export default{
         dataset1.data.push(0)
         dataset2.data.push(0)
       }
-      for (var i = 0; i < state.testResults[testId].length; ++i) {
-        var result = state.testResults[testId][i]
-        for (j = 0; j < state.testDetails[testId].questions.length; ++j) {
-          var question = state.testDetails[testId].questions[j]
+      console.log('!!!', this.filterResults[testId].length)
+      for (var i = 0; i < this.filterResults[testId].length; ++i) {
+        var result = this.filterResults[testId][i]
+        for (j = 0; j < this.testDetails[testId].questions.length; ++j) {
+          var question = this.testDetails[testId].questions[j]
+//          console.log(this.checkCorrectness(result, question.id))
           if (this.checkCorrectness(result, question.id)) {
+//            console.log('*')
             dataset1.data[j] += 1
           } else {
+//            console.log('%')
             dataset2.data[j] += 1
           }
         }
@@ -144,6 +174,14 @@ export default{
       }
       return found
     },
+    calculateTime (seconds) {
+      if (seconds > 0) {
+        seconds = Math.ceil(seconds)
+        var min = Math.floor(seconds / 60)
+        var sec = seconds % 60
+        return min.toString() + 'm, ' + sec.toString() + 's'
+      }
+    },
     calculateGroups (student) {
 //      console.log(student)
 //      var ans = ''
@@ -161,6 +199,13 @@ export default{
     this.$store.dispatch('getTestResults')
     this.$store.dispatch('getStudents')
     this.$store.dispatch('getGroups')
+    this.timer1 = setInterval(() => {
+      console.log('Kek')
+      this.$store.dispatch('getTestResults')
+    }, 2000)
+  },
+  beforeDestroy: function () {
+    clearInterval(this.timer1)
   }
 }
 </script>

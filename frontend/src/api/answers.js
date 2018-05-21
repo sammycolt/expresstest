@@ -22,11 +22,16 @@ export const Answer = {
       return response.data
     })
   },
-  deleteAnswerByUser (answerByUser) {
-    return HTTP.delete(`/answer_by_user/${answerByUser}/`, getHeaders()).then(response => {
+  deleteAnswerToPassing (answerToPassing) {
+    return HTTP.delete(`/answer_to_passing/${answerToPassing}/`, getHeaders()).then(response => {
       return response.data
     })
   },
+  // deleteAnswerByUser (answerByUser) {
+  //   return HTTP.delete(`/answer_by_user/${answerByUser}/`, getHeaders()).then(response => {
+  //     return response.data
+  //   })
+  // },
   delete (id) {
     return HTTP.delete(`/answers/${id}/`, getHeaders()).then(response => {
       return response.data

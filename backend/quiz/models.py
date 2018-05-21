@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import pytz
 
 
 USER_CHOICES = (
@@ -107,6 +109,17 @@ class QuizPassing(models.Model):
     result = models.ForeignKey(QuizResults, related_name='passing')
     start_time = models.DateTimeField()
     duration = models.IntegerField()  # in minutes
+    end_time = models.DateTimeField(default=timezone.now())
+
+    @property
+    def remaining_time(self):
+        # print(type(self.end_time))
+        # print(type(self.start_time))
+        timediff = self.end_time.replace(tzinfo=pytz.UTC) - self.start_time.replace(tzinfo=pytz.UTC)
+        if timediff.total_seconds() < 0:
+            return -1
+        else:
+            return timediff.total_seconds()
 
 
 class AnswerToPassing(models.Model):

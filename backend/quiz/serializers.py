@@ -138,13 +138,13 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
 
         correct_answers_on_this_question = QuizQuestion.objects.filter(id=question.id). \
             filter(answers__is_correct=True)
-        print(question.type)
+        # print(question.type)
         if str(question.type) == '0':
-            print("+")
+            # print("+")
             count_of_correct_answers_on_this_question = correct_answers_on_this_question.count()
         else:
             count_of_correct_answers_on_this_question = 1
-        print("HERE", count_of_correct_answers_on_this_question)
+        # print("HERE", count_of_correct_answers_on_this_question)
         # for elem in correct_answers_on_this_question_by_user.all():
         #     print(elem)
         # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
@@ -281,12 +281,13 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
             atp = super().save(**kwargs)
         user = atp.passing.user
         quiz = atp.passing.quiz
+        results = atp.passing.result
 
         question = atp.answer.questions.all()[0].question
         # quiz = question.quiz
-        quiz_results = QuizResults.objects.filter(quiz_id=quiz.id).filter(user_id=user.id)
+        quiz_results = QuizResults.objects.filter(id=results.id)
 
-        answers_on_this_question_by_user = AnswerByUser.objects.filter(user_id=user.id). \
+        answers_on_this_question_by_user = AnswerToPassing.objects.filter(passing_id=passing.id). \
             filter(answer__questions__question_id=question.id)
 
         correct_answers_on_this_question_by_user = answers_on_this_question_by_user.filter(answer__is_correct=True)
@@ -305,7 +306,9 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
         # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
 
         if (quiz_results.count()):
+
             quiz_result = quiz_results[0]
+            print(quiz_result.id)
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
                     print("!!1")
@@ -320,6 +323,7 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                         quiz_result.save()
                 else:
                     if question in quiz_result.correct_questions.all():
+                        print("!!2")
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
                         QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
                         quiz_result.total_score -= question.score
@@ -328,6 +332,7 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                         quiz_result.save()
             else:
                 if question in quiz_result.correct_questions.all():
+                    print("!!3")
                     max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
                     QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
                     quiz_result.total_score -= question.score
@@ -353,11 +358,12 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
 
 class QuizPassingSerializer(serializers.ModelSerializer):
     result = QuizResultsSerializer(read_only=True)
-    answers = AnswerToPassingSerializer(many=True, read_only=True)
+    answers = QuizAnswerSerializer(many=True, read_only=True)
+    remaining_time = serializers.ReadOnlyField()
 
     class Meta:
         model = QuizPassing
-        fields = ('id', 'quiz', 'user', 'result', 'answers', 'start_time', 'duration')
+        fields = ('id', 'quiz', 'user', 'result', 'answers', 'start_time', 'duration', 'end_time', 'remaining_time')
 
     def save(self, **kwargs):
         quiz = self.validated_data['quiz']
@@ -372,10 +378,16 @@ class QuizPassingSerializer(serializers.ModelSerializer):
             # print(last.start_time)
             timediff = now - last.start_time
             timediff_in_minutes = timediff.total_seconds() / 60
-            if timediff_in_minutes > last.duration:
+
+            timediff2 = now - last.end_time
+            if timediff_in_minutes > last.duration or timediff2.total_seconds() > 0:
                 result = QuizResults()
                 result.save()
-                new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=1, result=result)
+
+                now = timezone.now()
+                duration = 1
+                new_passing = super().save(quiz=quiz, user=user, start_time=now, duration=duration, result=result,
+                                           end_time=now + datetime.timedelta(minutes=duration + 1))
                 return new_passing
             else:
                 return last
@@ -384,7 +396,6 @@ class QuizPassingSerializer(serializers.ModelSerializer):
             result.save()
             new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=1, result=result)
             return new_passing
-
 
 
 def jwt_token_payload_handler(token, user, request=None):

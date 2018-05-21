@@ -4,6 +4,7 @@
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">Result: {{results[this.testId][0].total_score}}</div>
        <div class="panel-title h3 mt-10">Percents: {{Number((results[this.testId][0].percentage * 100).toFixed(1))}} %</div>
+      <div class="panel-title h3 mt-10" v-if="results[this.testId][0].remaining_time > 0">Time: {{calculateTime(results[this.testId][0].remaining_time)}}</div>
     </div>
   </div>
 
@@ -81,6 +82,14 @@ export default{
         this.questionIndex = value
       }
     },
+    calculateTime (seconds) {
+      if (seconds > 0) {
+        seconds = Math.ceil(seconds)
+        var min = Math.floor(seconds / 60)
+        var sec = seconds % 60
+        return min.toString() + 'm, ' + sec.toString() + 's'
+      }
+    },
     correctClass (question) {
       var label = this.correctLabel(question)
       if (label === 'Correct') {
@@ -106,6 +115,9 @@ export default{
   created: function () {
     this.$store.dispatch('getTestDetails', this.testId)
     this.$store.dispatch('getTestResults')
+    setTimeout(() => {
+      this.$store.dispatch('getTestResults')
+    }, 500)
   }
 }
 </script>

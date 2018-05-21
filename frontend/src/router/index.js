@@ -5,6 +5,7 @@ import QuestionInfo from '../components/Questions/QuestionInfo'
 import TestPassing from '../components/TestPassing/TestPassing'
 import store from '../store'
 import { UserType } from '../enums/userType'
+import { Passing } from '../api/passing'
 import StudentTestResultsInDetail from '../components/TestPassing/StudentTestResultsInDetail'
 
 function studentsOutZone (to, from, next) {
@@ -39,13 +40,23 @@ export default new Router({
       name: 'TestPassing',
       component: TestPassing,
       beforeEnter (to, from, next) {
-        const answer = window.confirm('Are you sure you want to take the test? If you have already passed it, ' +
-          'the previous result will be deleted!')
-        if (answer) {
-          next()
-        } else {
-          next(false)
-        }
+        Passing.last().then(response => {
+          var id = response[0].id
+          Passing.details(id).then(response => {
+            console.log(response)
+            if (response.is_going === false) {
+              const answer = window.confirm('Are you sure you want to take the test? If you have already passed it, ' +
+                'the previous result will be deleted!')
+              if (answer) {
+                next()
+              } else {
+                next(false)
+              }
+            } else {
+              next()
+            }
+          })
+        })
       }
     },
     {

@@ -184,20 +184,20 @@ class UserQuizResultsViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         try:
             if self.request.user.universityuser.type == UniUser.TEACHER.value:
-                return queryset.filter(quiz_author_id=self.request.user.id)
+                return queryset.filter(passing_quiz_author_id=self.request.user.id)
             elif self.request.user.universityuser.type == UniUser.STUDENT.value:
-                return queryset.filter(user_id=self.request.user.id)
+                return queryset.filter(passing_user_id=self.request.user.id)
         except Exception as e:
             return queryset
 
-    def destroy(self, request, *args, **kwargs):
-        id = kwargs['pk']
-        res = QuizResults.objects.get(id=id)
-        user = res.user
-        quiz = res.quiz
-        for question in quiz.questions.all():
-            AnswerByUser.objects.filter(user_id=user.id, answer__questions__question_id=question.id).delete()
-        return super().destroy(request, *args, **kwargs)
+    # def destroy(self, request, *args, **kwargs):
+    #     id = kwargs['pk']
+    #     res = QuizResults.objects.get(id=id)
+    #     user = res.user
+    #     quiz = res.quiz
+    #     for question in quiz.questions.all():
+    #         AnswerByUser.objects.filter(user_id=user.id, answer__questions__question_id=question.id).delete()
+    #     return super().destroy(request, *args, **kwargs)
 
 
 class UserToGroupViewSet(viewsets.ModelViewSet):
@@ -285,7 +285,31 @@ class QuizPassingViewSet(viewsets.ModelViewSet):
         print(last.start_time)
         return resp
 
-class QuizPassingDetails(generics.RetrieveAPIView):
+
+class QuizPassingLastViewSet(viewsets.ModelViewSet):
+    queryset = QuizPassing.objects.all()
+    serializer_class = QuizPassingSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        try:
+            if self.request.user.universityuser.type == UniUser.STUDENT.value:
+                queryset = queryset.filter(user_id=self.request.user.id)
+                last = queryset.order_by('start_time').last()
+                return queryset.filter(id=last.id)
+            else:
+                queryset = queryset.filter(quiz_author_id=self.request.user.id)
+                last = queryset.order_by('start_time').last()
+                return queryset.filter(id=last.id)
+        except Exception:
+            return queryset
+    # def list(self, request, *args, **kwargs):
+    #     resp = super().list(request, *args, **kwargs)
+    #     resp['data']
+    #     return resp
+
+
+class QuizPassingDetails(generics.RetrieveAPIView, generics.UpdateAPIView):
     queryset = QuizPassing.objects.all()
     serializer_class = QuizPassingSerializer
 
@@ -301,6 +325,23 @@ class QuizPassingDetails(generics.RetrieveAPIView):
             resp.data['is_going'] = True
             resp.data['seconds_per_end'] = 60 * obj.duration - timediff.total_seconds()
         return resp
+
+    def put(self, request, *args, **kwargs):
+        pass
+
+class QuizPassingStop(generics.RetrieveAPIView):
+    queryset = QuizPassing.objects.all()
+    serializer_class = QuizPassingSerializer
+
+    def get(self, request, *args, **kwargs):
+        resp = super().get(request, *args, **kwargs)
+        obj = QuizPassing.objects.filter(id=resp.data['id']).last()
+        obj.end_time = timezone.now()
+        obj.save()
+        resp.data['end_time'] = obj.end_time
+        resp.data['is_going'] = False
+        return resp
+
 
 class AnswerToPassingViewSet(viewsets.ModelViewSet):
     queryset = AnswerToPassing.objects.all()
@@ -318,11 +359,12 @@ class AnswerToPassingViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         id = kwargs['pk']
         atp = AnswerToPassing.objects.get(id=id)
-        question = atp.answer.questions.filter(answer_id=atp.answer)[0].question
+        question = atp.answer.questions.filter(answer_id=atp.answer.id)[0].question
         quiz = question.quiz
         passing = atp.passing
         user = passing.user
-        results = QuizResults.objects.filter(user_id=user.id, quiz_id=quiz.id)
+        res = atp.passing.result
+        results = QuizResults.objects.filter(id=res.id)
 
         if atp.answer.is_correct:
             if results.count():

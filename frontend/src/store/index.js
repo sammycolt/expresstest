@@ -203,13 +203,18 @@ const mutations = {
       Vue.set(state, 'studentsDictionaryById', students1)
     }
   },
-  [SET_TEST_RESULTS] (state, results) {
+  [SET_TEST_RESULTS] (state, passings) {
     var res = {}
-    for (var i = 0; i < results.length; ++i) {
-      if (!res[results[i].quiz]) {
-        res[results[i].quiz] = [results[i]]
+    for (var i = 0; i < passings.length; ++i) {
+      var result = passings[i].result
+      result['quiz'] = passings[i].quiz
+      result['user'] = passings[i].user
+      result['remaining_time'] = passings[i].remaining_time
+      // result['time'] = passings[i].
+      if (!res[passings[i].quiz]) {
+        res[passings[i].quiz] = [result]
       } else {
-        res[results[i].quiz] = [results[i], ...res[results[i].quiz]]
+        res[passings[i].quiz] = [result, ...res[passings[i].quiz]]
       }
     }
     state.testResults = res
@@ -416,19 +421,19 @@ const actions = {
     })
   },
   addAnswerByUser ({ commit }, payload) {
-    Answer.addAnswerByUser(payload).then(response => {
+    Answer.addAnswerToPassing(payload).then(response => {
       commit(ADD_ANSWER_BY_USER, payload)
       // console.log(response)
       commit(ADD_ID_TO_GIVEN_ANSWERS, response)
     })
   },
   deleteAnswerByUser ({ commit }, id) {
-    Answer.deleteAnswerByUser(id).then(response => {
+    Answer.deleteAnswerToPassing(id).then(response => {
       commit(REMOVE_ANSWER_BY_USER, id)
     })
   },
   getTestResults ({ commit }) {
-    Test.results().then(results => {
+    Passing.list().then(results => {
       commit(SET_TEST_RESULTS, results)
     })
   },
@@ -480,6 +485,11 @@ const actions = {
   },
   getCurrentPassingDetails ({ commit }, id) {
     Passing.details(id).then(passing => {
+      commit(SET_PASSING, passing)
+    })
+  },
+  stopPassing ({ commit }, id) {
+    Passing.stop(id).then(passing => {
       commit(SET_PASSING, passing)
     })
   }
