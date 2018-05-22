@@ -220,7 +220,7 @@ class GroupToQuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuizToGroup
-        fields = ('group', 'quiz')
+        fields = ('group', 'quiz', 'id')
 
 
     def save(self, **kwargs):

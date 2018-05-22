@@ -56,5 +56,25 @@ export const Test = {
     return HTTP.get('/quiz_to_course/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  deleteGroupToTest (id) {
+    return HTTP.delete(`/quiz_to_group/${id}`, getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  getGroupToTests () {
+    return HTTP.get('/quiz_to_group/', getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  deleteUserToTest (id) {
+    return HTTP.delete(`/user_to_quiz/${id}`, getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  getUserToTests () {
+    return HTTP.get('/user_to_quiz/', getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

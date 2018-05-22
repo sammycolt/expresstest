@@ -44,7 +44,9 @@ import {
   REMOVE_ANSWER,
   SET_PASSING,
   SET_PASSING_TO_TEST,
-  SET_COURSE_TO_TEST
+  SET_COURSE_TO_TEST,
+  SET_GROUP_TO_TEST,
+  SET_USER_TO_TEST
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -73,7 +75,9 @@ const state = {
   coursesDictionaryByName: {},
   coursesDictionaryById: {},
   passing: {},
-  courseToTests: {}
+  courseToTests: {},
+  groupToTests: {},
+  userToTests: {}
 }
 
 const getters = {
@@ -312,6 +316,24 @@ const mutations = {
       Vue.set(state.courseToTests, test, {})
     }
     Vue.set(state.courseToTests[test], course, id)
+  },
+  [SET_GROUP_TO_TEST] (state, payload) {
+    var test = payload.quiz
+    var group = payload.group
+    var id = payload.id
+    if (!state.groupToTests[test]) {
+      Vue.set(state.groupToTests, test, {})
+    }
+    Vue.set(state.groupToTests[test], group, id)
+  },
+  [SET_USER_TO_TEST] (state, payload) {
+    var test = payload.quiz
+    var user = payload.user
+    var id = payload.id
+    if (!state.userToTests[test]) {
+      Vue.set(state.userToTests, test, {})
+    }
+    Vue.set(state.userToTests[test], user, id)
   }
 }
 
@@ -391,6 +413,8 @@ const actions = {
       commit(ADD_TEST_DETAILS, payload)
       commit(SET_GIVEN_ANSWERS, id)
       dispatch('getCourseToTests')
+      dispatch('getGroupToTests')
+      dispatch('getUserToTests')
     })
   },
   createQuestion ({ commit, dispatch }, questionData) {
@@ -438,8 +462,11 @@ const actions = {
       dispatch('getQuestionDetails', questionId)
     })
   },
-  addUserToTest ({ commit }, payload) {
-    Test.addUserToTest(payload).then(response => {})
+  addUserToTest ({ commit, dispatch }, payload) {
+    Test.addUserToTest(payload).then(response => {
+      commit(SET_USER_TO_TEST, response)
+      dispatch('getTestDetails', response.quiz)
+    })
   },
   getStudents ({ commit }) {
     User.studentList().then(students => {
@@ -477,8 +504,11 @@ const actions = {
       commit(SET_GROUPS_DICTIONARY)
     })
   },
-  addGroupToTest ({ commit }, payload) {
-    Test.addGroupToTest(payload).then(response => {})
+  addGroupToTest ({ commit, dispatch }, payload) {
+    Test.addGroupToTest(payload).then(response => {
+      commit(SET_GROUP_TO_TEST, response)
+      dispatch('getTestDetails', response.quiz)
+    })
   },
   getCourses ({ commit }) {
     Course.list().then(courses => {
@@ -553,6 +583,46 @@ const actions = {
         }
         commit(SET_COURSE_TO_TEST, payload)
       }
+    })
+  },
+  getGroupToTests ({ commit }) {
+    Test.getGroupToTests().then(response => {
+      for (var i = 0; i < response.length; ++i) {
+        var payload = {
+          'quiz': response[i].quiz,
+          'group': response[i].group,
+          'id': response[i].id
+        }
+        commit(SET_GROUP_TO_TEST, payload)
+      }
+    })
+  },
+  getUserToTests ({ commit }) {
+    Test.getUserToTests().then(response => {
+      for (var i = 0; i < response.length; ++i) {
+        var payload = {
+          'quiz': response[i].quiz,
+          'user': response[i].user,
+          'id': response[i].id
+        }
+        commit(SET_USER_TO_TEST, payload)
+      }
+    })
+  },
+  deleteGroupToTest ({ dispatch }, payload) {
+    var id = payload.id
+    var test = payload.test
+    Test.deleteGroupToTest(id).then(response => {
+      // commit(SET_COURSE_TO_TEST, response)
+      dispatch('getTestDetails', test)
+    })
+  },
+  deleteUserToTest ({ dispatch }, payload) {
+    var id = payload.id
+    var test = payload.test
+    Test.deleteUserToTest(id).then(response => {
+      // commit(SET_COURSE_TO_TEST, response)
+      dispatch('getTestDetails', test)
     })
   }
 }

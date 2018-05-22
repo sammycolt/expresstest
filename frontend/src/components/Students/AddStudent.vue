@@ -1,36 +1,43 @@
 <template>
-<div class="panel" v-if="studentsDictionaryByUsername">
-  <div class="panel-header text-center">
-    <div class="panel-title h5 mt-10">Share test to student</div>
-  </div>
-  <div class="panel-body">
-    <div>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <select class="form-select" v-model="stdnt">
-            <option v-for="student in this.students">{{ student.username }}</option>
-          </select>
-      </div>
-      </form>
+<div>
+  <div class="panel" v-if="studentsDictionaryByUsername">
+    <div class="panel-header text-center">
+      <div class="panel-title h5 mt-10">Share test to student</div>
     </div>
-  </div>
-  <div class="panel-footer">
-    <div class="form-group">
+    <div class="panel-body">
       <div>
-        <button class="btn btn-primary btn-block" v-on:click="share">Share</button>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <select class="form-select" v-model="stdnt">
+              <option v-for="student in this.students">{{ student.username }}</option>
+            </select>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="form-group">
+        <div>
+          <button class="btn btn-primary btn-block" v-on:click="share">Share</button>
+        </div>
       </div>
     </div>
   </div>
+  <students-list :testId="this.testId"></students-list>
 </div>
 </template>
 
 <script>
 
 import { mapGetters } from 'vuex'
+import StudentList from './StudentsList.vue'
 
 export default{
   name: 'add-student',
   props: ['testId'],
+  components: {
+    'students-list': StudentList
+  },
   computed: mapGetters(['students', 'studentsDictionaryByUsername']),
   data () {
     return {
