@@ -14,6 +14,24 @@
             <input class="form-input "  type="text" v-model="title" placeholder="Type title...">
           </div>
         </div>
+
+        <div class="form-group">
+          <div class="col-3">
+            <label class="form-label">Max time (minutes)</label>
+          </div>
+          <div class="col-9">
+            <input class="form-input "  type="text" v-model="maxTime" placeholder="Enter max time...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-3">
+            <label class="form-label">Max num of attempts</label>
+          </div>
+          <div class="col-9">
+            <input class="form-input "  type="text" v-model="maxAttempts" placeholder="Enter max attempts...">
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -32,14 +50,18 @@ export default{
   name: 'create-test',
   data () {
     return {
-      'title': ''
+      'title': '',
+      'maxTime': 2,
+      'maxAttempts': 3
     }
   },
   methods: {
     create (event) {
       this.$store.dispatch('createTest', {
         'title': this.title,
-        'author': this.$store.getters.userInfo.id
+        'author': this.$store.getters.userInfo.id,
+        'max_time': this.maxTime,
+        'max_attempts': this.maxAttempts
       })
       event.preventDefault()
     }

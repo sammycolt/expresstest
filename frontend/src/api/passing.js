@@ -17,8 +17,8 @@ export const Passing = {
       return response.data
     })
   },
-  last () {
-    return HTTP.get('/last_passing/', getHeaders()).then(response => {
+  last (testId) {
+    return HTTP.get('/last_passing/' + testId + '/', getHeaders()).then(response => {
       return response.data
     })
   },

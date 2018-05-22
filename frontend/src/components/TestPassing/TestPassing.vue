@@ -214,7 +214,15 @@ export default{
 //              console.log(answer)
               var question = this.findQuestion(answer.id)
 //              console.log(question.id)
-              this.givenAnswers[question.id][answer.id].given = true
+              if (question.type === '0') {
+                this.givenAnswers[question.id][answer.id].given = true
+              } else if (question.type === '1') {
+                this.givenAnswers[question.id].given = answer.id
+              } else if (question.type === '2') {
+                if (this.givenAnswers[question.id].textInput === undefined) {
+                  this.givenAnswers[question.id].textInput = answer.answer_text
+                }
+              }
             }
 //            console.log(this.passing.answers)
           }

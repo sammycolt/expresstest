@@ -37,6 +37,30 @@
                   {{ calculateTime(result.remaining_time) }}
                 </td>
               </tr>
+              <tr>
+                <td>
+                  Average
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                  {{ averageTime(filterResults[testId]) }}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -79,10 +103,6 @@ export default{
       var ans = {}
       for (var i = 0; i < this.testResults[this.testId].length; ++i) {
         var result = this.testResults[this.testId][i]
-//        console.log(result)
-//        console.log(result.user)
-//        console.log(set.size)
-//        console.log(!set.has(result.user))
         if (!set.has(result.user)) {
 //          console.log('add')
           set.add(result.user)
@@ -108,7 +128,6 @@ export default{
     groups (state) {
       return state.groups
     },
-
     calculateLabelsForChart (state) {
       var labels = []
       var testId = this.testId
@@ -174,8 +193,18 @@ export default{
       }
       return found
     },
+    averageTime (results) {
+      var sum = 0
+      for (var i = 0; i < results.length; ++i) {
+        sum += results[i].remaining_time
+      }
+      return this.calculateTime(sum / results.length)
+    },
     calculateTime (seconds) {
       if (seconds > 0) {
+        if (this.testDetails[this.testId].max_time * 60 < seconds) {
+          seconds = this.testDetails[this.testId].max_time * 60
+        }
         seconds = Math.ceil(seconds)
         var min = Math.floor(seconds / 60)
         var sec = seconds % 60
@@ -184,15 +213,14 @@ export default{
     },
     calculateGroups (student) {
 //      console.log(student)
-//      var ans = ''
+      var ans = ''
 //      console.log(this.studentsInfo[student])
-//      var groups = this.studentsInfo[student].group_set
-//      for (var i = 0; i < groups.length - 1; ++i) {
-//        console.log(groups[i], this.groupsInfo[groups[i]])
-//       ans += this.groupsInfo[groups[i]].name + ', '
-//      }
-//      ans += this.groupsInfo[groups[groups.length - 1]].name
-//      return ans
+      var groups = this.studentsInfo[student].group_set
+      for (var i = 0; i < groups.length - 1; ++i) {
+        ans += this.groupsInfo[groups[i]].name + ', '
+      }
+      ans += this.groupsInfo[groups[groups.length - 1]].name
+      return ans
     }
   },
   created: function () {
@@ -200,7 +228,7 @@ export default{
     this.$store.dispatch('getStudents')
     this.$store.dispatch('getGroups')
     this.timer1 = setInterval(() => {
-      console.log('Kek')
+//      console.log('Kek')
       this.$store.dispatch('getTestResults')
     }, 2000)
   },

@@ -26,7 +26,6 @@ router.register(r'courses', CourseViewSet)
 router.register(r'quiz_to_course', QuizToCourseViewSet)
 router.register(r'passing', QuizPassingViewSet)
 router.register(r'answer_to_passing', AnswerToPassingViewSet)
-router.register(r'last_passing', QuizPassingLastViewSet)
 
 urlpatterns = [
     url(r'^user/(?P<pk>[0-9]+)/$', UserDetails.as_view()),
@@ -34,6 +33,7 @@ urlpatterns = [
     url(r'^question/(?P<pk>[0-9]+)/$', QuizQuestionDetails.as_view()),
     url(r'^passing_details/(?P<pk>[0-9]+)/$', QuizPassingDetails.as_view()),
     url(r'^stop_passing/(?P<pk>[0-9]+)/$', QuizPassingStop.as_view()),
+    url(r'^last_passing/(?P<pk>[0-9]+)/$', QuizPassingLastViewSet.as_view()),
 ]
 
 urlpatterns += router.urls

@@ -40,22 +40,42 @@ export default new Router({
       name: 'TestPassing',
       component: TestPassing,
       beforeEnter (to, from, next) {
-        Passing.last().then(response => {
-          var id = response[0].id
-          Passing.details(id).then(response => {
-            console.log(response)
-            if (response.is_going === false) {
-              const answer = window.confirm('Are you sure you want to take the test? If you have already passed it, ' +
-                'the previous result will be deleted!')
-              if (answer) {
-                next()
+        Passing.last(to.params.id).then(response => {
+          console.log('!', response)
+          if (response.quiz) {
+            var id = response.id
+            Passing.details(id).then(response => {
+              // console.log(response.attempt)
+              // console.log(response.quiz)
+              // console.log(store.state.tests[response.quiz].max_attempts)
+              if (response.is_going === false) {
+                console.log('?!', response)
+                var testIndex = -1
+                for (var i = 0; i < store.state.tests.length; ++i) {
+                  if (store.state.tests[i].id === response.quiz) {
+                    testIndex = i
+                  }
+                }
+                if (response.attempt < store.state.tests[testIndex].max_attempts) {
+                  const answer = window.confirm('Are you sure you want to take the test? If you have already passed it, ' +
+                    'the previous result will be deleted!')
+                  if (answer) {
+                    next()
+                  } else {
+                    next(false)
+                  }
+                } else {
+                  alert('You have run out')
+                }
               } else {
-                next(false)
+                // console.log('HERE12123')
+                next()
               }
-            } else {
-              next()
-            }
-          })
+            })
+          } else {
+            // console.log('Kek')
+            next()
+          }
         })
       }
     },

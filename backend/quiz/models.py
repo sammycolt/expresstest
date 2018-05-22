@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import datetime
 import pytz
 
 
@@ -27,6 +28,8 @@ class UniversityUser(models.Model):
 class QuizTest(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User)
+    max_time = models.IntegerField(default=2)
+    max_attempts = models.IntegerField(default=3)
     readers = models.ManyToManyField(User, through='UserToQuiz', related_name='quiz')
     groups_of_readers = models.ManyToManyField('Group', through='QuizToGroup', related_name='quiz')
     courses = models.ManyToManyField('Course', through='QuizToCourse', related_name='quiz')
@@ -109,18 +112,50 @@ class QuizPassing(models.Model):
     result = models.ForeignKey(QuizResults, related_name='passing')
     start_time = models.DateTimeField()
     duration = models.IntegerField()  # in minutes
-    end_time = models.DateTimeField(default=timezone.now())
+    end_time = models.DateTimeField(default=datetime.now, blank=False)
+    attempt = models.IntegerField(default=0)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        print('!?!', self.end_time)
+        super().save(force_insert, force_update, using, update_fields)
 
     @property
     def remaining_time(self):
         # print(type(self.end_time))
         # print(type(self.start_time))
+        # print(self.end_time)
+        # timediff = -1
         timediff = self.end_time.replace(tzinfo=pytz.UTC) - self.start_time.replace(tzinfo=pytz.UTC)
         if timediff.total_seconds() < 0:
+            print('ahkbshbahj')
             return -1
         else:
             return timediff.total_seconds()
 
+    @property
+    def remaining_attempts(self):
+        return self.quiz.max_attempts - self.attempt
+
+    @property
+    def is_going(self):
+        now = timezone.now()
+        timediff = now - self.start_time
+        timediff_in_minutes = timediff.total_seconds() / 60
+
+        timediff2 = now - self.end_time
+
+        return not(timediff_in_minutes > self.duration or timediff2.total_seconds() > 0)
+
+    @property
+    def seconds_per_end(self):
+        now = timezone.now()
+        timediff = now - self.start_time
+        ans = 60 * self.duration - timediff.total_seconds()
+        if ans > 0 and self.is_going:
+            return ans
+        else:
+            return 0
 
 class AnswerToPassing(models.Model):
     answer = models.ForeignKey(QuizAnswer)

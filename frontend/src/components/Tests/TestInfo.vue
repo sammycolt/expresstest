@@ -11,6 +11,7 @@
       </tab>
       <tab name="Share">
         <add-course :testId="this.id"></add-course>
+
         <add-group :testId="this.id"></add-group>
         <add-student :testId="this.id"></add-student>
       </tab>

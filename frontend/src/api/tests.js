@@ -46,5 +46,15 @@ export const Test = {
     return HTTP.post('/quiz_to_course/', payload, getHeaders()).then(response => {
       return response.data
     })
+  },
+  deleteCourseToTest (id) {
+    return HTTP.delete(`/quiz_to_course/${id}`, getHeaders()).then(response => {
+      return response.data
+    })
+  },
+  getCourseToTests () {
+    return HTTP.get('/quiz_to_course/', getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

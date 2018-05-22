@@ -1,8 +1,11 @@
 from django.contrib import admin
-from .models import Group, UserToGroup, Course, GroupToCourse
+from .models import Group, UserToGroup, Course, GroupToCourse, QuizPassing, QuizToCourse
 
 #admin.site.register(GroupOfUsers)
 #admin.site.register(UserToGroup)
+admin.site.register(QuizPassing)
+
+admin.site.register(QuizToCourse)
 
 @admin.register(Group)
 class GroupOfUsersAdmin(admin.ModelAdmin):

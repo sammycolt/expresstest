@@ -6,6 +6,7 @@
   </div>
   <div v-else-if="checkType('teacher')">
     <create-test></create-test>
+    <br>
     <test-list></test-list>
   </div>
 </div>

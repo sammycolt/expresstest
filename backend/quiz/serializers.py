@@ -60,7 +60,8 @@ class QuizTestSerializer(serializers.ModelSerializer):
     readers = UserSerializer(many=True, read_only=True)
     class Meta:
         model = QuizTest
-        fields = ('id', 'title', 'author', 'questions', 'readers')
+        fields = ('id', 'title', 'author', 'questions', 'readers', 'max_time',
+                  'max_attempts', 'groups_of_readers', 'courses')
 
 class QuizAnswerStudentSerializer(serializers.ModelSerializer):
 
@@ -80,7 +81,7 @@ class QuizTestStudentSerializer(serializers.ModelSerializer):
     readers = UserSerializer(many=True, read_only=True)
     class Meta:
         model = QuizTest
-        fields = ('id', 'title', 'author', 'questions', 'readers')
+        fields = ('id', 'title', 'author', 'questions', 'readers', 'max_time', 'max_attempts')
 
 class AnswerToQuestionSerializer(serializers.ModelSerializer):
 
@@ -252,7 +253,7 @@ class QuizToCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuizToCourse
-        fields = ('quiz', 'course')
+        fields = ('quiz', 'course', 'id')
 
     def save(self, **kwargs):
         quiz = self.validated_data['quiz']
@@ -360,10 +361,14 @@ class QuizPassingSerializer(serializers.ModelSerializer):
     result = QuizResultsSerializer(read_only=True)
     answers = QuizAnswerSerializer(many=True, read_only=True)
     remaining_time = serializers.ReadOnlyField()
+    remaining_attempts = serializers.ReadOnlyField()
+    seconds_per_end = serializers.ReadOnlyField()
+    is_going = serializers.ReadOnlyField()
 
     class Meta:
         model = QuizPassing
-        fields = ('id', 'quiz', 'user', 'result', 'answers', 'start_time', 'duration', 'end_time', 'remaining_time')
+        fields = ('id', 'quiz', 'user', 'result', 'answers', 'start_time', 'duration', 'end_time',
+                  'remaining_time', 'attempt', 'remaining_attempts', 'seconds_per_end', 'is_going')
 
     def save(self, **kwargs):
         quiz = self.validated_data['quiz']
@@ -380,21 +385,29 @@ class QuizPassingSerializer(serializers.ModelSerializer):
             timediff_in_minutes = timediff.total_seconds() / 60
 
             timediff2 = now - last.end_time
-            if timediff_in_minutes > last.duration or timediff2.total_seconds() > 0:
+            # print(last.attempt)
+            # print(last.quiz.max_attempts)
+            if (timediff_in_minutes > last.duration or timediff2.total_seconds() > 0) and last.attempt < last.quiz.max_attempts:
                 result = QuizResults()
                 result.save()
-
+                print('Kek')
                 now = timezone.now()
-                duration = 1
+                duration = quiz.max_time
                 new_passing = super().save(quiz=quiz, user=user, start_time=now, duration=duration, result=result,
-                                           end_time=now + datetime.timedelta(minutes=duration + 1))
+                                           end_time=now + datetime.timedelta(minutes=duration + 1), attempt=last.attempt + 1)
                 return new_passing
             else:
+                print('Hui')
+                print(last)
                 return last
         else:
+            print('Ebat')
             result = QuizResults()
             result.save()
-            new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=1, result=result)
+            now = timezone.now()
+            duration = quiz.max_time
+            new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=duration, result=result,
+                                       end_time=now + datetime.timedelta(minutes=duration + 1), attempt=1)
             return new_passing
 
 

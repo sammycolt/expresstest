@@ -1,7 +1,8 @@
 from django.db.models import QuerySet
 from django.db.models import Q
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from django.utils import timezone
+from rest_framework.response import Response
 
 from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, \
     QuizResults, QuestionToResult, UserToGroup, Group, QuizToGroup, Course, GroupToCourse, QuizToCourse, QuizPassing, \
@@ -256,7 +257,7 @@ class QuizToCourseViewSet(viewsets.ModelViewSet):
             if self.request.user.universityuser.type == UniUser.STUDENT.value:
                 return queryset.filter(course_groups__students_id=self.request.user.id)
             else:
-                return queryset
+                return queryset.filter(quiz_author_id=self.request.user.id)
         except Exception as e:
             return queryset
 
@@ -286,23 +287,54 @@ class QuizPassingViewSet(viewsets.ModelViewSet):
         return resp
 
 
-class QuizPassingLastViewSet(viewsets.ModelViewSet):
+class QuizPassingLastViewSet(generics.RetrieveAPIView):
     queryset = QuizPassing.objects.all()
     serializer_class = QuizPassingSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        try:
-            if self.request.user.universityuser.type == UniUser.STUDENT.value:
-                queryset = queryset.filter(user_id=self.request.user.id)
-                last = queryset.order_by('start_time').last()
-                return queryset.filter(id=last.id)
-            else:
-                queryset = queryset.filter(quiz_author_id=self.request.user.id)
-                last = queryset.order_by('start_time').last()
-                return queryset.filter(id=last.id)
-        except Exception:
-            return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     # id = self.request.data['pk']
+    #     # print(self.request)
+    #     try:
+    #         if self.request.user.universityuser.type == UniUser.STUDENT.value:
+    #             queryset = queryset.filter(user_id=self.request.user.id)
+    #             last = queryset.order_by('start_time').last()
+    #             return queryset.filter(id=last.id)
+    #         else:
+    #             queryset = queryset.filter(quiz_author_id=self.request.user.id)
+    #             last = queryset.order_by('start_time').last()
+    #             return queryset.filter(id=last.id)
+    #     except Exception:
+    #         return queryset
+
+    def get(self, request, *args, **kwargs):
+        if request.user.universityuser.type == UniUser.STUDENT.value:
+            id = kwargs['pk']
+            # print(request.user.id)
+            queryset = QuizPassing.objects.filter(quiz_id=id, user_id=request.user.id).order_by('start_time')
+
+
+
+            # print(last.id)
+            try:
+                last = queryset.reverse()[0]
+            except IndexError as e:
+                print(e, id, request.user.id)
+                return Response(status=status.HTTP_204_NO_CONTENT)
+                # print(e)
+            # print(id, args, kwargs)
+            # print(request, args, kwargs )
+            # ans = super().get(request, *args, **kwargs)
+            # print(ans)
+            # print(self.get_serializer_class())
+            # print(self.get_serializer(*args, **kwargs).data)
+            # print(type(last))
+            print('!', last.end_time)
+            # print('*', QuizPassingSerializer(last))
+            print('?', self.get_serializer(last).data['end_time'])
+            return Response(self.get_serializer(last).data)
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)
     # def list(self, request, *args, **kwargs):
     #     resp = super().list(request, *args, **kwargs)
     #     resp['data']
@@ -319,7 +351,9 @@ class QuizPassingDetails(generics.RetrieveAPIView, generics.UpdateAPIView):
         now = timezone.now()
         timediff = now - obj.start_time
         timediff_in_minutes = timediff.total_seconds() / 60
-        if timediff_in_minutes > obj.duration:
+
+        timediff2 = now - obj.end_time
+        if timediff_in_minutes > obj.duration or timediff2.total_seconds() > 0:
             resp.data['is_going'] = False
         else:
             resp.data['is_going'] = True
@@ -335,12 +369,15 @@ class QuizPassingStop(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         resp = super().get(request, *args, **kwargs)
-        obj = QuizPassing.objects.filter(id=resp.data['id']).last()
-        obj.end_time = timezone.now()
-        obj.save()
-        resp.data['end_time'] = obj.end_time
-        resp.data['is_going'] = False
-        return resp
+        obj = QuizPassing.objects.filter(id=resp.data['id'], user=request.user.id).last()
+        if obj:
+            obj.end_time = timezone.now()
+            obj.save()
+            resp.data['end_time'] = obj.end_time
+            resp.data['is_going'] = False
+            return resp
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AnswerToPassingViewSet(viewsets.ModelViewSet):

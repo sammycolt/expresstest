@@ -42,7 +42,9 @@ import {
   REMOVE_TEST,
   REMOVE_QUESTION,
   REMOVE_ANSWER,
-  SET_PASSING
+  SET_PASSING,
+  SET_PASSING_TO_TEST,
+  SET_COURSE_TO_TEST
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -70,7 +72,8 @@ const state = {
   courses: [],
   coursesDictionaryByName: {},
   coursesDictionaryById: {},
-  passing: {}
+  passing: {},
+  courseToTests: {}
 }
 
 const getters = {
@@ -289,6 +292,26 @@ const mutations = {
     // console.log('Kek')
     // console.log(passing)
     state.passing = passing
+  },
+  [SET_PASSING_TO_TEST] (state, payload) {
+    var testId = payload.testId
+    var passing = payload.passing
+    var testIndex = -1
+    for (var i = 0; i < state.tests.length; ++i) {
+      if (state.tests[i].id === testId) {
+        testIndex = i
+      }
+    }
+    Vue.set(state.tests[testIndex], 'passing', passing)
+  },
+  [SET_COURSE_TO_TEST] (state, payload) {
+    var test = payload.quiz
+    var course = payload.course
+    var id = payload.id
+    if (!state.courseToTests[test]) {
+      Vue.set(state.courseToTests, test, {})
+    }
+    Vue.set(state.courseToTests[test], course, id)
   }
 }
 
@@ -351,12 +374,15 @@ const actions = {
       commit(ADD_TEST, test)
     })
   },
-  getTests ({ commit }) {
+  getTests ({ commit, dispatch }) {
     Test.list().then(tests => {
       commit(SET_TESTS, { tests })
+      for (var i = 0; i < tests.length; ++i) {
+        dispatch('getLastPassing', tests[i].id)
+      }
     })
   },
-  getTestDetails ({ commit }, id) {
+  getTestDetails ({ commit, dispatch }, id) {
     Test.details(id).then(response => {
       var payload = {
         key: id,
@@ -364,6 +390,7 @@ const actions = {
       }
       commit(ADD_TEST_DETAILS, payload)
       commit(SET_GIVEN_ANSWERS, id)
+      dispatch('getCourseToTests')
     })
   },
   createQuestion ({ commit, dispatch }, questionData) {
@@ -459,8 +486,20 @@ const actions = {
       commit(SET_COURSES_DICTIONARY)
     })
   },
-  addCourseToTest ({ commit }, payload) {
-    Test.addCourseToTest(payload).then(response => {})
+  addCourseToTest ({ commit, dispatch }, payload) {
+    Test.addCourseToTest(payload).then(response => {
+      // console.log('allah')
+      commit(SET_COURSE_TO_TEST, response)
+      dispatch('getTestDetails', response.quiz)
+    })
+  },
+  deleteCourseToTest ({ dispatch }, payload) {
+    var id = payload.id
+    var test = payload.test
+    Test.deleteCourseToTest(id).then(response => {
+      // commit(SET_COURSE_TO_TEST, response)
+      dispatch('getTestDetails', test)
+    })
   },
   deleteTest ({ commit }, testId) {
     Test.delete(testId).then(response => {
@@ -491,6 +530,29 @@ const actions = {
   stopPassing ({ commit }, id) {
     Passing.stop(id).then(passing => {
       commit(SET_PASSING, passing)
+    })
+  },
+  getLastPassing ({ commit }, testId) {
+    Passing.last(testId).then(passing => {
+      var payload = {
+        'testId': testId,
+        'passing': passing
+      }
+      console.log(payload)
+      commit(SET_PASSING_TO_TEST, payload)
+      // commit(SET_PASSING, passing)
+    })
+  },
+  getCourseToTests ({ commit }) {
+    Test.getCourseToTests().then(response => {
+      for (var i = 0; i < response.length; ++i) {
+        var payload = {
+          'quiz': response[i].quiz,
+          'course': response[i].course,
+          'id': response[i].id
+        }
+        commit(SET_COURSE_TO_TEST, payload)
+      }
     })
   }
 }

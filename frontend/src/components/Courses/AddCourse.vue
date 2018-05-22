@@ -1,36 +1,43 @@
 <template>
-<div class="panel" v-if="coursesDictionaryByName">
-  <div class="panel-header text-center">
-    <div class="panel-title h5 mt-10">Share test to course</div>
-  </div>
-  <div class="panel-body">
-    <div>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <select class="form-select" v-model="cor">
-            <option v-for="course in this.courses">{{ course.name }}</option>
-          </select>
-      </div>
-      </form>
+<div>
+  <div class="panel" v-if="coursesDictionaryByName">
+    <div class="panel-header text-center">
+      <div class="panel-title h5 mt-10">Share test to course</div>
     </div>
-  </div>
-  <div class="panel-footer">
-    <div class="form-group">
+    <div class="panel-body">
       <div>
-        <button class="btn btn-primary btn-block" @click="share">Share</button>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <select class="form-select" v-model="cor">
+              <option v-for="course in this.courses">{{ course.name }}</option>
+            </select>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="form-group">
+        <div>
+          <button class="btn btn-primary btn-block" @click="share">Share</button>
+        </div>
       </div>
     </div>
   </div>
+  <courses-list :testId="this.testId"></courses-list>
 </div>
 </template>
 
 <script>
 
 import { mapGetters } from 'vuex'
+import CoursesList from './CoursesList.vue'
 
 export default{
   name: 'add-course',
   props: ['testId'],
+  components: {
+    'courses-list': CoursesList
+  },
   computed: mapGetters(['courses', 'coursesDictionaryByName']),
   data () {
     return {
