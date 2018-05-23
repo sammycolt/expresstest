@@ -5,6 +5,7 @@ from django.utils.timezone import utc
 from django.utils import timezone
 import datetime
 from django.db.models import Q
+import importlib
 
 
 from .models import Note, UniversityUser, User, QuizTest, \
@@ -48,6 +49,15 @@ class QuizAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizAnswer
         fields = ('id', 'answer_text', 'is_correct')
+
+    def save(self, **kwargs):
+        answer = super().save(**kwargs)
+        checker = importlib.import_module('quiz.checkers.pifagor_checker')
+        # print(dir(checker))
+        answer.is_correct = checker.check(answer.answer_text)
+        answer.save()
+        # print(checker.check(answer.answer_text))
+        return answer
 
 
 class QuizQuestionSerializer(serializers.ModelSerializer):

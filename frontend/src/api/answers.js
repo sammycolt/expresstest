@@ -2,7 +2,7 @@ import { HTTP, getHeaders } from './common'
 
 export const Answer = {
   create (config) {
-    console.log(config)
+    // console.log(config)
     return HTTP.post('/answers/', config, getHeaders()).then(response => {
       return response.data
     })
@@ -18,6 +18,7 @@ export const Answer = {
   //   })
   // },
   addAnswerToPassing (config) {
+    console.log('Ebat')
     return HTTP.post('/answer_to_passing/', config, getHeaders()).then(response => {
       return response.data
     })

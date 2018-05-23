@@ -46,7 +46,8 @@ import {
   SET_PASSING_TO_TEST,
   SET_COURSE_TO_TEST,
   SET_GROUP_TO_TEST,
-  SET_USER_TO_TEST
+  SET_USER_TO_TEST,
+  ADD_ELEM_TO_GIVEN_ANSWERS
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -183,6 +184,15 @@ const mutations = {
         }
       }
       Vue.set(state, 'givenAnswers', ans)
+    }
+  },
+  [ADD_ELEM_TO_GIVEN_ANSWERS] (state, payload) {
+    if (state.givenAnswers) {
+      var question = payload.question
+      var answer = payload.answer
+      var given = payload.given
+      Vue.set(state.givenAnswers[question], answer, {})
+      Vue.set(state.givenAnswers[question][answer], 'given', given)
     }
   },
   [ADD_ID_TO_GIVEN_ANSWERS] (state, payload) {
@@ -446,6 +456,18 @@ const actions = {
       dispatch('addAnswerToQuestion', {
         'questionId': questionId,
         'answerId': answer.id
+      })
+      if (payload.passing) {
+        console.log('Ama tut')
+        dispatch('addAnswerByUser', {
+          'passing': payload.passing,
+          'answer': answer.id
+        })
+      }
+      commit(ADD_ELEM_TO_GIVEN_ANSWERS, {
+        'answer': answer.id,
+        'question': questionId,
+        'given': true
       })
       commit(ADD_ANSWER, answer)
     })

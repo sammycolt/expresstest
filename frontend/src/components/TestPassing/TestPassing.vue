@@ -83,6 +83,9 @@ export default{
     },
     passing (state) {
       return state.passing
+    },
+    answers (state) {
+      return state.answers
     }
   }),
   data () {
@@ -152,6 +155,19 @@ export default{
       }
       if (isCorrect) {
         this.givenAnswers[question.id][corrAnsId].given = true
+      } else {
+        if (this.givenAnswers[question.id].textInput) {
+          if (this.givenAnswers[question.id].textInput.length) {
+            this.$store.dispatch('createAnswer', {
+              'answerData': {
+                'answer_text': this.givenAnswers[question.id].textInput,
+                'is_correct': false
+              },
+              'questionId': question.id,
+              'passing': this.passing.id
+            })
+          }
+        }
       }
 //      console.log(isCorrect)
     },
@@ -204,32 +220,34 @@ export default{
     }
     this.$store.dispatch('setPassing', {})
     this.$store.dispatch('getCurrentPassing', passingData).then(response => {
-      console.log('kekek', response)
+//      console.log('kekek', response)
       this.timer = setInterval(() => {
         if (this.passing) {
-          this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
-          if (this.passing.is_going === false) {
-            this.finish()
-          } else {
-            if (this.passing.is_going === true) {
-              for (var i = 0; i < this.passing.answers.length; ++i) {
-                var answer = this.passing.answers[i]
-                //              console.log(answer)
-                var question = this.findQuestion(answer.id)
-                //              console.log(question.id)
-                if (question.type === '0') {
-                  this.givenAnswers[question.id][answer.id].given = true
-                } else if (question.type === '1') {
-                  if (this.givenAnswers[question.id].given === false) {
-                    this.givenAnswers[question.id].given = answer.id
-                  }
-                } else if (question.type === '2') {
-                  if (!this.givenAnswers[question.id].textInput.length) {
-                    this.givenAnswers[question.id].textInput = answer.answer_text
+          if (this.passing.id) {
+            this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
+            if (this.passing.is_going === false) {
+              this.finish()
+            } else {
+              if (this.passing.is_going === true) {
+                for (var i = 0; i < this.passing.answers.length; ++i) {
+                  var answer = this.passing.answers[i]
+                  //              console.log(answer)
+                  var question = this.findQuestion(answer.id)
+                  //              console.log(question.id)
+                  if (question.type === '0') {
+                    this.givenAnswers[question.id][answer.id].given = true
+                  } else if (question.type === '1') {
+                    if (this.givenAnswers[question.id].given === false) {
+                      this.givenAnswers[question.id].given = answer.id
+                    }
+                  } else if (question.type === '2') {
+                    if (!this.givenAnswers[question.id].textInput.length) {
+                      this.givenAnswers[question.id].textInput = answer.answer_text
+                    }
                   }
                 }
+                //            console.log(this.passing.answers)
               }
-              //            console.log(this.passing.answers)
             }
           }
         }

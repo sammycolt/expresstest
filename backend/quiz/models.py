@@ -137,7 +137,7 @@ class QuizPassing(models.Model):
         # timediff = -1
         timediff = self.end_time.replace(tzinfo=pytz.UTC) - self.start_time.replace(tzinfo=pytz.UTC)
         if timediff.total_seconds() < 0:
-            print('ahkbshbahj')
+            # print('ahkbshbahj')
             return -1
         else:
             return timediff.total_seconds()
@@ -148,18 +148,18 @@ class QuizPassing(models.Model):
 
     @property
     def is_going(self):
-        now = timezone.now()
-        timediff = now - self.start_time
+        now = timezone.now().replace(tzinfo=pytz.UTC)
+        timediff = now - self.start_time.replace(tzinfo=pytz.UTC)
         timediff_in_minutes = timediff.total_seconds() / 60
 
-        timediff2 = now - self.end_time
+        timediff2 = now - self.end_time.replace(tzinfo=pytz.UTC)
 
         return not(timediff_in_minutes > self.duration or timediff2.total_seconds() > 0)
 
     @property
     def seconds_per_end(self):
-        now = timezone.now()
-        timediff = now - self.start_time
+        now = timezone.now().replace(tzinfo=pytz.UTC)
+        timediff = now - self.start_time.replace(tzinfo=pytz.UTC)
         ans = 60 * self.duration - timediff.total_seconds()
         if ans > 0 and self.is_going:
             return ans
