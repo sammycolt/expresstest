@@ -20,11 +20,20 @@
                 <td>{{calculateGroups(result.user)}}</td>
                 <td class="text-left">{{studentsInfo[result.user].username}}</td>
                 <td v-for="question in testDetails[testId].questions">
-                  <div v-if="checkCorrectness(result, question.id)">
-                    {{ question.score }}
+                  <div v-if="checkCorrectness(result, question.id) === 1" >
+                    <span class="label label-primary label-success">
+                      {{ question.score }}
+                    </span>
+                  </div>
+                  <div v-else-if="checkCorrectness(result, question.id) === 2" >
+                    <span class="label label-primary label-warning">
+                      0({{ question.score }})
+                    </span>
                   </div>
                   <div v-else="">
-                    0
+                    <span class="label label-primary">
+                      0
+                    </span>
                   </div>
                 </td>
                 <td>
@@ -184,11 +193,15 @@ export default{
   }),
   methods: {
     checkCorrectness (result, questionId) {
-      var found = false
-      for (var i = 0; i < result.correct_questions.length; ++i) {
-        var question = result.correct_questions[i]
+      var found = 0
+      for (var i = 0; i < result.questions.length; ++i) {
+        var question = result.questions[i].question
         if (question.id === questionId) {
-          found = true
+          if (result.questions[i].show_in_res === true) {
+            found = 1
+          } else {
+            found = 2
+          }
         }
       }
       return found

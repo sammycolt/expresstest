@@ -67,7 +67,8 @@ class QuizResults(models.Model):
 
 class QuestionToResult(models.Model):
     question = models.ForeignKey(QuizQuestion)
-    result = models.ForeignKey(QuizResults)
+    result = models.ForeignKey(QuizResults, related_name='questions')
+    show_in_res = models.BooleanField(default=True)
 
 class Group(models.Model):
     name = models.CharField(max_length=255)

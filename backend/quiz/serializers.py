@@ -4,6 +4,7 @@ from rest_auth.serializers import JWTSerializer
 from django.utils.timezone import utc
 from django.utils import timezone
 import datetime
+from django.db.models import Q
 
 
 from .models import Note, UniversityUser, User, QuizTest, \
@@ -194,13 +195,18 @@ class AnswerByUserSerializer(serializers.ModelSerializer):
 
         return abu
 
+class QuestionToResultSerializer(serializers.ModelSerializer):
+    question = QuizQuestionStudentSerializer(read_only=True)
+    class Meta:
+        model = QuestionToResult
+        fields = ('question', 'result', 'show_in_res')
 
 class QuizResultsSerializer(serializers.ModelSerializer):
-    correct_questions = QuizQuestionStudentSerializer(many=True, read_only=True)
+    questions = QuestionToResultSerializer(many=True, read_only=True)
 
     class Meta:
         model = QuizResults
-        fields = ('id',  'correct_questions', 'total_score', 'percentage')
+        fields = ('id',  'questions', 'total_score', 'percentage')
 
 class UserToGroupSerializer(serializers.ModelSerializer):
 
@@ -306,6 +312,17 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
         #     print(elem)
         # print('Correct answers by user: ', correct_answers_on_this_question_by_user.count())
 
+        correct_answers_on_this_question_by_other_users = \
+            QuizResults.objects.filter(passing__quiz_id=quiz.id, correct_questions__id=question.id).filter(~Q(passing__user_id=user.id))
+        l = [i for i in correct_answers_on_this_question_by_other_users.all()]
+        s = set()
+        for i in l:
+            all = i.passing.all()
+            for j in all:
+                s.add(j.user_id)
+                # print(dir(j))
+        print('Kekekek', len(s))
+
         if (quiz_results.count()):
 
             quiz_result = quiz_results[0]
@@ -316,12 +333,15 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                     if question not in quiz_result.correct_questions.all():
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
 
-                        ans_to_res = QuestionToResult(question=question, result=quiz_result)
+                        show_in_res = False
+                        if (len(s) < 1):
+                            quiz_result.total_score += question.score
+                            quiz_result.save()
+                            quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
+                            quiz_result.save()
+                            show_in_res = True
+                        ans_to_res = QuestionToResult(question=question, result=quiz_result, show_in_res=show_in_res)
                         ans_to_res.save()
-                        quiz_result.total_score += question.score
-                        quiz_result.save()
-                        quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
-                        quiz_result.save()
                 else:
                     if question in quiz_result.correct_questions.all():
                         print("!!2")
@@ -344,15 +364,18 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
             score = 0
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
-                if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
-                    score = question.score
+                show_in_res = False
+                if len(s) < 1:
+                    if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                        score = question.score
+                        show_in_res = True
                 new_result = QuizResults(total_score=score,
                                          percentage=score / max_score_for_quiz)
                 new_result.save()
                 atp.passing.result = new_result
                 atp.save()
                 if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
-                    ans_to_res = QuestionToResult(question=question, result=new_result)
+                    ans_to_res = QuestionToResult(question=question, result=new_result, show_in_res=show_in_res)
                     ans_to_res.save()
 
         return atp
@@ -409,6 +432,7 @@ class QuizPassingSerializer(serializers.ModelSerializer):
             new_passing = super().save(quiz=quiz, user=user, start_time=datetime.datetime.utcnow(), duration=duration, result=result,
                                        end_time=now + datetime.timedelta(minutes=duration + 1), attempt=1)
             return new_passing
+
 
 
 def jwt_token_payload_handler(token, user, request=None):

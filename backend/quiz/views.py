@@ -228,7 +228,7 @@ class GroupToQuizViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.universityuser.type == UniUser.STUDENT.value:
-            return queryset.filter(group_students_id=self.request.user.id)
+            return queryset.filter(group__students__id=self.request.user.id)
         else:
             return queryset
 

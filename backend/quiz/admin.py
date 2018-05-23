@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Group, UserToGroup, Course, GroupToCourse, QuizPassing, QuizToCourse
+from .models import Group, UserToGroup, Course, GroupToCourse, QuizPassing, QuizToCourse, QuizResults
 
 #admin.site.register(GroupOfUsers)
 #admin.site.register(UserToGroup)
 admin.site.register(QuizPassing)
-
+admin.site.register(QuizResults)
 admin.site.register(QuizToCourse)
 
 @admin.register(Group)
