@@ -6,12 +6,12 @@
       <div class="card-subtitle" @click="onClick">Questions: {{ questionsCount }}</div>
       <div class="card-subtitle" @click="onClick">Max time: {{ maxTime }} min</div>
       <div class="card-subtitle" v-if="!checkType()">Attempts: {{ remainingAttempts }}</div>
-      <div class="card-subtitle" v-if="!checkType() && remainingTime !== null && remainingTime !== '0m, 0s'">
+      <div class="card-subtitle" v-if="!checkType() && remainingTime !== undefined && remainingTime !== null && remainingTime !== '0m, 0s'">
         Seconds to end: {{ remainingTime }}
       </div>
       <div class="card-subtitle" v-if="!checkType() ">
-          <span class="label label-primary" v-bind:class="correctClass(remainingTime !== null && remainingTime !== '0m, 0s')">
-            {{ correctLabel(remainingTime !== null && remainingTime !== '0m, 0s') }}
+          <span class="label label-primary" v-bind:class="correctClass(remainingTime !== undefined && remainingTime !== null && remainingTime !== '0m, 0s')">
+            {{ correctLabel(remainingTime !== undefined && remainingTime !== null && remainingTime !== '0m, 0s') }}
           </span>
         </div>
       <br v-if="!checkType()">

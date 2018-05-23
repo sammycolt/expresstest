@@ -92,23 +92,31 @@ export default{
     },
     correctClass (question) {
       var label = this.correctLabel(question)
-      if (label === 'Correct') {
+      if (label === 'Correct, first') {
         return 'label-success'
-      } else {
+      } else if (label === 'Incorrect') {
         return 'label-error'
+      } else {
+        return 'label-warning'
       }
     },
     correctLabel (question) {
-      var found = false
-      for (var i = 0; i < this.results[this.testId][0].correct_questions.length; ++i) {
-        if (this.results[this.testId][0].correct_questions[i].id === question.id) {
-          found = true
+      var found = 0
+      for (var i = 0; i < this.results[this.testId][0].questions.length; ++i) {
+        if (this.results[this.testId][0].questions[i].question.id === question.id) {
+          if (this.results[this.testId][0].questions[i].show_in_res === true) {
+            found = 1
+          } else {
+            found = 2
+          }
         }
       }
-      if (found) {
-        return 'Correct'
-      } else {
+      if (found === 1) {
+        return 'Correct, first'
+      } else if (found === 0) {
         return 'Incorrect'
+      } else {
+        return 'Correct, not first'
       }
     }
   },

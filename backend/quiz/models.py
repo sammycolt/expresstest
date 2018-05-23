@@ -16,6 +16,12 @@ QUESTION_TYPE_CHOICES = (
     ('2', 'OpenAnswer')
 )
 
+
+SCORING_SYSTEM_CHOICES = (
+    ('0', 'For everyone'),
+    ('1', 'For first')
+)
+
 class Note(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
@@ -33,6 +39,8 @@ class QuizTest(models.Model):
     readers = models.ManyToManyField(User, through='UserToQuiz', related_name='quiz')
     groups_of_readers = models.ManyToManyField('Group', through='QuizToGroup', related_name='quiz')
     courses = models.ManyToManyField('Course', through='QuizToCourse', related_name='quiz')
+    scoring_system = models.CharField(max_length=1, choices=SCORING_SYSTEM_CHOICES, default='0')
+    num_of_winners = models.IntegerField(default=1, blank=True)
 
 class UserToQuiz(models.Model):
     quiz = models.ForeignKey(QuizTest)

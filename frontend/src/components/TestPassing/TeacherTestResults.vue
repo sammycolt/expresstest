@@ -17,7 +17,9 @@
             </thead>
             <tbody>
               <tr v-for="result in filterResults[testId]">
-                <td>{{calculateGroups(result.user)}}</td>
+                <td>
+                  {{calculateGroups(result.user)}}
+                </td>
                 <td class="text-left">{{studentsInfo[result.user].username}}</td>
                 <td v-for="question in testDetails[testId].questions">
                   <div v-if="checkCorrectness(result, question.id) === 1" >
@@ -31,9 +33,7 @@
                     </span>
                   </div>
                   <div v-else="">
-                    <span class="label label-primary">
-                      0
-                    </span>
+                    0
                   </div>
                 </td>
                 <td>
@@ -50,18 +50,8 @@
                 <td>
                   Average
                 </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                </td>
+                <td></td>
+                <td v-for="question in testDetails[testId].questions"></td>
                 <td>
                 </td>
                 <td>
@@ -164,7 +154,7 @@ export default{
         dataset1.data.push(0)
         dataset2.data.push(0)
       }
-      console.log('!!!', this.filterResults[testId].length)
+//      console.log('!!!', this.filterResults[testId].length)
       for (var i = 0; i < this.filterResults[testId].length; ++i) {
         var result = this.filterResults[testId][i]
         for (j = 0; j < this.testDetails[testId].questions.length; ++j) {
@@ -225,15 +215,19 @@ export default{
       }
     },
     calculateGroups (student) {
-//      console.log(student)
-      var ans = ''
+      if (this.studentsInfo[student]) {
+//        console.log('???!', student)
+        var ans = ''
 //      console.log(this.studentsInfo[student])
-      var groups = this.studentsInfo[student].group_set
-      for (var i = 0; i < groups.length - 1; ++i) {
-        ans += this.groupsInfo[groups[i]].name + ', '
+        var groups = this.studentsInfo[student].group_set
+        for (var i = 0; i < groups.length - 1; ++i) {
+          ans += this.groupsInfo[groups[i]].name + ', '
+        }
+        if (groups.length > 0) {
+          ans += this.groupsInfo[groups[groups.length - 1]].name
+        }
+        return ans
       }
-      ans += this.groupsInfo[groups[groups.length - 1]].name
-      return ans
     }
   },
   created: function () {

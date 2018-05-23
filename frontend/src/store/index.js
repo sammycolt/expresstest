@@ -552,6 +552,9 @@ const actions = {
       commit(SET_PASSING, passing)
     })
   },
+  setPassing ({ commit }, passing) {
+    commit(SET_PASSING, passing)
+  },
   getCurrentPassingDetails ({ commit }, id) {
     Passing.details(id).then(passing => {
       commit(SET_PASSING, passing)
@@ -568,7 +571,7 @@ const actions = {
         'testId': testId,
         'passing': passing
       }
-      console.log(payload)
+      // console.log(payload)
       commit(SET_PASSING_TO_TEST, payload)
       // commit(SET_PASSING, passing)
     })

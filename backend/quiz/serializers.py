@@ -62,7 +62,7 @@ class QuizTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizTest
         fields = ('id', 'title', 'author', 'questions', 'readers', 'max_time',
-                  'max_attempts', 'groups_of_readers', 'courses')
+                  'max_attempts', 'groups_of_readers', 'courses', 'scoring_system', 'num_of_winners')
 
 class QuizAnswerStudentSerializer(serializers.ModelSerializer):
 
@@ -334,7 +334,14 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
 
                         show_in_res = False
-                        if (len(s) < 1):
+                        if quiz.scoring_system == '1':
+                            if (len(s) < quiz.num_of_winners):
+                                quiz_result.total_score += question.score
+                                quiz_result.save()
+                                quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
+                                quiz_result.save()
+                                show_in_res = True
+                        else:
                             quiz_result.total_score += question.score
                             quiz_result.save()
                             quiz_result.percentage = quiz_result.total_score / max_score_for_quiz
@@ -365,7 +372,12 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
                 show_in_res = False
-                if len(s) < 1:
+                if quiz.scoring_system == '1':
+                    if len(s) < quiz.num_of_winners:
+                        if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
+                            score = question.score
+                            show_in_res = True
+                else:
                     if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
                         score = question.score
                         show_in_res = True

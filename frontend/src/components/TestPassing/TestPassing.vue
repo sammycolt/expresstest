@@ -202,29 +202,35 @@ export default{
       'start_time': '1970-01-01 01:01:01',
       'duration': 0
     }
+    this.$store.dispatch('setPassing', {})
     this.$store.dispatch('getCurrentPassing', passingData).then(response => {
+      console.log('kekek', response)
       this.timer = setInterval(() => {
-        this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
-        if (this.passing.is_going === false) {
-          this.finish()
-        } else {
-          if (this.passing.is_going === true) {
-            for (var i = 0; i < this.passing.answers.length; ++i) {
-              var answer = this.passing.answers[i]
-//              console.log(answer)
-              var question = this.findQuestion(answer.id)
-//              console.log(question.id)
-              if (question.type === '0') {
-                this.givenAnswers[question.id][answer.id].given = true
-              } else if (question.type === '1') {
-                this.givenAnswers[question.id].given = answer.id
-              } else if (question.type === '2') {
-                if (this.givenAnswers[question.id].textInput === undefined) {
-                  this.givenAnswers[question.id].textInput = answer.answer_text
+        if (this.passing) {
+          this.$store.dispatch('getCurrentPassingDetails', this.passing.id)
+          if (this.passing.is_going === false) {
+            this.finish()
+          } else {
+            if (this.passing.is_going === true) {
+              for (var i = 0; i < this.passing.answers.length; ++i) {
+                var answer = this.passing.answers[i]
+                //              console.log(answer)
+                var question = this.findQuestion(answer.id)
+                //              console.log(question.id)
+                if (question.type === '0') {
+                  this.givenAnswers[question.id][answer.id].given = true
+                } else if (question.type === '1') {
+                  if (this.givenAnswers[question.id].given === false) {
+                    this.givenAnswers[question.id].given = answer.id
+                  }
+                } else if (question.type === '2') {
+                  if (!this.givenAnswers[question.id].textInput.length) {
+                    this.givenAnswers[question.id].textInput = answer.answer_text
+                  }
                 }
               }
+              //            console.log(this.passing.answers)
             }
-//            console.log(this.passing.answers)
           }
         }
       }, 500)

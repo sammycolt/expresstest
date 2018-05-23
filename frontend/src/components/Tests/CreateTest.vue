@@ -32,6 +32,27 @@
             <input class="form-input "  type="text" v-model="maxAttempts" placeholder="Enter max attempts...">
           </div>
         </div>
+
+        <div class="form-group">
+          <div class="col-3">
+            <label class="form-label">Scoring system</label>
+          </div>
+          <div class="col-9">
+            <select class="form-select" v-model="scoringSystem">
+              <option value="0">For everyone</option>
+              <option value="1">For first</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" v-if="scoringSystem === '1'">
+          <div class="col-3">
+            <label class="form-label">Num of winners</label>
+          </div>
+          <div class="col-9">
+            <input class="form-input "  type="text" v-model="numOfFirsts" placeholder="Enter num of winners">
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -52,7 +73,9 @@ export default{
     return {
       'title': '',
       'maxTime': 2,
-      'maxAttempts': 3
+      'maxAttempts': 3,
+      'scoringSystem': 0,
+      'numOfFirsts': 1
     }
   },
   methods: {
@@ -61,7 +84,9 @@ export default{
         'title': this.title,
         'author': this.$store.getters.userInfo.id,
         'max_time': this.maxTime,
-        'max_attempts': this.maxAttempts
+        'max_attempts': this.maxAttempts,
+        'scoring_system': this.scoringSystem,
+        'num_of_winners': this.numOfFirsts
       })
       event.preventDefault()
     }

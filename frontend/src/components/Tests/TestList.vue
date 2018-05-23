@@ -34,14 +34,16 @@ export default {
     },
     time (test) {
 //      console.log(test.passing.seconds_per_end)
-      if (test.passing.seconds_per_end !== undefined && test.passing.seconds_per_end !== null) {
-        var seconds = test.passing.seconds_per_end
-        seconds = Math.ceil(seconds)
-        var min = Math.floor(seconds / 60)
-        var sec = seconds % 60
-        return min.toString() + 'm, ' + sec.toString() + 's'
-      } else {
-        return null
+      if (test.passing) {
+        if (test.passing.seconds_per_end !== undefined && test.passing.seconds_per_end !== null) {
+          var seconds = test.passing.seconds_per_end
+          seconds = Math.ceil(seconds)
+          var min = Math.floor(seconds / 60)
+          var sec = seconds % 60
+          return min.toString() + 'm, ' + sec.toString() + 's'
+        } else {
+          return null
+        }
       }
     }
   },
@@ -54,18 +56,20 @@ export default {
       this.$store.dispatch('getTests')
       for (var i = 0; i < this.tests.length; ++i) {
         var test = this.tests[i]
-        if (test.passing.seconds_per_end !== undefined && test.passing.seconds_per_end !== null) {
-//          console.log('sjndj', test.passing.seconds_per_end)
-//          console.log(test.passing.seconds_per_end <= 0)
-          if (test.passing.is_going) {
-            if (test.passing.seconds_per_end <= 0) {
-              this.$store.dispatch('stopPassing', test.passing.id)
+        if (test.passing) {
+          if (test.passing.seconds_per_end !== undefined && test.passing.seconds_per_end !== null) {
+            //          console.log('sjndj', test.passing.seconds_per_end)
+            //          console.log(test.passing.seconds_per_end <= 0)
+            if (test.passing.is_going) {
+              if (test.passing.seconds_per_end <= 0) {
+                this.$store.dispatch('stopPassing', test.passing.id)
+              }
             }
+            //          console.log('kek')
           }
-//          console.log('kek')
         }
       }
-    }, 3000)
+    }, 5000)
     this.$store.dispatch('getTestResults')
   },
   beforeDestroy: function () {
