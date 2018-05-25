@@ -18,6 +18,10 @@
       <tab name="Results">
         <teacher-test-results :testId="this.id"></teacher-test-results>
       </tab>
+      <tab name="Checkers">
+        <add-checker></add-checker>
+        <checker-list></checker-list>
+      </tab>
     </tabs>
   </div>
 </section>
@@ -32,6 +36,8 @@ import AddStudent from '../Students/AddStudent.vue'
 import TeacherTestResults from '../TestPassing/TeacherTestResults.vue'
 import AddGroup from '../Groups/AddGroup.vue'
 import AddCourse from '../Courses/AddCourse.vue'
+import CheckerList from '../Checkers/ChekerList.vue'
+import AddChecker from '../Checkers/AddCheker.vue'
 import {Tabs, Tab} from 'vue-tabs-component'
 
 export default {
@@ -44,7 +50,9 @@ export default {
     'add-group': AddGroup,
     'add-course': AddCourse,
     'tabs': Tabs,
-    'tab': Tab
+    'tab': Tab,
+    'checker-list': CheckerList,
+    'add-checker': AddChecker
   },
   computed: mapState({
     title (state) {

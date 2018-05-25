@@ -19,7 +19,7 @@
             <input type="checkbox" v-model="isCorrect">
             <i class="form-icon"></i> Correct
           </label>
-      </div>
+        </div>
       </form>
     </div>
   </div>

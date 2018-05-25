@@ -23,6 +23,20 @@
             </select>
           </div>
         </div>
+
+        <div class="form-group" v-if="type === '2'">
+          <label class="form-switch">
+            <input type="checkbox" v-model="use_checker">
+            <i class="form-icon"></i> Use checker
+          </label>
+        </div>
+
+        <div class="form-group" v-if="use_checker">
+          <select class="form-select" v-model="checker">
+              <option v-for="name in this.checkerNames">{{name}}</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <div class="col-3">
             <label class="form-label">Score</label>
@@ -45,27 +59,54 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default{
   name: 'create-test',
   props: ['testId'],
+  computed: mapState({
+    checkerNames (state) {
+      var names = []
+      for (var i = 0; i < state.myCheckers.length; ++i) {
+        names.push(state.myCheckers[i].name)
+      }
+      for (i = 0; i < state.otherCheckers.length; ++i) {
+        names.push(state.otherCheckers[i].name)
+      }
+      return names
+    },
+    checkerDict (state) {
+      return state.checkerDict
+    }
+  }),
   data () {
     return {
       'body': '',
       'score': 0,
-      'type': 0
+      'type': 0,
+      'use_checker': false,
+      'checker': {}
     }
   },
   methods: {
     create (event) {
-      this.$store.dispatch('createQuestion', {
+      var payload = {
         'quiz': this.testId,
         'text': this.body,
         'score': this.score,
-        'type': this.type.toString()
-      })
+        'type': this.type.toString(),
+        'use_checker': this.use_checker
+      }
+      if (this.use_checker === true) {
+        payload['checker'] = this.checkerDict[this.checker].id
+      }
+      this.$store.dispatch('createQuestion', payload)
       this.body = ''
       event.preventDefault()
     }
+  },
+  created: function () {
+    this.$store.dispatch('getCheckers')
   }
 
 }

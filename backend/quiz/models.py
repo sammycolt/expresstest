@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import datetime
 import pytz
+from django.dispatch import receiver
+import os
+from django.contrib.sites.models import Site
 
 
 USER_CHOICES = (
@@ -21,6 +24,28 @@ SCORING_SYSTEM_CHOICES = (
     ('0', 'For everyone'),
     ('1', 'For first')
 )
+
+class Checker(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=255)
+    file = models.FileField(blank=False, null=False, upload_to='./quiz/checkers')
+    author = models.ForeignKey(User, null=True)
+
+    @property
+    def filename(self):
+        return self.file.path.split('/')[-1]
+
+    @property
+    def file_url(self):
+        filename = self.file.path.split('/')[-1]
+        return 'http://localhost:8000/quiz/checkers/' + filename
+
+
+@receiver(models.signals.post_delete, sender=Checker)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
 
 class Note(models.Model):
     title = models.CharField(max_length=255)
@@ -60,6 +85,8 @@ class QuizQuestion(models.Model):
     answers = models.ManyToManyField(QuizAnswer, through='AnswerToQuestion')
     score = models.IntegerField(default=1)
     type = models.CharField(max_length=1, choices=QUESTION_TYPE_CHOICES, default='0')
+    use_checker = models.BooleanField(blank=True, default=False)
+    checker = models.ForeignKey(Checker, blank=True, null=True)
 
 class AnswerToQuestion(models.Model):
     answer = models.ForeignKey(QuizAnswer, related_name='questions')
@@ -169,3 +196,4 @@ class QuizPassing(models.Model):
 class AnswerToPassing(models.Model):
     answer = models.ForeignKey(QuizAnswer)
     passing = models.ForeignKey(QuizPassing)
+

@@ -1,12 +1,12 @@
 from django.db.models import QuerySet
 from django.db.models import Q
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics, status, views, parsers
 from django.utils import timezone
 from rest_framework.response import Response
 
 from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, \
     QuizResults, QuestionToResult, UserToGroup, Group, QuizToGroup, Course, GroupToCourse, QuizToCourse, QuizPassing, \
-    AnswerToPassing
+    AnswerToPassing, Checker
 
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
@@ -14,7 +14,51 @@ from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
     UserToQuizSerializer, QuizQuestionStudentSerializer, QuizTestStudentSerializer, \
     AnswerByUserSerializer, QuizResultsSerializer, UserToGroupSerializer, GroupOfUsersSerializer, \
     GroupToQuizSerializer, CourseSerializer, GroupToCourseSerializer, QuizToCourseSerializer, QuizPassingSerializer, \
-    AnswerToPassingSerializer
+    AnswerToPassingSerializer, StudentCheckerSerializer, MyCheckerSerializer
+
+
+class CheckerView(viewsets.ModelViewSet):
+    parser_classes = (parsers.MultiPartParser, parsers.FormParser)
+    queryset = Checker.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        file_serializer = serializer_class(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_serializer_class(self):
+        try:
+            if self.request.user.universityuser.type == UniUser.TEACHER.value:
+                return MyCheckerSerializer
+            else:
+                return StudentCheckerSerializer
+        except:
+            return StudentCheckerSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        try:
+            if self.request.user.universityuser.type == UniUser.TEACHER.value:
+                return queryset.filter(~Q(author_id=self.request.user.id))
+        except Exception:
+            return queryset
+
+
+
+class MyCheckerView(CheckerView):
+
+    def get_queryset(self):
+        queryset = Checker.objects.all()
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+
+            return queryset.filter(author_id=self.request.user.id)
+
+
+
 
 
 class NoteViewSet(viewsets.ModelViewSet):

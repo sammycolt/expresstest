@@ -35,6 +35,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     ),
 }
 
+
 # Make JWT Auth the default authentication mechanism for Django
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -171,3 +172,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+CHECKER_URL = '/quiz/'
+CHECKER_ROOT = os.path.join(BASE_DIR, 'quiz/')

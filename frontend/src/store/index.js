@@ -8,6 +8,7 @@ import { Question } from '../api/questions'
 import { Group } from '../api/groups'
 import { Course } from '../api/courses'
 import { Passing } from '../api/passing'
+import { Checker } from '../api/checkers'
 import {
   ADD_NOTE,
   REMOVE_NOTE,
@@ -47,7 +48,12 @@ import {
   SET_COURSE_TO_TEST,
   SET_GROUP_TO_TEST,
   SET_USER_TO_TEST,
-  ADD_ELEM_TO_GIVEN_ANSWERS
+  ADD_ELEM_TO_GIVEN_ANSWERS,
+  ADD_MY_CHEKCER,
+  REMOVE_MY_CHECKER,
+  SET_MY_CHECKERS,
+  SET_OTHER_CHECKERS,
+  SET_CHECKER_DICTIONARIES
 } from './mutation-types.js'
 
 Vue.use(Vuex)
@@ -78,7 +84,10 @@ const state = {
   passing: {},
   courseToTests: {},
   groupToTests: {},
-  userToTests: {}
+  userToTests: {},
+  myCheckers: {},
+  otherCheckers: {},
+  checkerDict: {}
 }
 
 const getters = {
@@ -344,6 +353,37 @@ const mutations = {
       Vue.set(state.userToTests, test, {})
     }
     Vue.set(state.userToTests[test], user, id)
+  },
+  [ADD_MY_CHEKCER] (state, checker) {
+    state.myCheckers = [checker, ...state.myCheckers]
+  },
+  [REMOVE_MY_CHECKER] (state, id) {
+    state.myCheckers = state.myCheckers.filter(checker => {
+      return checker.id !== id
+    })
+  },
+  [SET_MY_CHECKERS] (state, { checkers }) {
+    state.myCheckers = checkers
+  },
+  [SET_OTHER_CHECKERS] (state, { checkers }) {
+    state.otherCheckers = checkers
+  },
+  [SET_CHECKER_DICTIONARIES] (state) {
+    console.log('Checker dictionary')
+    console.log(state.myCheckers.length, state.otherCheckers.length)
+    var dict = {}
+    var checker = {}
+    for (var i = 0; i < state.myCheckers.length; ++i) {
+      checker = state.myCheckers[i]
+      dict[checker.name] = checker
+    }
+    console.log('1', dict)
+    for (i = 0; i < state.otherCheckers.length; ++i) {
+      checker = state.otherCheckers[i]
+      dict[checker.name] = checker
+    }
+    console.log('2', dict)
+    Vue.set(state, 'checkerDict', dict)
   }
 }
 
@@ -649,6 +689,32 @@ const actions = {
       // commit(SET_COURSE_TO_TEST, response)
       dispatch('getTestDetails', test)
     })
+  },
+  createChecker ({ commit }, checkerData) {
+    Checker.create(checkerData).thern(checker => {
+      commit(ADD_MY_CHEKCER, checker)
+    })
+  },
+  deleteChecker ({ commit }, checkerId) {
+    Checker.delete(checkerId).then(response => {
+      commit(REMOVE_MY_CHECKER, checkerId)
+    })
+  },
+  getMyCheckers ({ commit }) {
+    Checker.myCheckers().then(checkers => {
+      commit(SET_MY_CHECKERS, { checkers })
+      commit(SET_CHECKER_DICTIONARIES)
+    })
+  },
+  getOtherCheckers ({ commit }) {
+    Checker.otherCheckers().then(checkers => {
+      commit(SET_OTHER_CHECKERS, { checkers })
+      commit(SET_CHECKER_DICTIONARIES)
+    })
+  },
+  getCheckers ({ commit, dispatch }) {
+    dispatch('getMyCheckers')
+    dispatch('getOtherCheckers')
   }
 }
 

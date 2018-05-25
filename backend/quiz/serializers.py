@@ -11,7 +11,29 @@ import importlib
 from .models import Note, UniversityUser, User, QuizTest, \
     QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, \
     AnswerByUser, QuizResults, QuestionToResult, UserToGroup, Group, \
-    QuizToGroup, QuizToCourse, Course, GroupToCourse, QuizPassing, AnswerToPassing
+    QuizToGroup, QuizToCourse, Course, GroupToCourse, QuizPassing, AnswerToPassing, Checker
+
+
+class StudentCheckerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Checker
+        fields = ('name', 'description')
+
+
+class MyCheckerSerializer(serializers.ModelSerializer):
+    file_url = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Checker
+        fields = ('name', 'description', 'file', 'id', 'author', 'file_url')
+
+    def save(self, **kwargs):
+        queryset = Checker.objects.filter(name=self.validated_data['name'])
+        if queryset.count() > 0:
+            return queryset.last()
+        else:
+            return super().save(**kwargs)
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -50,21 +72,13 @@ class QuizAnswerSerializer(serializers.ModelSerializer):
         model = QuizAnswer
         fields = ('id', 'answer_text', 'is_correct')
 
-    def save(self, **kwargs):
-        answer = super().save(**kwargs)
-        checker = importlib.import_module('quiz.checkers.pifagor_checker')
-        # print(dir(checker))
-        answer.is_correct = checker.check(answer.answer_text)
-        answer.save()
-        # print(checker.check(answer.answer_text))
-        return answer
 
 
 class QuizQuestionSerializer(serializers.ModelSerializer):
     answers = QuizAnswerSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type')
+        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type', 'use_checker', 'checker')
 
 class QuizTestSerializer(serializers.ModelSerializer):
     questions = QuizQuestionSerializer(many=True, read_only=True)
@@ -99,6 +113,25 @@ class AnswerToQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnswerToQuestion
         fields = ('answer', 'question')
+
+    def save(self, **kwargs):
+        atq = super().save(**kwargs)
+        answer = atq.answer
+        question = atq.question
+
+        # print(dir(checker))
+        # question = answer.questions.all()[0]
+        # print(dir(question))
+        if question.type == '2':
+            if question.use_checker:
+                ch = question.checker
+                checker = importlib.import_module('quiz.checkers.' + ch.filename[:-3])
+                answer.is_correct = checker.check(answer.answer_text)
+                answer.save()
+
+        # print(checker.check(answer.answer_text))
+        return answer
+
 
 
 class UserToQuizSerializer(serializers.ModelSerializer):
