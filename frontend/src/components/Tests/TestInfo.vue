@@ -4,25 +4,39 @@
     <div class="panel-header text-center">
       <div class="panel-title h5 mt-10">Test: {{ title }}</div>
     </div>
-    <tabs>
-      <tab name="Questions">
-        <create-question :testId="this.id"></create-question>
-        <question-list :testId="this.id"></question-list>
-      </tab>
-      <tab name="Share">
-        <add-course :testId="this.id"></add-course>
 
-        <add-group :testId="this.id"></add-group>
-        <add-student :testId="this.id"></add-student>
-      </tab>
-      <tab name="Results">
-        <teacher-test-results :testId="this.id"></teacher-test-results>
-      </tab>
-      <tab name="Checkers">
-        <add-checker></add-checker>
+    <ul class="tab tab-block">
+      <li class="tab-item" :class="isActive(1)">
+        <a @click="setTabIndex(1)">Questions</a>
+      </li>
+      <li class="tab-item" :class="isActive(2)">
+        <a @click="setTabIndex(2)">Share</a>
+      </li>
+      <li class="tab-item" :class="isActive(3)">
+        <a @click="setTabIndex(3)">Results</a>
+      </li>
+      <li class="tab-item" :class="isActive(4)">
+        <a @click="setTabIndex(4)">Checkers</a>
+      </li>
+    </ul>
+
+    <div v-if="tabIndex === 1">
+      <create-question :testId="this.id"></create-question>
+      <question-list :testId="this.id"></question-list>
+    </div>
+    <div v-else-if="tabIndex === 2">
+      <add-course :testId="this.id"></add-course>
+
+      <add-group :testId="this.id"></add-group>
+      <add-student :testId="this.id"></add-student>
+    </div>
+    <div v-else-if="tabIndex === 3">
+      <teacher-test-results :testId="this.id"></teacher-test-results>
+    </div>
+    <div v-else-if="tabIndex === 4">
+      <add-checker></add-checker>
         <checker-list></checker-list>
-      </tab>
-    </tabs>
+    </div>
   </div>
 </section>
 </template>
@@ -38,7 +52,6 @@ import AddGroup from '../Groups/AddGroup.vue'
 import AddCourse from '../Courses/AddCourse.vue'
 import CheckerList from '../Checkers/ChekerList.vue'
 import AddChecker from '../Checkers/AddCheker.vue'
-import {Tabs, Tab} from 'vue-tabs-component'
 
 export default {
   name: 'test-info',
@@ -49,8 +62,6 @@ export default {
     'teacher-test-results': TeacherTestResults,
     'add-group': AddGroup,
     'add-course': AddCourse,
-    'tabs': Tabs,
-    'tab': Tab,
     'checker-list': CheckerList,
     'add-checker': AddChecker
   },
@@ -63,7 +74,18 @@ export default {
   }),
   data () {
     return {
-      id: this.$route.params.id
+      'id': this.$route.params.id,
+      tabIndex: 1
+    }
+  },
+  methods: {
+    setTabIndex (index) {
+      this.tabIndex = index
+    },
+    isActive (index) {
+      if (this.tabIndex === index) {
+        return 'active'
+      }
     }
   },
   created: function () {
