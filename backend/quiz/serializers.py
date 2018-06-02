@@ -118,10 +118,6 @@ class AnswerToQuestionSerializer(serializers.ModelSerializer):
         atq = super().save(**kwargs)
         answer = atq.answer
         question = atq.question
-
-        # print(dir(checker))
-        # question = answer.questions.all()[0]
-        # print(dir(question))
         if question.type == '2':
             if question.use_checker:
                 ch = question.checker
@@ -129,10 +125,7 @@ class AnswerToQuestionSerializer(serializers.ModelSerializer):
                 answer.is_correct = checker.check(answer.answer_text)
                 answer.save()
 
-        # print(checker.check(answer.answer_text))
         return answer
-
-
 
 class UserToQuizSerializer(serializers.ModelSerializer):
 
@@ -364,15 +357,14 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
             for j in all:
                 s.add(j.user_id)
                 # print(dir(j))
-        print('Kekekek', len(s))
 
         if (quiz_results.count()):
 
             quiz_result = quiz_results[0]
-            print(quiz_result.id)
+            # print(quiz_result.id)
             if answers_on_this_question_by_user.count() == correct_answers_on_this_question_by_user.count():
                 if correct_answers_on_this_question_by_user.count() == count_of_correct_answers_on_this_question:
-                    print("!!1")
+                    # print("!!1")
                     if question not in quiz_result.correct_questions.all():
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
 
@@ -394,7 +386,7 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                         ans_to_res.save()
                 else:
                     if question in quiz_result.correct_questions.all():
-                        print("!!2")
+                        # print("!!2")
                         max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
                         QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
                         quiz_result.total_score -= question.score
@@ -403,7 +395,7 @@ class AnswerToPassingSerializer(serializers.ModelSerializer):
                         quiz_result.save()
             else:
                 if question in quiz_result.correct_questions.all():
-                    print("!!3")
+                    # print("!!3")
                     max_score_for_quiz = sum([question.score for question in quiz.questions.all()])
                     QuestionToResult.objects.filter(result=quiz_result.id, question=question.id).delete()
                     quiz_result.total_score -= question.score
@@ -456,30 +448,21 @@ class QuizPassingSerializer(serializers.ModelSerializer):
         last = query.all().last()
         if last:
             now = timezone.now()
-            # print(now)
-            # print(timezone.now())
-            # print(last.start_time)
             timediff = now - last.start_time
             timediff_in_minutes = timediff.total_seconds() / 60
 
             timediff2 = now - last.end_time
-            # print(last.attempt)
-            # print(last.quiz.max_attempts)
             if (timediff_in_minutes > last.duration or timediff2.total_seconds() > 0) and last.attempt < last.quiz.max_attempts:
                 result = QuizResults()
                 result.save()
-                print('Kek')
                 now = timezone.now()
                 duration = quiz.max_time
                 new_passing = super().save(quiz=quiz, user=user, start_time=now, duration=duration, result=result,
                                            end_time=now + datetime.timedelta(minutes=duration + 1), attempt=last.attempt + 1)
                 return new_passing
             else:
-                print('Hui')
-                print(last)
                 return last
         else:
-            print('Ebat')
             result = QuizResults()
             result.save()
             now = timezone.now()

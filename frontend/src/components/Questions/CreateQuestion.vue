@@ -31,10 +31,15 @@
           </label>
         </div>
 
-        <div class="form-group" v-if="use_checker">
-          <select class="form-select" v-model="checker">
-              <option v-for="name in this.checkerNames">{{name}}</option>
-          </select>
+        <div class="form-group" v-if="use_checker && type === '2'">
+          <div class="col-4">
+            <label class="form-label">Checker</label>
+          </div>
+          <div class="col-5">
+            <select class="form-select" v-model="checker">
+                <option v-for="name in this.checkerNames">{{name}}</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
@@ -62,7 +67,7 @@
 import { mapState } from 'vuex'
 
 export default{
-  name: 'create-test',
+  name: 'create-question',
   props: ['testId'],
   computed: mapState({
     checkerNames (state) {

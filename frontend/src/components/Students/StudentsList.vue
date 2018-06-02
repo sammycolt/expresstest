@@ -31,7 +31,7 @@ export default {
     }
   }),
   methods: {
-    deleteGroup (studentId) {
+    deleteStudent (studentId) {
       var payload = {
         'id': this.studentToTests[this.testId][studentId],
         'test': this.testId

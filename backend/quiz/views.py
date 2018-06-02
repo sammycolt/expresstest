@@ -70,9 +70,19 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().select_related('universityuser')
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return queryset
+
 class UserDetails(generics.RetrieveAPIView):
     queryset = User.objects.all().select_related('universityuser')
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return queryset
 
 class QuizTestViewSet(viewsets.ModelViewSet):
     queryset = QuizTest.objects.all()
@@ -154,11 +164,11 @@ class QuizQuestionViewSet(viewsets.ModelViewSet):
     queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
 
-    # def get_serializer_class(self):
-    #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
-    #         return QuizQuestionSerializer
-    #     elif self.request.user.universityuser.type == UniUser.STUDENT.value:
-    #         return QuizQuestionStudentSerializer
+    def get_serializer_class(self):
+        if self.request.user.universityuser.type == UniUser.TEACHER.value:
+            return QuizQuestionSerializer
+        elif self.request.user.universityuser.type == UniUser.STUDENT.value:
+            return QuizQuestionStudentSerializer
 
 class QuizQuestionDetails(generics.RetrieveAPIView):
     queryset = QuizQuestion.objects.all()
@@ -354,36 +364,15 @@ class QuizPassingLastViewSet(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         if request.user.universityuser.type == UniUser.STUDENT.value:
             id = kwargs['pk']
-            # print(request.user.id)
             queryset = QuizPassing.objects.filter(quiz_id=id, user_id=request.user.id).order_by('start_time')
-
-
-
-            # print(last.id)
             try:
                 last = queryset.reverse()[0]
             except IndexError as e:
                 print(e, id, request.user.id)
                 return Response(status=status.HTTP_204_NO_CONTENT)
-                # print(e)
-            # print(id, args, kwargs)
-            # print(request, args, kwargs )
-            # ans = super().get(request, *args, **kwargs)
-            # print(ans)
-            # print(self.get_serializer_class())
-            # print(self.get_serializer(*args, **kwargs).data)
-            # print(type(last))
-            print('!', last.end_time)
-            # print('*', QuizPassingSerializer(last))
-            print('?', self.get_serializer(last).data['end_time'])
             return Response(self.get_serializer(last).data)
         else:
             return Response(status=status.HTTP_204_NO_CONTENT)
-    # def list(self, request, *args, **kwargs):
-    #     resp = super().list(request, *args, **kwargs)
-    #     resp['data']
-    #     return resp
-
 
 class QuizPassingDetails(generics.RetrieveAPIView, generics.UpdateAPIView):
     queryset = QuizPassing.objects.all()

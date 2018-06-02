@@ -889,290 +889,18 @@ model</columns>
       <mandatory>1</mandatory>
       <data-type>VARCHAR(255)(0,-1)|12</data-type>
     </column>
-    <column id="214" parent="28" name="file">
+    <column id="214" parent="28" name="author_id">
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="215" parent="28" name="file">
       <mandatory>1</mandatory>
       <data-type>VARCHAR(100)(0,-1)|12</data-type>
     </column>
-    <key id="215" parent="28">
+    <key id="216" parent="28">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <column id="216" parent="29" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="217" parent="29" name="name">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(255)(0,-1)|12</data-type>
-    </column>
-    <key id="218" parent="29">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <column id="219" parent="30" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="220" parent="30" name="name">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(255)(0,-1)|12</data-type>
-    </column>
-    <key id="221" parent="30">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <column id="222" parent="31" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="223" parent="31" name="course_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="224" parent="31" name="group_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="225" parent="31">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="226" parent="31" name="#FAKE_quiz_grouptocourse_2">
-      <name-surrogate>1</name-surrogate>
-      <columns>course_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_course.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <foreign-key id="227" parent="31" name="#FAKE_quiz_grouptocourse_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>group_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_group.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="228" parent="32" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="229" parent="32" name="title">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(255)(0,-1)|12</data-type>
-    </column>
-    <column id="230" parent="32" name="body">
-      <mandatory>1</mandatory>
-      <data-type>TEXT(0,-1)|12</data-type>
-    </column>
-    <column id="231" parent="32" name="created_at">
-      <mandatory>1</mandatory>
-      <data-type>DATETIME(0,-1)|12</data-type>
-    </column>
-    <key id="232" parent="32">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <column id="233" parent="33" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="234" parent="33" name="question_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="235" parent="33" name="show_in_res">
-      <mandatory>1</mandatory>
-      <data-type>BOOL(0,-1)|4</data-type>
-    </column>
-    <column id="236" parent="33" name="result_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="237" parent="33">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="238" parent="33" name="#FAKE_quiz_questiontoresult_2">
-      <name-surrogate>1</name-surrogate>
-      <columns>question_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quizquestion.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <foreign-key id="239" parent="33" name="#FAKE_quiz_questiontoresult_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>result_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quizresults.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="240" parent="34" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="241" parent="34" name="is_correct">
-      <data-type>BOOL(0,-1)|4</data-type>
-    </column>
-    <column id="242" parent="34" name="answer_text">
-      <mandatory>1</mandatory>
-      <data-type>TEXT(0,-1)|12</data-type>
-    </column>
-    <key id="243" parent="34">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <column id="244" parent="35" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="245" parent="35" name="start_time">
-      <mandatory>1</mandatory>
-      <data-type>DATETIME(0,-1)|12</data-type>
-    </column>
-    <column id="246" parent="35" name="duration">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="247" parent="35" name="quiz_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="248" parent="35" name="result_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="249" parent="35" name="user_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="250" parent="35" name="attempt">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="251" parent="35" name="end_time">
-      <mandatory>1</mandatory>
-      <data-type>DATETIME(0,-1)|12</data-type>
-    </column>
-    <key id="252" parent="35">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="253" parent="35" name="#FAKE_quiz_quizpassing_3">
-      <name-surrogate>1</name-surrogate>
-      <columns>quiz_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quiztest.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <foreign-key id="254" parent="35" name="#FAKE_quiz_quizpassing_2">
-      <name-surrogate>1</name-surrogate>
-      <columns>result_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quizresults.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <foreign-key id="255" parent="35" name="#FAKE_quiz_quizpassing_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>user_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.auth_user.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="256" parent="36" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="257" parent="36" name="text">
-      <mandatory>1</mandatory>
-      <data-type>TEXT(0,-1)|12</data-type>
-    </column>
-    <column id="258" parent="36" name="quiz_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="259" parent="36" name="score">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="260" parent="36" name="type">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(1)(0,-1)|12</data-type>
-    </column>
-    <key id="261" parent="36">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="262" parent="36" name="#FAKE_quiz_quizquestion_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>quiz_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quiztest.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="263" parent="37" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="264" parent="37" name="percentage">
-      <mandatory>1</mandatory>
-      <data-type>REAL(0,-1)|6</data-type>
-    </column>
-    <column id="265" parent="37" name="total_score">
-      <mandatory>1</mandatory>
-      <data-type>REAL(0,-1)|6</data-type>
-    </column>
-    <key id="266" parent="37">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <column id="267" parent="38" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="268" parent="38" name="title">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(255)(0,-1)|12</data-type>
-    </column>
-    <column id="269" parent="38" name="author_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="270" parent="38" name="max_time">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="271" parent="38" name="max_attempts">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="272" parent="38" name="num_of_winners">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="273" parent="38" name="scoring_system">
-      <mandatory>1</mandatory>
-      <data-type>VARCHAR(1)(0,-1)|12</data-type>
-    </column>
-    <key id="274" parent="38">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="275" parent="38" name="#FAKE_quiz_quiztest_1">
+    <foreign-key id="217" parent="28" name="#FAKE_quiz_checker_1">
       <name-surrogate>1</name-surrogate>
       <columns>author_id</columns>
       <deferrable>1</deferrable>
@@ -1181,23 +909,47 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <column id="276" parent="39" name="id">
+    <column id="218" parent="29" name="id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <column id="277" parent="39" name="course_id">
+    <column id="219" parent="29" name="name">
       <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
+      <data-type>VARCHAR(255)(0,-1)|12</data-type>
     </column>
-    <column id="278" parent="39" name="quiz_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="279" parent="39">
+    <key id="220" parent="29">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="280" parent="39" name="#FAKE_quiz_quiztocourse_2">
+    <column id="221" parent="30" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="222" parent="30" name="name">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(255)(0,-1)|12</data-type>
+    </column>
+    <key id="223" parent="30">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <column id="224" parent="31" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="225" parent="31" name="course_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="226" parent="31" name="group_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="227" parent="31">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="228" parent="31" name="#FAKE_quiz_grouptocourse_2">
       <name-surrogate>1</name-surrogate>
       <columns>course_id</columns>
       <deferrable>1</deferrable>
@@ -1206,32 +958,7 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <foreign-key id="281" parent="39" name="#FAKE_quiz_quiztocourse_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>quiz_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_quiztest.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="282" parent="40" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="283" parent="40" name="group_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="284" parent="40" name="quiz_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="285" parent="40">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="286" parent="40" name="#FAKE_quiz_quiztogroup_2">
+    <foreign-key id="229" parent="31" name="#FAKE_quiz_grouptocourse_1">
       <name-surrogate>1</name-surrogate>
       <columns>group_id</columns>
       <deferrable>1</deferrable>
@@ -1240,7 +967,116 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <foreign-key id="287" parent="40" name="#FAKE_quiz_quiztogroup_1">
+    <column id="230" parent="32" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="231" parent="32" name="title">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(255)(0,-1)|12</data-type>
+    </column>
+    <column id="232" parent="32" name="body">
+      <mandatory>1</mandatory>
+      <data-type>TEXT(0,-1)|12</data-type>
+    </column>
+    <column id="233" parent="32" name="created_at">
+      <mandatory>1</mandatory>
+      <data-type>DATETIME(0,-1)|12</data-type>
+    </column>
+    <key id="234" parent="32">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <column id="235" parent="33" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="236" parent="33" name="question_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="237" parent="33" name="show_in_res">
+      <mandatory>1</mandatory>
+      <data-type>BOOL(0,-1)|4</data-type>
+    </column>
+    <column id="238" parent="33" name="result_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="239" parent="33">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="240" parent="33" name="#FAKE_quiz_questiontoresult_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>question_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quizquestion.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="241" parent="33" name="#FAKE_quiz_questiontoresult_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>result_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quizresults.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="242" parent="34" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="243" parent="34" name="is_correct">
+      <data-type>BOOL(0,-1)|4</data-type>
+    </column>
+    <column id="244" parent="34" name="answer_text">
+      <mandatory>1</mandatory>
+      <data-type>TEXT(0,-1)|12</data-type>
+    </column>
+    <key id="245" parent="34">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <column id="246" parent="35" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="247" parent="35" name="start_time">
+      <mandatory>1</mandatory>
+      <data-type>DATETIME(0,-1)|12</data-type>
+    </column>
+    <column id="248" parent="35" name="duration">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="249" parent="35" name="quiz_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="250" parent="35" name="result_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="251" parent="35" name="user_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="252" parent="35" name="attempt">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="253" parent="35" name="end_time">
+      <mandatory>1</mandatory>
+      <data-type>DATETIME(0,-1)|12</data-type>
+    </column>
+    <key id="254" parent="35">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="255" parent="35" name="#FAKE_quiz_quizpassing_3">
       <name-surrogate>1</name-surrogate>
       <columns>quiz_id</columns>
       <deferrable>1</deferrable>
@@ -1249,82 +1085,56 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <column id="288" parent="41" name="id">
+    <foreign-key id="256" parent="35" name="#FAKE_quiz_quizpassing_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>result_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quizresults.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="257" parent="35" name="#FAKE_quiz_quizpassing_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>user_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.auth_user.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="258" parent="36" name="id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <column id="289" parent="41" name="type">
+    <column id="259" parent="36" name="text">
+      <mandatory>1</mandatory>
+      <data-type>TEXT(0,-1)|12</data-type>
+    </column>
+    <column id="260" parent="36" name="quiz_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="261" parent="36" name="score">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="262" parent="36" name="type">
       <mandatory>1</mandatory>
       <data-type>VARCHAR(1)(0,-1)|12</data-type>
     </column>
-    <column id="290" parent="41" name="user_id">
-      <mandatory>1</mandatory>
+    <column id="263" parent="36" name="checker_id">
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <key id="291" parent="41">
+    <column id="264" parent="36" name="use_checker">
+      <mandatory>1</mandatory>
+      <data-type>BOOL(0,-1)|4</data-type>
+    </column>
+    <key id="265" parent="36">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="292" parent="41" name="#FAKE_quiz_universityuser_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>user_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.auth_user.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="293" parent="42" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="294" parent="42" name="user_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="295" parent="42" name="group_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="296" parent="42">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="297" parent="42" name="#FAKE_quiz_usertogroup_2">
-      <name-surrogate>1</name-surrogate>
-      <columns>user_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.auth_user.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <foreign-key id="298" parent="42" name="#FAKE_quiz_usertogroup_1">
-      <name-surrogate>1</name-surrogate>
-      <columns>group_id</columns>
-      <deferrable>1</deferrable>
-      <initially-deferred>1</initially-deferred>
-      <ref-key>~.quiz_group.#1</ref-key>
-      <cascade-update-rule>no_action</cascade-update-rule>
-      <cascade-delete-rule>no_action</cascade-delete-rule>
-    </foreign-key>
-    <column id="299" parent="43" name="id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="300" parent="43" name="quiz_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <column id="301" parent="43" name="user_id">
-      <mandatory>1</mandatory>
-      <data-type>INTEGER(0,-1)|4</data-type>
-    </column>
-    <key id="302" parent="43">
-      <columns>id</columns>
-      <primary>1</primary>
-    </key>
-    <foreign-key id="303" parent="43" name="#FAKE_quiz_usertoquiz_2">
+    <foreign-key id="266" parent="36" name="#FAKE_quiz_quizquestion_2">
       <name-surrogate>1</name-surrogate>
       <columns>quiz_id</columns>
       <deferrable>1</deferrable>
@@ -1333,7 +1143,157 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <foreign-key id="304" parent="43" name="#FAKE_quiz_usertoquiz_1">
+    <foreign-key id="267" parent="36" name="#FAKE_quiz_quizquestion_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>checker_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_checker.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="268" parent="37" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="269" parent="37" name="percentage">
+      <mandatory>1</mandatory>
+      <data-type>REAL(0,-1)|6</data-type>
+    </column>
+    <column id="270" parent="37" name="total_score">
+      <mandatory>1</mandatory>
+      <data-type>REAL(0,-1)|6</data-type>
+    </column>
+    <key id="271" parent="37">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <column id="272" parent="38" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="273" parent="38" name="title">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(255)(0,-1)|12</data-type>
+    </column>
+    <column id="274" parent="38" name="author_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="275" parent="38" name="max_time">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="276" parent="38" name="max_attempts">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="277" parent="38" name="num_of_winners">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="278" parent="38" name="scoring_system">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(1)(0,-1)|12</data-type>
+    </column>
+    <key id="279" parent="38">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="280" parent="38" name="#FAKE_quiz_quiztest_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>author_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.auth_user.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="281" parent="39" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="282" parent="39" name="course_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="283" parent="39" name="quiz_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="284" parent="39">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="285" parent="39" name="#FAKE_quiz_quiztocourse_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>course_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_course.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="286" parent="39" name="#FAKE_quiz_quiztocourse_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>quiz_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quiztest.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="287" parent="40" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="288" parent="40" name="group_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="289" parent="40" name="quiz_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="290" parent="40">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="291" parent="40" name="#FAKE_quiz_quiztogroup_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>group_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_group.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="292" parent="40" name="#FAKE_quiz_quiztogroup_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>quiz_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quiztest.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="293" parent="41" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="294" parent="41" name="type">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(1)(0,-1)|12</data-type>
+    </column>
+    <column id="295" parent="41" name="user_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="296" parent="41">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="297" parent="41" name="#FAKE_quiz_universityuser_1">
       <name-surrogate>1</name-surrogate>
       <columns>user_id</columns>
       <deferrable>1</deferrable>
@@ -1342,10 +1302,78 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <column id="305" parent="44" name="name">
+    <column id="298" parent="42" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="299" parent="42" name="user_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="300" parent="42" name="group_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="301" parent="42">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="302" parent="42" name="#FAKE_quiz_usertogroup_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>user_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.auth_user.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="303" parent="42" name="#FAKE_quiz_usertogroup_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>group_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_group.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="304" parent="43" name="id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="305" parent="43" name="quiz_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <column id="306" parent="43" name="user_id">
+      <mandatory>1</mandatory>
+      <data-type>INTEGER(0,-1)|4</data-type>
+    </column>
+    <key id="307" parent="43">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="308" parent="43" name="#FAKE_quiz_usertoquiz_2">
+      <name-surrogate>1</name-surrogate>
+      <columns>quiz_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.quiz_quiztest.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="309" parent="43" name="#FAKE_quiz_usertoquiz_1">
+      <name-surrogate>1</name-surrogate>
+      <columns>user_id</columns>
+      <deferrable>1</deferrable>
+      <initially-deferred>1</initially-deferred>
+      <ref-key>~.auth_user.#1</ref-key>
+      <cascade-update-rule>no_action</cascade-update-rule>
+      <cascade-delete-rule>no_action</cascade-delete-rule>
+    </foreign-key>
+    <column id="310" parent="44" name="name">
       <data-type>(0,-1)|12</data-type>
     </column>
-    <column id="306" parent="44" name="seq">
+    <column id="311" parent="44" name="seq">
       <data-type>(0,-1)|12</data-type>
     </column>
   </database-model>

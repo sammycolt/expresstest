@@ -35,7 +35,7 @@ export default {
         'id': this.courseToTests[this.testId][courseId],
         'test': this.testId
       }
-      console.log('delete')
+//      console.log('delete')
       this.$store.dispatch('deleteCourseToTest', payload)
     }
   }

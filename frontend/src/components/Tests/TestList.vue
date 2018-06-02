@@ -65,7 +65,6 @@ export default {
                 this.$store.dispatch('stopPassing', test.passing.id)
               }
             }
-            //          console.log('kek')
           }
         }
       }

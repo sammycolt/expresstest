@@ -4,7 +4,7 @@
       <br>
       <h5> My checkers</h5>
     </center>
-    <div class="card" v-for="checker in this.myCheckers">
+    <div class="card" v-for="checker in myCheckers">
       <div class="card-header">
         <button class="btn btn-clear float-right" v-on:click="deleteChecker(checker.id)"></button>
         <div class="card-title"><a :href="checker.file_url">{{ checker.name }}</a></div>

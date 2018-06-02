@@ -18,7 +18,6 @@ export const Answer = {
   //   })
   // },
   addAnswerToPassing (config) {
-    console.log('Ebat')
     return HTTP.post('/answer_to_passing/', config, getHeaders()).then(response => {
       return response.data
     })

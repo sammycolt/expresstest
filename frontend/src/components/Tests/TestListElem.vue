@@ -2,7 +2,7 @@
     <div class="card-header">
       <button v-if="checkType()" class="btn btn-clear float-right" @click="deleteTest()"></button>
       <div class="card-title" @click="onClick">Test: {{ title }}</div>
-      <div class="card-subtitle" @click="onClick">Author: {{ username }}</div>
+      <div class="card-subtitle"  v-if="checkType()" @click="onClick">Author: {{ username }}</div>
       <div class="card-subtitle" @click="onClick">Questions: {{ questionsCount }}</div>
       <div class="card-subtitle" @click="onClick">Max time: {{ maxTime }} min</div>
       <div class="card-subtitle" v-if="!checkType()">Attempts: {{ remainingAttempts }}</div>

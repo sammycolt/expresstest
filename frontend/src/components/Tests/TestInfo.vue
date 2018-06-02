@@ -35,7 +35,7 @@
     </div>
     <div v-else-if="tabIndex === 4">
       <add-checker></add-checker>
-        <checker-list></checker-list>
+      <checker-list></checker-list>
     </div>
   </div>
 </section>
