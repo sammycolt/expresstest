@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^1.0.8",
     "axios": "^0.16.2",
     "chart.js": "^2.7.2",
     "jwt-decode": "^2.2.0",
@@ -18,6 +19,7 @@
     "vue-chartjs": "^3.3.1",
     "vue-router": "^3.0.1",
     "vue-tabs-component": "^1.4.0",
+    "vue-wysiwyg": "^1.7.0",
     "vuejs-jwt": "^1.0.0",
     "vuex": "^2.3.1",
     "vuex-router-sync": "^5.0.0"

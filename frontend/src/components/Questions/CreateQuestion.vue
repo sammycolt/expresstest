@@ -6,9 +6,20 @@
   <div class="panel-body">
     <div>
       <form class="form-horizontal">
-        <div class="form-group">
+         <div class="form-group">
+          <label class="form-switch">
+            <input type="checkbox" v-model="use_wysiwyg">
+            <i class="form-icon"></i> Use WYSIWYG
+          </label>
+        </div>
+        <div class="form-group" v-if="use_wysiwyg === false">
           <div class="col-9">
            <textarea class="form-input" v-model="body" rows="8" placeholder="Type your question..."></textarea>
+          </div>
+        </div>
+        <div class="form-group" v-else="">
+          <div class="col-9">
+           <wysiwyg v-model="body" placeholder="Enter your question..."/>
           </div>
         </div>
         <div class="form-group">
@@ -90,7 +101,8 @@ export default{
       'score': 0,
       'type': 0,
       'use_checker': false,
-      'checker': {}
+      'checker': {},
+      'use_wysiwyg': false
     }
   },
   methods: {
@@ -100,7 +112,8 @@ export default{
         'text': this.body,
         'score': this.score,
         'type': this.type.toString(),
-        'use_checker': this.use_checker
+        'use_checker': this.use_checker,
+        'text_in_html': this.use_wysiwyg
       }
       if (this.use_checker === true) {
         payload['checker'] = this.checkerDict[this.checker].id

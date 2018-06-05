@@ -78,7 +78,7 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
     answers = QuizAnswerSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type', 'use_checker', 'checker')
+        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type', 'use_checker', 'checker', 'text_in_html')
 
 class QuizTestSerializer(serializers.ModelSerializer):
     questions = QuizQuestionSerializer(many=True, read_only=True)
@@ -99,7 +99,7 @@ class QuizQuestionStudentSerializer(serializers.ModelSerializer):
     answers = QuizAnswerStudentSerializer(many=True, read_only=True)
     class Meta:
         model = QuizQuestion
-        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type')
+        fields = ('id', 'quiz', 'text', 'answers', 'score', 'type', 'text_in_html')
 
 class QuizTestStudentSerializer(serializers.ModelSerializer):
     questions = QuizQuestionStudentSerializer(many=True, read_only=True)

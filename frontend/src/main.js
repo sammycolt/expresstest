@@ -6,11 +6,16 @@ import store from './store'
 import router from './router'
 import Router from 'vue-router'
 import {Tabs} from 'vue-tabs-component'
+import wysiwyg from 'vue-wysiwyg'
 // import { sync } from 'vuex-router-sync'
 
 // var jwtDecode = require('jwt-decode')
 Vue.use(Router)
 Vue.use(Tabs)
+Vue.use(wysiwyg, {
+  hideModules: { 'table': true },
+  maxWidth: '500px'
+})
 Vue.config.productionTip = false
 // sync(store, router)
 

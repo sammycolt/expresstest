@@ -26,6 +26,7 @@ export default {
 <style>
   @import url(https://fonts.googleapis.com/css?family=Eczar);
   @import url(https://fonts.googleapis.com/css?family=Work+Sans);
+  @import "~vue-wysiwyg/dist/vueWysiwyg.css";
 
   body {
     font-family: "Work Sans", "Segoe UI", "Helvetica Neue", sans-serif;

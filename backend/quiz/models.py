@@ -87,6 +87,7 @@ class QuizQuestion(models.Model):
     type = models.CharField(max_length=1, choices=QUESTION_TYPE_CHOICES, default='0')
     use_checker = models.BooleanField(blank=True, default=False)
     checker = models.ForeignKey(Checker, blank=True, null=True)
+    text_in_html = models.BooleanField(blank=True, default=False)
 
 class AnswerToQuestion(models.Model):
     answer = models.ForeignKey(QuizAnswer, related_name='questions')

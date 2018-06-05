@@ -13,7 +13,8 @@
       </ul>
       <div v-for="(question, index) in this.questions" class="step-item">
         <div v-show="index === questionIndex">
-          <h5>{{ question.text }}</h5>
+          <h5 v-if="question.text_in_html === false">{{ question.text }}</h5>
+          <div v-else="" v-html="question.text"></div>
           <div v-if="question.type === '0'">
             <ol>
               <li v-for="(answer, index2) in question.answers">
