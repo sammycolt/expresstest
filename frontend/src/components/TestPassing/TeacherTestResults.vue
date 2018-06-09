@@ -9,6 +9,7 @@
               <tr>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th v-for="question in testDetails[testId].questions" class="tooltip" :data-tooltip="question.text">{{question.text.substring(0, question.text.length >= 5 ? 5 : question.text.length)}}</th>
                 <th>total</th>
                 <th>%</th>
@@ -17,6 +18,9 @@
             </thead>
             <tbody>
               <tr v-for="result in filterResults[testId]">
+                <td>
+                   <img :src="studentsInfo[result.user].avatar" class="avatar" v-if="studentsInfo[result.user].avatar !== ''">
+                </td>
                 <td>
                   {{calculateGroups(result.user)}}
                 </td>
@@ -50,6 +54,7 @@
                 <td>
                   Average
                 </td>
+                <td></td>
                 <td></td>
                 <td v-for="question in testDetails[testId].questions"></td>
                 <td>

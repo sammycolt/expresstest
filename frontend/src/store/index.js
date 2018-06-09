@@ -715,6 +715,9 @@ const actions = {
   getCheckers ({ commit, dispatch }) {
     dispatch('getMyCheckers')
     dispatch('getOtherCheckers')
+  },
+  setAvatar ({ commit }, payload) {
+    User.setAvatar(payload).then(() => {})
   }
 }
 

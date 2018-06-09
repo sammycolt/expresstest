@@ -55,6 +55,7 @@ class Note(models.Model):
 class UniversityUser(models.Model):
     user = models.OneToOneField(User)
     type = models.CharField(max_length=1, choices=USER_CHOICES)
+    avatar = models.TextField(blank=True)
 
 class QuizTest(models.Model):
     title = models.CharField(max_length=255)

@@ -6,7 +6,7 @@ from .views import NoteViewSet, UserViewSet, QuizTestViewSet, QuizAnswerViewSet,
     UserToQuizVS, StudentsViewSet, AnswerByUserViewSet, UserQuizResultsViewSet, \
     UserToGroupViewSet, GroupViewSet, GroupToQuizViewSet, CourseViewSet, QuizToCourseViewSet, \
     QuizPassingViewSet, QuizPassingDetails, AnswerToPassingViewSet, QuizPassingLastViewSet, \
-    QuizPassingStop, CheckerView, MyCheckerView
+    QuizPassingStop, CheckerView, MyCheckerView, UserSetAvatar
 
 
 router = routers.DefaultRouter()
@@ -27,6 +27,7 @@ router.register(r'passing', QuizPassingViewSet)
 router.register(r'answer_to_passing', AnswerToPassingViewSet)
 router.register(r'checker', CheckerView)
 router.register(r'my_checker', MyCheckerView)
+router.register(r'set_avatar', UserSetAvatar)
 
 urlpatterns = [
     url(r'^user/(?P<pk>[0-9]+)/$', UserDetails.as_view()),

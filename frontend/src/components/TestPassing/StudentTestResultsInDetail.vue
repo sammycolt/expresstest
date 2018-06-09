@@ -21,7 +21,8 @@
       </ul>
       <div v-for="(question, index) in this.questions" class="step-item">
         <div v-show="index === questionIndex">
-          <h5>{{ question.text }}</h5>
+          <h5 v-if="!question.text_in_html">{{ question.text }}</h5>
+          <div v-else="" v-html="question.text"></div>
           <span class="label label-primary" v-bind:class="correctClass(question)">{{ correctLabel(question) }}</span>
         </div>
       </div>

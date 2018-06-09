@@ -2,7 +2,8 @@
 <section class="container grid-960">
   <div class="panel">
     <div class="panel-header text-center">
-      <div class="panel-title h5 mt-10">Question: {{ text }}</div>
+      <div class="panel-title h5 mt-10" v-if="!questionDetails.text_in_html">Question: {{ text }}</div>
+      <div v-else="" v-html="text"></div>
       <div class="panel-default h5 mt-10">Answers:</div>
     </div>
   </div>
@@ -27,6 +28,11 @@ export default {
     text (state) {
       if (state.questionDetails[this.id]) {
         return state.questionDetails[this.id].text
+      }
+    },
+    questionDetails (state) {
+      if (state.questionDetails[this.id]) {
+        return state.questionDetails[this.id]
       }
     }
   }),

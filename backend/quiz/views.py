@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from .models import Note, User, QuizTest, QuizAnswer, QuizQuestion, AnswerToQuestion, UserToQuiz, AnswerByUser, \
     QuizResults, QuestionToResult, UserToGroup, Group, QuizToGroup, Course, GroupToCourse, QuizToCourse, QuizPassing, \
-    AnswerToPassing, Checker
+    AnswerToPassing, Checker, UniversityUser
 
 from .enums import UniUser
 from .serializers import NoteSerializer, UserSerializer, QuizTestSerializer,\
@@ -70,10 +70,10 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().select_related('universityuser')
     serializer_class = UserSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.universityuser.type == UniUser.TEACHER.value:
-            return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if self.request.user.universityuser.type == UniUser.TEACHER.value:
+    #         return queryset
 
 class UserDetails(generics.RetrieveAPIView):
     queryset = User.objects.all().select_related('universityuser')
@@ -83,6 +83,30 @@ class UserDetails(generics.RetrieveAPIView):
         queryset = super().get_queryset()
         if self.request.user.universityuser.type == UniUser.TEACHER.value:
             return queryset
+
+class UserSetAvatar(viewsets.ModelViewSet):
+    queryset = User.objects.all().select_related('universityuser')
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        id = request.data['id']
+        image = request.data['data']['avatar']
+        users = User.objects.filter(id=id)
+        print(users.count())
+        if users.count():
+            user = users[0]
+            uus = UniversityUser.objects.filter(user=user)
+            if uus.count():
+                uu = uus[0]
+                print(dir(uu))
+                uu.avatar = image
+                uu.save()
+                # print(user.avatar)
+                return Response(status=status.HTTP_201_CREATED, data=UserSerializer(user).data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class QuizTestViewSet(viewsets.ModelViewSet):
     queryset = QuizTest.objects.all()

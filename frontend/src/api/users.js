@@ -25,5 +25,11 @@ export const User = {
     return HTTP.get('/students/', getHeaders()).then(response => {
       return response.data
     })
+  },
+  setAvatar (payload) {
+    // console.log('c++', payload)
+    return HTTP.post('/set_avatar/', payload, getHeaders()).then(response => {
+      return response.data
+    })
   }
 }

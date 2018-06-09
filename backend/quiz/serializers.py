@@ -60,11 +60,12 @@ class UserRegSer(RegisterSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source='universityuser.type')
+    avatar = serializers.CharField(source='universityuser.avatar')
     # groups = GroupOfUsersSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'type', 'group_set')
+        fields = ('id', 'username', 'email', 'password', 'type', 'group_set', 'avatar')
 
 class QuizAnswerSerializer(serializers.ModelSerializer):
 

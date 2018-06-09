@@ -3,10 +3,8 @@ from .models import Group, UserToGroup, Course, GroupToCourse, QuizPassing, Quiz
 
 #admin.site.register(GroupOfUsers)
 #admin.site.register(UserToGroup)
-admin.site.register(QuizPassing)
+# admin.site.register(QuizPassing)
 admin.site.register(QuizResults)
-admin.site.register(QuizToCourse)
-admin.site.register(Checker)
 
 @admin.register(Group)
 class GroupOfUsersAdmin(admin.ModelAdmin):
